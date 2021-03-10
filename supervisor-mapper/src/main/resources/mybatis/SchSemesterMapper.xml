@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SchSemesterMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SchSemester">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sem_code" jdbcType="VARCHAR" property="semCode" />
+    <result column="school_year_start" jdbcType="INTEGER" property="schoolYearStart" />
+    <result column="school_year_end" jdbcType="INTEGER" property="schoolYearEnd" />
+    <result column="sem_num" jdbcType="INTEGER" property="semNum" />
+    <result column="sem_date_start" jdbcType="DATE" property="semDateStart" />
+    <result column="sem_date_end" jdbcType="DATE" property="semDateEnd" />
+    <result column="total_weeks" jdbcType="INTEGER" property="totalWeeks" />
+    <result column="is_current_sem" jdbcType="CHAR" property="isCurrentSem" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sem_code, school_year_start, school_year_end, sem_num, sem_date_start, sem_date_end, 
+    total_weeks, is_current_sem, create_id, create_by, create_way, create_time, remark, 
+    is_delete, delete_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_sch_semester
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据参数查询，返回单个实例-->
+  <select id="selectOneByParam" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sch_semester wss
+    where wss.is_delete='0'
+    <if test="schoolYearStart!=null and schoolYearStart!=''">
+      AND wss.school_year_start = #{schoolYearStart,jdbcType=INTEGER}
+    </if>
+    <if test="schoolYearEnd!=null and schoolYearEnd!=''">
+      AND wss.school_year_end = #{schoolYearEnd,jdbcType=INTEGER}
+    </if>
+    <if test="semNum!=null and semNum!=''">
+      AND wss.sem_num = #{semNum,jdbcType=INTEGER}
+    </if>
+    <if test="isCurrentSem!=null and isCurrentSem!=''">
+      AND wss.is_current_sem = #{isCurrentSem,jdbcType=CHAR}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT count(0) FROM wr_sch_semester wss WHERE wss.is_delete = '0'
+  </select>
+
+
+  <select id="queryListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sch_semester wss
+    where wss.is_delete='0'
+    <if test="schoolYearStart!=null and schoolYearStart!=''">
+      AND wss.school_year_start = #{schoolYearStart,jdbcType=INTEGER}
+    </if>
+    <if test="schoolYearEnd!=null and schoolYearEnd!=''">
+      AND wss.school_year_end = #{schoolYearEnd,jdbcType=INTEGER}
+    </if>
+    <if test="semNum!=null and semNum!=''">
+      AND wss.sem_num = #{semNum,jdbcType=INTEGER}
+    </if>
+    <if test="isCurrentSem!=null and isCurrentSem!=''">
+      AND wss.is_current_sem = #{isCurrentSem,jdbcType=CHAR}
+    </if>
+    ORDER BY wss.sem_date_start DESC
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_sch_semester
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SchSemester">
+    insert into wr_sch_semester (id, sem_code, school_year_start, 
+      school_year_end, sem_num, sem_date_start, 
+      sem_date_end, total_weeks, is_current_sem, 
+      create_id, create_by, create_way, 
+      create_time, remark, is_delete, 
+      delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{semCode,jdbcType=VARCHAR}, #{schoolYearStart,jdbcType=INTEGER}, 
+      #{schoolYearEnd,jdbcType=INTEGER}, #{semNum,jdbcType=INTEGER}, #{semDateStart,jdbcType=DATE}, 
+      #{semDateEnd,jdbcType=DATE}, #{totalWeeks,jdbcType=INTEGER}, #{isCurrentSem,jdbcType=CHAR}, 
+      #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=CHAR}, 
+      #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SchSemester">
+    insert into wr_sch_semester
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="semCode != null">
+        sem_code,
+      </if>
+      <if test="schoolYearStart != null">
+        school_year_start,
+      </if>
+      <if test="schoolYearEnd != null">
+        school_year_end,
+      </if>
+      <if test="semNum != null">
+        sem_num,
+      </if>
+      <if test="semDateStart != null">
+        sem_date_start,
+      </if>
+      <if test="semDateEnd != null">
+        sem_date_end,
+      </if>
+      <if test="totalWeeks != null">
+        total_weeks,
+      </if>
+      <if test="isCurrentSem != null">
+        is_current_sem,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="semCode != null">
+        #{semCode,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolYearStart != null">
+        #{schoolYearStart,jdbcType=INTEGER},
+      </if>
+      <if test="schoolYearEnd != null">
+        #{schoolYearEnd,jdbcType=INTEGER},
+      </if>
+      <if test="semNum != null">
+        #{semNum,jdbcType=INTEGER},
+      </if>
+      <if test="semDateStart != null">
+        #{semDateStart,jdbcType=DATE},
+      </if>
+      <if test="semDateEnd != null">
+        #{semDateEnd,jdbcType=DATE},
+      </if>
+      <if test="totalWeeks != null">
+        #{totalWeeks,jdbcType=INTEGER},
+      </if>
+      <if test="isCurrentSem != null">
+        #{isCurrentSem,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SchSemester">
+    update wr_sch_semester
+    <set>
+      <if test="semCode != null">
+        sem_code = #{semCode,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolYearStart != null">
+        school_year_start = #{schoolYearStart,jdbcType=INTEGER},
+      </if>
+      <if test="schoolYearEnd != null">
+        school_year_end = #{schoolYearEnd,jdbcType=INTEGER},
+      </if>
+      <if test="semNum != null">
+        sem_num = #{semNum,jdbcType=INTEGER},
+      </if>
+      <if test="semDateStart != null">
+        sem_date_start = #{semDateStart,jdbcType=DATE},
+      </if>
+      <if test="semDateEnd != null">
+        sem_date_end = #{semDateEnd,jdbcType=DATE},
+      </if>
+      <if test="totalWeeks != null">
+        total_weeks = #{totalWeeks,jdbcType=INTEGER},
+      </if>
+      <if test="isCurrentSem != null">
+        is_current_sem = #{isCurrentSem,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SchSemester">
+    update wr_sch_semester
+    set sem_code = #{semCode,jdbcType=VARCHAR},
+      school_year_start = #{schoolYearStart,jdbcType=INTEGER},
+      school_year_end = #{schoolYearEnd,jdbcType=INTEGER},
+      sem_num = #{semNum,jdbcType=INTEGER},
+      sem_date_start = #{semDateStart,jdbcType=DATE},
+      sem_date_end = #{semDateEnd,jdbcType=DATE},
+      total_weeks = #{totalWeeks,jdbcType=INTEGER},
+      is_current_sem = #{isCurrentSem,jdbcType=CHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
+  <delete id="batchDelete" parameterType="java.util.Map" >
+    delete from wr_sch_semester
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+  </delete>
+
+  <!--批量查询 -->
+  <select id="BatchSelect" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wr_sch_semester
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+  </select>
+
+</mapper>

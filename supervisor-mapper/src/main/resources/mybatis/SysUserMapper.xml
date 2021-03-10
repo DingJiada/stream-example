@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SysUser">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="person_num" jdbcType="VARCHAR" property="personNum" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="profile" jdbcType="VARCHAR" property="profile" />
+    <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
+    <result column="is_registered" jdbcType="VARCHAR" property="isRegistered" />
+    <result column="is_locked" jdbcType="CHAR" property="isLocked" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+
+    <result column="sys_role_names" jdbcType="VARCHAR" property="sysRoleNames" />
+    <result column="sys_role_ids" jdbcType="VARCHAR" property="sysRoleIds" />
+  </resultMap>
+
+  <!--Shiro Login-->
+  <resultMap id="LoginResultMap" type="com.shouzhi.pojo.db.SysUser" extends="BaseResultMap">
+    <collection property="sysRoles" column="id" select="com.shouzhi.mapper.SysUserRoleMapper.selectRolesPermissionsByUserId" ofType="com.shouzhi.pojo.db.SysRole"></collection>
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, person_name, nickname, sex, age, birthday, person_num, position, profile, head_img_url,
+    is_registered, is_locked, create_id, create_by, create_way, create_time, remark, is_delete, delete_time
+  </sql>
+
+  <sql id="Alias_Column_List">
+    wsu.id, wsu.person_name, wsu.nickname, wsu.sex, wsu.age, wsu.birthday, wsu.person_num, wsu.position, wsu.profile, wsu.head_img_url,
+    wsu.is_registered, wsu.is_locked, wsu.create_id, wsu.create_by, wsu.create_way, wsu.create_time, wsu.remark, wsu.is_delete, wsu.delete_time
+  </sql>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_sys_user
+    where is_delete='0' and id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据参数查询用户信息，返回单个实例-->
+  <select id="selectOneByParam" parameterType="com.shouzhi.pojo.db.SysUser" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sys_user wsu
+    where wsu.is_delete='0'
+    <if test="personName!=null and personName!=''">
+      AND wsu.person_name = #{personName,jdbcType=VARCHAR}
+    </if>
+    <if test="personNum!=null and personNum!=''">
+      AND wsu.person_num = #{personNum,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <!--根据用户名查询用户信息，shiro登录专用，里边涉及到级联查询，其余场景请勿使用-->
+  <select id="selectByLogin" parameterType="com.shouzhi.pojo.db.SysUser" resultMap="LoginResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sys_user wsu
+    where wsu.is_delete='0'
+    <if test="id!=null and id!=''">
+      AND wsu.id = #{id,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <!--根据角色表的参数字段查询用户信息，比如：根据角色ID、根据角色类型、根据角色code等，不涉及groupBy-->
+  <select id="selectByRoleParam" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Alias_Column_List" />
+    from wr_sys_user wsu
+    LEFT JOIN wr_sys_user_role wsur ON wsu.id=wsur.sys_user_id
+    LEFT JOIN wr_sys_role wsr ON wsur.sys_role_id = wsr.id AND wsr.is_delete='0'
+    where wsu.is_delete='0'
+    <if test="personNumOrName!=null and personNumOrName!=''">
+      AND (wsu.person_num LIKE concat('%',#{personNumOrName,jdbcType=VARCHAR},'%') or wsu.person_name LIKE concat('%',#{personNumOrName,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="sysRoleId!=null and sysRoleId!=''">
+      AND wsr.id = #{sysRoleId,jdbcType=VARCHAR}
+    </if>
+    <if test="sysRoleType!=null and sysRoleType!=''">
+      AND wsr.role_type = #{sysRoleType,jdbcType=VARCHAR}
+    </if>
+    <if test="sysRoleCode!=null and sysRoleCode!=''">
+      AND wsr.role_code = #{sysRoleCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <select id="queryListByPage" parameterType="com.shouzhi.pojo.db.SysUser" resultMap="BaseResultMap">
+    select
+    <include refid="Alias_Column_List" />
+    , GROUP_CONCAT(wsr.role_name) sys_role_names, GROUP_CONCAT(wsr.id) sys_role_ids
+    from wr_sys_user wsu
+    LEFT JOIN wr_sys_user_role wsur ON wsu.id=wsur.sys_user_id
+    LEFT JOIN wr_sys_role wsr ON wsur.sys_role_id = wsr.id AND wsr.is_delete='0'
+    where wsu.is_delete='0'
+    <if test="personNum!=null and personNum!=''">
+      AND wsu.person_num LIKE concat('%',#{personNum,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="personName!=null and personName!=''">
+      AND wsu.person_name LIKE concat('%',#{personName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="personNumOrName!=null and personNumOrName!=''">
+      AND (wsu.person_num LIKE concat('%',#{personNumOrName,jdbcType=VARCHAR},'%') or wsu.person_name LIKE concat('%',#{personNumOrName,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="sex!=null and sex!=''">
+      AND wsu.sex = #{sex,jdbcType=CHAR}
+    </if>
+    <if test="isRegistered!=null and isRegistered!=''">
+      AND wsu.is_registered = #{isRegistered,jdbcType=VARCHAR}
+    </if>
+    <if test="sysRoleId!=null and sysRoleId!=''">
+      AND wsr.id = #{sysRoleId,jdbcType=VARCHAR}
+    </if>
+    group by wsu.id
+
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_sys_user
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SysUser">
+    insert into wr_sys_user (id, person_name, nickname,
+      sex, age, birthday, person_num,
+      position, profile, head_img_url,
+      is_registered, is_locked, create_id, create_by,
+      create_way, create_time, remark,
+      is_delete, delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+      #{sex,jdbcType=CHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{personNum,jdbcType=VARCHAR},
+      #{position,jdbcType=VARCHAR}, #{profile,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR},
+      #{is_registered,jdbcType=VARCHAR}, #{isLocked,jdbcType=CHAR}, #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+      #{createWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=CHAR}, #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SysUser">
+    insert into wr_sys_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personName != null">
+        person_name,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="personNum != null">
+        person_num,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="profile != null">
+        profile,
+      </if>
+      <if test="headImgUrl != null">
+        head_img_url,
+      </if>
+      <if test="isRegistered != null">
+        is_registered,
+      </if>
+      <if test="isLocked != null">
+        is_locked,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="personName != null">
+        #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="personNum != null">
+        #{personNum,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="headImgUrl != null">
+        #{headImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isRegistered != null">
+        #{isRegistered,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null">
+        #{isLocked,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SysUser">
+    update wr_sys_user
+    <set>
+      <if test="personName != null">
+        person_name = #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="personNum != null">
+        person_num = #{personNum,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        profile = #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="headImgUrl != null">
+        head_img_url = #{headImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isRegistered != null">
+        is_registered = #{isRegistered,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null">
+        is_locked = #{isLocked,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SysUser">
+    update wr_sys_user
+    set person_name = #{personName,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      age = #{age,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      person_num = #{personNum,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      profile = #{profile,jdbcType=VARCHAR},
+      head_img_url = #{headImgUrl,jdbcType=VARCHAR},
+      is_registered = #{isRegistered,jdbcType=VARCHAR},
+      is_locked = #{isLocked,jdbcType=CHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量插入-->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_sys_user (id, person_name, nickname,
+    sex, age, birthday, person_num,
+    position, profile, head_img_url,
+    is_registered, create_id, create_by,
+    create_way, create_time, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=VARCHAR}, #{item.personName,jdbcType=VARCHAR}, #{item.nickname,jdbcType=VARCHAR},
+      #{item.sex,jdbcType=CHAR}, #{item.age,jdbcType=INTEGER}, #{item.birthday,jdbcType=DATE}, #{item.personNum,jdbcType=VARCHAR},
+      #{item.position,jdbcType=VARCHAR}, #{item.profile,jdbcType=VARCHAR}, #{item.headImgUrl,jdbcType=VARCHAR},
+      #{item.isRegistered,jdbcType=VARCHAR}, #{item.createId,jdbcType=VARCHAR}, #{item.createBy,jdbcType=VARCHAR},
+      #{item.createWay,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+
+
+  <!--批量更新已注册 -->
+  <update id="BatchUpdate" parameterType="java.util.Map">
+    UPDATE wr_sys_user
+    <set>
+      <if test="isRegistered != null">
+        is_registered = #{isRegistered,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id IN
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+
+
+  <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
+  <delete id="batchDelete" parameterType="java.util.Map" >
+    delete from wr_sys_user
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+  </delete>
+
+  <!--批量查询 -->
+  <select id="BatchSelect" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wr_sys_user
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+  </select>
+
+</mapper>

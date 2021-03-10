@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SchSpaceMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SchSpace">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="parent_ids" jdbcType="VARCHAR" property="parentIds" />
+    <result column="space_code" jdbcType="VARCHAR" property="spaceCode" />
+    <result column="parent_space_code" jdbcType="VARCHAR" property="parentSpaceCode" />
+    <result column="parent_space_codes" jdbcType="VARCHAR" property="parentSpaceCodes" />
+    <result column="space_name" jdbcType="VARCHAR" property="spaceName" />
+    <result column="parent_space_name" jdbcType="VARCHAR" property="parentSpaceName" />
+    <result column="parent_space_names" jdbcType="VARCHAR" property="parentSpaceNames" />
+    <result column="space_alias" jdbcType="VARCHAR" property="spaceAlias" />
+    <result column="space_type" jdbcType="CHAR" property="spaceType" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="VARCHAR" property="isDelete" />
+    <result column="delete_id" jdbcType="VARCHAR" property="deleteId" />
+    <result column="delete_by" jdbcType="VARCHAR" property="deleteBy" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, parent_id, parent_ids, space_code, parent_space_code, parent_space_codes, space_name, parent_space_name,
+    parent_space_names, space_alias, space_type, sort_num, create_id, create_by, create_way, create_time, remark, is_delete,
+    delete_id, delete_by, delete_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_sch_space
+    where is_delete='0' and id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据参数查询，返回单个实例-->
+  <select id="selectOneByParam" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sch_space wss
+    where wss.is_delete='0'
+    <if test="parentId!=null and parentId!=''">
+      AND wss.parent_id = #{parentId,jdbcType=VARCHAR}
+    </if>
+    <if test="spaceType!=null and spaceType!=''">
+      AND wss.space_type = #{spaceType,jdbcType=CHAR}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT count(0) FROM wr_sch_space wsp WHERE wsp.is_delete = '0'
+  </select>
+
+
+  <select id="queryListByPage" parameterType="com.shouzhi.pojo.db.SchSpace" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sch_space wsp
+    where wsp.is_delete='0'
+    <if test="spaceType!=null and spaceType!=''">
+      AND wsp.space_type = #{spaceType,jdbcType=CHAR}
+    </if>
+    <if test="spaceName!=null and spaceName!=''">
+      AND wsp.space_name = #{spaceName,jdbcType=VARCHAR}
+    </if>
+    <if test="parentId!=null and parentId!=''">
+      AND wsp.parent_id = #{parentId,jdbcType=VARCHAR}
+    </if>
+
+    <if test="parentIds!=null and parentIds!=''">
+      AND wsp.parent_ids = #{parentIds,jdbcType=VARCHAR}
+    </if>
+
+    <if test="parentIdsLike!=null and parentIdsLike!=''">
+      AND wsp.parent_ids LIKE concat('%',#{parentIdsLike,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="includeParentRegion!=null and includeParentRegion!=''">
+      AND (wsp.parent_id = #{includeParentRegion,jdbcType=VARCHAR} OR wsp.id = #{includeParentRegion,jdbcType=VARCHAR})
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_sch_space
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SchSpace">
+    insert into wr_sch_space (id, parent_id, parent_ids,
+      space_code, parent_space_code, parent_space_codes, space_name, parent_space_name, parent_space_names, space_alias,
+      space_type, sort_num, create_id,
+      create_by, create_way, create_time, remark,
+      is_delete, delete_id, delete_by, delete_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR}, 
+      #{spaceCode,jdbcType=VARCHAR}, #{parentSpaceCode,jdbcType=VARCHAR}, #{parentSpaceCodes,jdbcType=VARCHAR},
+      #{spaceName,jdbcType=VARCHAR}, #{parentSpaceName,jdbcType=VARCHAR}, #{parentSpaceNames,jdbcType=VARCHAR},
+      #{spaceAlias,jdbcType=VARCHAR},
+      #{spaceType,jdbcType=CHAR}, #{sortNum,jdbcType=INTEGER}, #{createId,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},
+      #{isDelete,jdbcType=VARCHAR}, #{deleteId,jdbcType=VARCHAR}, #{deleteBy,jdbcType=VARCHAR}, #{deleteTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SchSpace">
+    insert into wr_sch_space
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="parentIds != null">
+        parent_ids,
+      </if>
+      <if test="spaceCode != null">
+        space_code,
+      </if>
+      <if test="parentSpaceCode != null">
+        parent_space_code,
+      </if>
+      <if test="parentSpaceCodes != null">
+        parent_space_codes,
+      </if>
+      <if test="spaceName != null">
+        space_name,
+      </if>
+      <if test="parentSpaceName != null">
+        parent_space_name,
+      </if>
+      <if test="parentSpaceNames != null">
+        parent_space_names,
+      </if>
+      <if test="spaceAlias != null">
+        space_alias,
+      </if>
+      <if test="spaceType != null">
+        space_type,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteId != null">
+        delete_id,
+      </if>
+      <if test="deleteBy != null">
+        delete_by,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentIds != null">
+        #{parentIds,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceCode != null">
+        #{spaceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceCode != null">
+        #{parentSpaceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceCodes != null">
+        #{parentSpaceCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceName != null">
+        #{spaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceName != null">
+        #{parentSpaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceNames != null">
+        #{parentSpaceNames,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceAlias != null">
+        #{spaceAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceType != null">
+        #{spaceType,jdbcType=CHAR},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteId != null">
+        #{deleteId,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteBy != null">
+        #{deleteBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SchSpace">
+    update wr_sch_space
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentIds != null">
+        parent_ids = #{parentIds,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceCode != null">
+        space_code = #{spaceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceCode != null">
+        parent_space_code = #{parentSpaceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceCodes != null">
+        parent_space_codes = #{parentSpaceCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceName != null">
+        space_name = #{spaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceName != null">
+        parent_space_name = #{parentSpaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceNames != null">
+        parent_space_names = #{parentSpaceNames,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceAlias != null">
+        space_alias = #{spaceAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceType != null">
+        space_type = #{spaceType,jdbcType=CHAR},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteId != null">
+        delete_id = #{deleteId,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteBy != null">
+        delete_by = #{deleteBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SchSpace">
+    update wr_sch_space
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      parent_ids = #{parentIds,jdbcType=VARCHAR},
+      space_code = #{spaceCode,jdbcType=VARCHAR},
+    parent_space_code = #{parentSpaceCode,jdbcType=VARCHAR},
+    parent_space_codes = #{parentSpaceCodes,jdbcType=VARCHAR},
+    space_name = #{spaceName,jdbcType=VARCHAR},
+    parent_space_name = #{parentSpaceName,jdbcType=VARCHAR},
+    parent_space_names = #{parentSpaceNames,jdbcType=VARCHAR},
+      space_alias = #{spaceAlias,jdbcType=VARCHAR},
+      space_type = #{spaceType,jdbcType=CHAR},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+    delete_id = #{deleteId,jdbcType=VARCHAR},
+      delete_by = #{deleteBy,jdbcType=VARCHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量插入-->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_sch_space (id, parent_id, parent_ids,
+    space_code, parent_space_code, parent_space_codes, space_name, parent_space_name, parent_space_names, space_alias,
+    space_type, sort_num, create_id,
+    create_by, create_way, create_time, remark
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=VARCHAR}, #{item.parentId,jdbcType=VARCHAR}, #{item.parentIds,jdbcType=VARCHAR},
+      #{item.spaceCode,jdbcType=VARCHAR}, #{item.parentSpaceCode,jdbcType=VARCHAR}, #{item.parentSpaceCodes,jdbcType=VARCHAR},
+      #{item.spaceName,jdbcType=VARCHAR}, #{item.parentSpaceName,jdbcType=VARCHAR}, #{item.parentSpaceNames,jdbcType=VARCHAR},
+      #{item.spaceAlias,jdbcType=VARCHAR},
+      #{item.spaceType,jdbcType=CHAR}, #{item.sortNum,jdbcType=INTEGER}, #{item.createId,jdbcType=VARCHAR},
+      #{item.createBy,jdbcType=VARCHAR}, #{item.createWay,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+
+
+  <!--批量更新 -->
+  <update id="BatchUpdate" parameterType="java.util.Map">
+    UPDATE wr_sch_space
+    <set>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteId != null">
+        delete_id = #{deleteId,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteBy != null">
+        delete_by = #{deleteBy,jdbcType=VARCHAR},
+      </if>
+
+      <if test="parentSpaceCode != null">
+        parent_space_code = #{parentSpaceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceCodesReplaceFrom!=null and parentSpaceCodesReplaceTo!=null">
+        parent_space_codes = REPLACE(parent_space_codes, #{parentSpaceCodesReplaceFrom,jdbcType=VARCHAR}, #{parentSpaceCodesReplaceTo,jdbcType=VARCHAR}),
+      </if>
+
+      <if test="parentSpaceName != null">
+        parent_space_name = #{parentSpaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentSpaceNamesReplaceFrom!=null and parentSpaceNamesReplaceTo!=null">
+        parent_space_names = REPLACE(parent_space_names, #{parentSpaceNamesReplaceFrom,jdbcType=VARCHAR}, #{parentSpaceNamesReplaceTo,jdbcType=VARCHAR}),
+      </if>
+
+    </set>
+    <where>
+        1=1
+      <if test="idIn != null">
+        AND id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+
+      <if test="parentSpaceCodeEq != null">
+        AND parent_space_code = #{parentSpaceCodeEq,jdbcType=VARCHAR}
+      </if>
+      <if test="parentSpaceCodesLike != null">
+        AND parent_space_codes LIKE concat('%',#{parentSpaceCodesLike,jdbcType=VARCHAR},'%')
+      </if>
+
+      <if test="parentSpaceNameEq != null">
+        AND parent_space_name = #{parentSpaceNameEq,jdbcType=VARCHAR}
+      </if>
+      <if test="parentSpaceNamesLike != null">
+        AND parent_space_names LIKE concat('%',#{parentSpaceNamesLike,jdbcType=VARCHAR},'%')
+      </if>
+
+    </where>
+  </update>
+
+  <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
+  <delete id="batchDelete" parameterType="java.util.Map" >
+    delete from wr_sch_space
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="parentIdsLike != null">
+      parent_ids LIKE concat('%',#{parentIdsLike,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="parentIdsRegexp != null">
+      parent_ids REGEXP #{parentIdsRegexp,jdbcType=VARCHAR}
+    </if>
+  </delete>
+
+  <!--批量查询 -->
+  <select id="BatchSelect" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wr_sch_space
+    where
+    <if test="idIn != null">
+      is_delete='0' AND id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="parentIdsLike != null">
+      parent_ids LIKE concat('%',#{parentIdsLike,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="parentIdsRegexp != null">
+      parent_ids REGEXP #{parentIdsRegexp,jdbcType=VARCHAR}
+    </if>
+
+    <if test="schSpaceNamesIn != null">
+      is_delete='0' AND CONCAT(parent_space_names,space_name) IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+  </select>
+
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SysStaticParamMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SysStaticParam">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="param_name" jdbcType="VARCHAR" property="paramName" />
+    <result column="param_val" jdbcType="VARCHAR" property="paramVal" />
+    <result column="param_desc" jdbcType="VARCHAR" property="paramDesc" />
+    <result column="show_type" jdbcType="CHAR" property="showType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, parent_id, param_name, param_val, param_desc, show_type, remark
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_sys_static_param
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="queryListByPage" parameterType="com.shouzhi.pojo.db.SysStaticParam" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_sys_static_param wssp
+    where 1=1
+    <if test="parentId!=null and parentId!=''">
+      AND wssp.parent_id = #{parentId,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_sys_static_param
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SysStaticParam">
+    insert into wr_sys_static_param (id, parent_id, param_name,
+      param_val, param_desc, show_type, remark
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{paramName,jdbcType=VARCHAR}, 
+      #{paramVal,jdbcType=VARCHAR}, #{paramDesc,jdbcType=VARCHAR}, #{showType,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SysStaticParam">
+    insert into wr_sys_static_param
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="paramName != null">
+        param_name,
+      </if>
+      <if test="paramVal != null">
+        param_val,
+      </if>
+      <if test="paramDesc != null">
+        param_desc,
+      </if>
+      <if test="showType != null">
+        show_type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null">
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramVal != null">
+        #{paramVal,jdbcType=VARCHAR},
+      </if>
+      <if test="paramDesc != null">
+        #{paramDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="showType != null">
+        #{showType,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SysStaticParam">
+    update wr_sys_static_param
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null">
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramVal != null">
+        param_val = #{paramVal,jdbcType=VARCHAR},
+      </if>
+      <if test="paramDesc != null">
+        param_desc = #{paramDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="showType != null">
+        show_type = #{showType,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SysStaticParam">
+    update wr_sys_static_param
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      param_name = #{paramName,jdbcType=VARCHAR},
+      param_val = #{paramVal,jdbcType=VARCHAR},
+      param_desc = #{paramDesc,jdbcType=VARCHAR},
+      show_type = #{showType,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
