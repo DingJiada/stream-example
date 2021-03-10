@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "dtd/mybatis-generator-config_1_0.dtd">
+<!--利用MyBatis Generator里面的Xml文件格式，复制成为resource的xml文件，并进行修改-->
+<generatorConfiguration>
+    <!--找到MySQL驱动包的路径,逆向生成时在springboot中不要指定最新版的驱动,否则会只生成插入代码-->
+    <classPathEntry location="E:\Java\maven\localRepositorys_ali\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar" />
+    <!--配置连接MySQL数据库的信息-->
+    <context id="inputdb" targetRuntime="MyBatis3">
+        <!-- 为生成的pojo实体类添加Serializable序列化 和 ToString方法 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <!-- 生成注释配置 是否去除自动生成的注释 true：是 ： false:否 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!-- JDBC连接配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/wechat_project?useSSL=false"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+        <!--会将数据库里的int类型数据转换为Java里的bigDecimals -->
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        <!--配置各个文件的相对路径和项目路径-->
+        <!--产生实体类，需要和App是同级的-->
+        <javaModelGenerator targetPackage="com.shouzhi.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!--映射文件，一定是在resources中的-->
+        <!-- <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">-->
+        <sqlMapGenerator targetPackage="com.shouzhi.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+        <!--底层dao-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.shouzhi.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--将example类型设为false，否则实体类里面会多一个example的类exampleStudent -->
+        <!--表明为数据库的表明，生成实体类Student，会自动生成到pojo的目录中-->
+        <table tableName="wr_school_space_info" domainObjectName="SchoolSpaceInfo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+
+
+    </context>
+</generatorConfiguration>

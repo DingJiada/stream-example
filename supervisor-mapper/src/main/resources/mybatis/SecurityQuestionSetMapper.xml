@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SecurityQuestionSetMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SecurityQuestionSet">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="basic_auth_id" jdbcType="VARCHAR" property="basicAuthId" />
+    <result column="security_question_id" jdbcType="VARCHAR" property="securityQuestionId" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="is_locked" jdbcType="CHAR" property="isLocked" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, basic_auth_id, security_question_id, rank, answer, is_locked, create_id, create_by, 
+    create_way, create_time, remark, is_delete, delete_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_security_question_set
+    where is_delete='0' and id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="queryListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_security_question_set wsqs
+    where wsqs.is_delete='0'
+    <if test="basicAuthId!=null and basicAuthId!=''">
+      AND wsqs.basic_auth_id = #{basicAuthId,jdbcType=VARCHAR}
+    </if>
+    <if test="securityQuestionId!=null and securityQuestionId!=''">
+      AND wsqs.security_question_id = #{securityQuestionId,jdbcType=VARCHAR}
+    </if>
+    <if test="rank!=null and rank!=''">
+      AND wsqs.rank = #{rank,jdbcType=INTEGER}
+    </if>
+    <if test="answer!=null and answer!=''">
+      AND wsqs.answer = #{answer,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_security_question_set
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByBasicAuthId" parameterType="java.lang.String">
+    delete from wr_security_question_set
+    where basic_auth_id = #{basicAuthId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SecurityQuestionSet">
+    insert into wr_security_question_set (id, basic_auth_id, security_question_id, 
+      rank, answer, is_locked, 
+      create_id, create_by, create_way, 
+      create_time, remark, is_delete, 
+      delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{basicAuthId,jdbcType=VARCHAR}, #{securityQuestionId,jdbcType=VARCHAR}, 
+      #{rank,jdbcType=INTEGER}, #{answer,jdbcType=VARCHAR}, #{isLocked,jdbcType=CHAR}, 
+      #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=CHAR}, 
+      #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SecurityQuestionSet">
+    insert into wr_security_question_set
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="basicAuthId != null">
+        basic_auth_id,
+      </if>
+      <if test="securityQuestionId != null">
+        security_question_id,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="answer != null">
+        answer,
+      </if>
+      <if test="isLocked != null">
+        is_locked,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="basicAuthId != null">
+        #{basicAuthId,jdbcType=VARCHAR},
+      </if>
+      <if test="securityQuestionId != null">
+        #{securityQuestionId,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null">
+        #{isLocked,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SecurityQuestionSet">
+    update wr_security_question_set
+    <set>
+      <if test="basicAuthId != null">
+        basic_auth_id = #{basicAuthId,jdbcType=VARCHAR},
+      </if>
+      <if test="securityQuestionId != null">
+        security_question_id = #{securityQuestionId,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="answer != null">
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null">
+        is_locked = #{isLocked,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SecurityQuestionSet">
+    update wr_security_question_set
+    set basic_auth_id = #{basicAuthId,jdbcType=VARCHAR},
+      security_question_id = #{securityQuestionId,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=INTEGER},
+      answer = #{answer,jdbcType=VARCHAR},
+      is_locked = #{isLocked,jdbcType=CHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量插入-->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_security_question_set (id, basic_auth_id, security_question_id,
+    rank, answer,
+    create_id, create_by, create_way,
+    create_time, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.basicAuthId,jdbcType=VARCHAR}, #{item.securityQuestionId,jdbcType=VARCHAR},
+      #{item.rank,jdbcType=INTEGER}, #{item.answer,jdbcType=VARCHAR},
+      #{item.createId,jdbcType=VARCHAR}, #{item.createBy,jdbcType=VARCHAR}, #{item.createWay,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+
+  <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
+  <delete id="batchDelete" parameterType="java.util.Map" >
+    delete from wr_security_question_set
+    where
+    <if test="basicAuthIdEq != null">
+      basic_auth_id = #{basicAuthIdEq,jdbcType=VARCHAR}
+    </if>
+  </delete>
+
+  <!--批量查询 -->
+  <select id="BatchSelect" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wr_security_question_set
+    where
+    <if test="basicAuthIdEq != null">
+      basic_auth_id = #{basicAuthIdEq,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+</mapper>

@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SchDeviceMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SchDevice">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sch_space_id" jdbcType="VARCHAR" property="schSpaceId" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="device_location" jdbcType="VARCHAR" property="deviceLocation" />
+    <result column="device_type" jdbcType="CHAR" property="deviceType" />
+    <result column="access_protocol" jdbcType="CHAR" property="accessProtocol" />
+    <result column="ip_addr" jdbcType="VARCHAR" property="ipAddr" />
+    <result column="access_user" jdbcType="VARCHAR" property="accessUser" />
+    <result column="access_pwd" jdbcType="VARCHAR" property="accessPwd" />
+    <result column="rtsp_url_main" jdbcType="VARCHAR" property="rtspUrlMain" />
+    <result column="rtsp_url_sub" jdbcType="VARCHAR" property="rtspUrlSub" />
+    <result column="rtmp_get_url" jdbcType="VARCHAR" property="rtmpGetUrl" />
+    <result column="flv_get_url" jdbcType="VARCHAR" property="flvGetUrl" />
+    <result column="hls_get_url" jdbcType="VARCHAR" property="hlsGetUrl" />
+    <result column="connect_status" jdbcType="CHAR" property="connectStatus" />
+    <result column="is_support_control" jdbcType="CHAR" property="isSupportControl" />
+
+    <result column="is_support_absolute_move" jdbcType="CHAR" property="isSupportAbsoluteMove" />
+    <result column="is_support_continuous_move" jdbcType="CHAR" property="isSupportContinuousMove" />
+
+    <result column="is_enable_control" jdbcType="CHAR" property="isEnableControl" />
+    <result column="is_active" jdbcType="CHAR" property="isActive" />
+    <result column="onvif_user" jdbcType="VARCHAR" property="onvifUser" />
+    <result column="onvif_pwd" jdbcType="VARCHAR" property="onvifPwd" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="VARCHAR" property="isDelete" />
+    <result column="delete_id" jdbcType="VARCHAR" property="deleteId" />
+    <result column="delete_by" jdbcType="VARCHAR" property="deleteBy" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+
+    <result column="sch_space_name" jdbcType="VARCHAR" property="schSpaceName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sch_space_id, serial_number, device_name, device_location, device_type, access_protocol, ip_addr,
+    access_user, access_pwd, rtsp_url_main, rtsp_url_sub, rtmp_get_url, flv_get_url, 
+    hls_get_url, connect_status, is_support_control, is_support_absolute_move, is_support_continuous_move,
+     is_enable_control, is_active, onvif_user,
+    onvif_pwd, create_id, create_by, create_way, create_time, remark, is_delete, delete_id, delete_by,
+    delete_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_sch_device
+    where is_delete='0' and id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="queryListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    wsd.* ,
+    CONCAT(wss.parent_space_names,wss.space_name) sch_space_name
+    from wr_sch_device wsd
+    LEFT JOIN wr_sch_space wss ON wsd.sch_space_id=wss.id AND wss.is_delete='0'
+    where wsd.is_delete='0'
+    <if test="deviceType!=null and deviceType!=''">
+      AND wsd.device_type = #{deviceType,jdbcType=CHAR}
+    </if>
+    <if test="deviceTypeNotEq!=null and deviceTypeNotEq!=''">
+      AND wsd.device_type != #{deviceTypeNotEq,jdbcType=CHAR}
+    </if>
+    <if test="deviceName!=null and deviceName!=''">
+      AND wsd.device_name = #{deviceName,jdbcType=VARCHAR}
+    </if>
+    <if test="ipAddr!=null and ipAddr!=''">
+      AND wsd.ip_addr = #{ipAddr,jdbcType=VARCHAR}
+    </if>
+    <if test="serialNumber!=null and serialNumber!=''">
+      AND wsd.serial_number = #{serialNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="schSpaceId!=null and schSpaceId!=''">
+      AND wsd.sch_space_id = #{schSpaceId,jdbcType=VARCHAR}
+    </if>
+    <if test="includeSubRegion!=null and includeSubRegion!=''">
+      AND (wss.parent_ids LIKE concat('%',#{schSpaceIdsLike,jdbcType=VARCHAR},'%') OR wss.id = #{includeSubRegion,jdbcType=VARCHAR})
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_sch_device
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SchDevice">
+    insert into wr_sch_device (id, sch_space_id, serial_number,
+      device_name, device_location, device_type, access_protocol,
+      ip_addr, access_user, access_pwd,
+      rtsp_url_main, rtsp_url_sub, rtmp_get_url, 
+      flv_get_url, hls_get_url, connect_status, 
+      is_support_control, is_support_absolute_move, is_support_continuous_move,
+      is_enable_control, is_active,
+      onvif_user, onvif_pwd, create_id, 
+      create_by, create_way, create_time, remark,
+      is_delete, delete_id, delete_by, 
+      delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{schSpaceId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR},
+      #{deviceName,jdbcType=VARCHAR}, #{deviceLocation,jdbcType=VARCHAR}, #{deviceType,jdbcType=CHAR}, #{accessProtocol,jdbcType=CHAR},
+      #{ipAddr,jdbcType=VARCHAR}, #{accessUser,jdbcType=VARCHAR}, #{accessPwd,jdbcType=VARCHAR}, 
+      #{rtspUrlMain,jdbcType=VARCHAR}, #{rtspUrlSub,jdbcType=VARCHAR}, #{rtmpGetUrl,jdbcType=VARCHAR}, 
+      #{flvGetUrl,jdbcType=VARCHAR}, #{hlsGetUrl,jdbcType=VARCHAR}, #{connectStatus,jdbcType=CHAR}, 
+      #{isSupportControl,jdbcType=CHAR}, #{isSupportAbsoluteMove,jdbcType=CHAR}, #{isSupportContinuousMove,jdbcType=CHAR},
+      #{isEnableControl,jdbcType=CHAR}, #{isActive,jdbcType=CHAR},
+      #{onvifUser,jdbcType=VARCHAR}, #{onvifPwd,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},
+      #{isDelete,jdbcType=VARCHAR}, #{deleteId,jdbcType=VARCHAR}, #{deleteBy,jdbcType=VARCHAR}, 
+      #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SchDevice">
+    insert into wr_sch_device
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schSpaceId != null">
+        sch_space_id,
+      </if>
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+      <if test="deviceName != null">
+        device_name,
+      </if>
+      <if test="deviceLocation != null">
+        device_location,
+      </if>
+      <if test="deviceType != null">
+        device_type,
+      </if>
+      <if test="accessProtocol != null">
+        access_protocol,
+      </if>
+      <if test="ipAddr != null">
+        ip_addr,
+      </if>
+      <if test="accessUser != null">
+        access_user,
+      </if>
+      <if test="accessPwd != null">
+        access_pwd,
+      </if>
+      <if test="rtspUrlMain != null">
+        rtsp_url_main,
+      </if>
+      <if test="rtspUrlSub != null">
+        rtsp_url_sub,
+      </if>
+      <if test="rtmpGetUrl != null">
+        rtmp_get_url,
+      </if>
+      <if test="flvGetUrl != null">
+        flv_get_url,
+      </if>
+      <if test="hlsGetUrl != null">
+        hls_get_url,
+      </if>
+      <if test="connectStatus != null">
+        connect_status,
+      </if>
+      <if test="isSupportControl != null">
+        is_support_control,
+      </if>
+      <if test="isSupportAbsoluteMove != null">
+        is_support_absolute_move,
+      </if>
+      <if test="isSupportContinuousMove != null">
+        is_support_continuous_move,
+      </if>
+      <if test="isEnableControl != null">
+        is_enable_control,
+      </if>
+      <if test="isActive != null">
+        is_active,
+      </if>
+      <if test="onvifUser != null">
+        onvif_user,
+      </if>
+      <if test="onvifPwd != null">
+        onvif_pwd,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteId != null">
+        delete_id,
+      </if>
+      <if test="deleteBy != null">
+        delete_by,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="schSpaceId != null">
+        #{schSpaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceLocation != null">
+        #{deviceLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=CHAR},
+      </if>
+      <if test="accessProtocol != null">
+        #{accessProtocol,jdbcType=CHAR},
+      </if>
+      <if test="ipAddr != null">
+        #{ipAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="accessUser != null">
+        #{accessUser,jdbcType=VARCHAR},
+      </if>
+      <if test="accessPwd != null">
+        #{accessPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="rtspUrlMain != null">
+        #{rtspUrlMain,jdbcType=VARCHAR},
+      </if>
+      <if test="rtspUrlSub != null">
+        #{rtspUrlSub,jdbcType=VARCHAR},
+      </if>
+      <if test="rtmpGetUrl != null">
+        #{rtmpGetUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flvGetUrl != null">
+        #{flvGetUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hlsGetUrl != null">
+        #{hlsGetUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="connectStatus != null">
+        #{connectStatus,jdbcType=CHAR},
+      </if>
+      <if test="isSupportControl != null">
+        #{isSupportControl,jdbcType=CHAR},
+      </if>
+      <if test="isSupportAbsoluteMove != null">
+        #{isSupportAbsoluteMove,jdbcType=CHAR},
+      </if>
+      <if test="isSupportContinuousMove != null">
+        #{isSupportContinuousMove,jdbcType=CHAR},
+      </if>
+      <if test="isEnableControl != null">
+        #{isEnableControl,jdbcType=CHAR},
+      </if>
+      <if test="isActive != null">
+        #{isActive,jdbcType=CHAR},
+      </if>
+      <if test="onvifUser != null">
+        #{onvifUser,jdbcType=VARCHAR},
+      </if>
+      <if test="onvifPwd != null">
+        #{onvifPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteId != null">
+        #{deleteId,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteBy != null">
+        #{deleteBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SchDevice">
+    update wr_sch_device
+    <set>
+      <if test="schSpaceId != null">
+        sch_space_id = #{schSpaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        device_name = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceLocation != null">
+        device_location = #{deviceLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        device_type = #{deviceType,jdbcType=CHAR},
+      </if>
+      <if test="accessProtocol != null">
+        access_protocol = #{accessProtocol,jdbcType=CHAR},
+      </if>
+      <if test="ipAddr != null">
+        ip_addr = #{ipAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="accessUser != null">
+        access_user = #{accessUser,jdbcType=VARCHAR},
+      </if>
+      <if test="accessPwd != null">
+        access_pwd = #{accessPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="rtspUrlMain != null">
+        rtsp_url_main = #{rtspUrlMain,jdbcType=VARCHAR},
+      </if>
+      <if test="rtspUrlSub != null">
+        rtsp_url_sub = #{rtspUrlSub,jdbcType=VARCHAR},
+      </if>
+      <if test="rtmpGetUrl != null">
+        rtmp_get_url = #{rtmpGetUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flvGetUrl != null">
+        flv_get_url = #{flvGetUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hlsGetUrl != null">
+        hls_get_url = #{hlsGetUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="connectStatus != null">
+        connect_status = #{connectStatus,jdbcType=CHAR},
+      </if>
+      <if test="isSupportControl != null">
+        is_support_control = #{isSupportControl,jdbcType=CHAR},
+      </if>
+      <if test="isSupportAbsoluteMove != null">
+        is_support_absolute_move = #{isSupportAbsoluteMove,jdbcType=CHAR},
+      </if>
+      <if test="isSupportContinuousMove != null">
+        is_support_continuous_move = #{isSupportContinuousMove,jdbcType=CHAR},
+      </if>
+      <if test="isEnableControl != null">
+        is_enable_control = #{isEnableControl,jdbcType=CHAR},
+      </if>
+      <if test="isActive != null">
+        is_active = #{isActive,jdbcType=CHAR},
+      </if>
+      <if test="onvifUser != null">
+        onvif_user = #{onvifUser,jdbcType=VARCHAR},
+      </if>
+      <if test="onvifPwd != null">
+        onvif_pwd = #{onvifPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteId != null">
+        delete_id = #{deleteId,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteBy != null">
+        delete_by = #{deleteBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SchDevice">
+    update wr_sch_device
+    set sch_space_id = #{schSpaceId,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=VARCHAR},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+    device_location = #{deviceLocation,jdbcType=VARCHAR},
+    device_type = #{deviceType,jdbcType=CHAR},
+      access_protocol = #{accessProtocol,jdbcType=CHAR},
+      ip_addr = #{ipAddr,jdbcType=VARCHAR},
+      access_user = #{accessUser,jdbcType=VARCHAR},
+      access_pwd = #{accessPwd,jdbcType=VARCHAR},
+      rtsp_url_main = #{rtspUrlMain,jdbcType=VARCHAR},
+      rtsp_url_sub = #{rtspUrlSub,jdbcType=VARCHAR},
+      rtmp_get_url = #{rtmpGetUrl,jdbcType=VARCHAR},
+      flv_get_url = #{flvGetUrl,jdbcType=VARCHAR},
+      hls_get_url = #{hlsGetUrl,jdbcType=VARCHAR},
+      connect_status = #{connectStatus,jdbcType=CHAR},
+      is_support_control = #{isSupportControl,jdbcType=CHAR},
+    is_support_absolute_move = #{isSupportAbsoluteMove,jdbcType=CHAR},
+    is_support_continuous_move = #{isSupportContinuousMove,jdbcType=CHAR},
+    is_enable_control = #{isEnableControl,jdbcType=CHAR},
+      is_active = #{isActive,jdbcType=CHAR},
+      onvif_user = #{onvifUser,jdbcType=VARCHAR},
+      onvif_pwd = #{onvifPwd,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      delete_id = #{deleteId,jdbcType=VARCHAR},
+      delete_by = #{deleteBy,jdbcType=VARCHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量插入-->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_sch_device (id, sch_space_id, serial_number,
+    device_name, device_location, device_type, access_protocol,
+    ip_addr, access_user, access_pwd,
+    rtsp_url_main, rtsp_url_sub, rtmp_get_url,
+    flv_get_url, hls_get_url, connect_status,
+    is_support_control, is_support_absolute_move, is_support_continuous_move,
+    is_enable_control, is_active,
+    onvif_user, onvif_pwd, create_id,
+    create_by, create_way, create_time, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=VARCHAR}, #{item.schSpaceId,jdbcType=VARCHAR}, #{item.serialNumber,jdbcType=VARCHAR},
+      #{item.deviceName,jdbcType=VARCHAR}, #{item.deviceLocation,jdbcType=VARCHAR}, #{item.deviceType,jdbcType=CHAR}, #{item.accessProtocol,jdbcType=CHAR},
+      #{item.ipAddr,jdbcType=VARCHAR}, #{item.accessUser,jdbcType=VARCHAR}, #{item.accessPwd,jdbcType=VARCHAR},
+      #{item.rtspUrlMain,jdbcType=VARCHAR}, #{item.rtspUrlSub,jdbcType=VARCHAR}, #{item.rtmpGetUrl,jdbcType=VARCHAR},
+      #{item.flvGetUrl,jdbcType=VARCHAR}, #{item.hlsGetUrl,jdbcType=VARCHAR}, #{item.connectStatus,jdbcType=CHAR},
+      #{item.isSupportControl,jdbcType=CHAR}, #{item.isSupportAbsoluteMove,jdbcType=CHAR}, #{item.isSupportContinuousMove,jdbcType=CHAR},
+      #{item.isEnableControl,jdbcType=CHAR}, #{item.isActive,jdbcType=CHAR},
+      #{item.onvifUser,jdbcType=VARCHAR}, #{item.onvifPwd,jdbcType=VARCHAR}, #{item.createId,jdbcType=VARCHAR},
+      #{item.createBy,jdbcType=VARCHAR}, #{item.createWay,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+
+
+  <!--批量更新 -->
+  <update id="BatchUpdate" parameterType="java.util.Map">
+    UPDATE wr_sch_device
+    <set>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteId != null">
+        delete_id = #{deleteId,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteBy != null">
+        delete_by = #{deleteBy,jdbcType=VARCHAR},
+      </if>
+
+      <if test="rtmpGetUrlReplaceFrom!=null and rtmpGetUrlReplaceTo!=null">
+        rtmp_get_url = REPLACE(rtmp_get_url, #{rtmpGetUrlReplaceFrom,jdbcType=VARCHAR}, #{rtmpGetUrlReplaceTo,jdbcType=VARCHAR}),
+      </if>
+      <if test="flvGetUrlReplaceFrom!=null and flvGetUrlReplaceTo!=null">
+        flv_get_url = REPLACE(flv_get_url, #{flvGetUrlReplaceFrom,jdbcType=VARCHAR}, #{flvGetUrlReplaceTo,jdbcType=VARCHAR}),
+      </if>
+      <if test="hlsGetUrlReplaceFrom!=null and hlsGetUrlReplaceTo!=null">
+        hls_get_url = REPLACE(hls_get_url, #{hlsGetUrlReplaceFrom,jdbcType=VARCHAR}, #{hlsGetUrlReplaceTo,jdbcType=VARCHAR}),
+      </if>
+
+    </set>
+    <where>
+      <if test="idIn != null">
+        id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+
+      <if test="schSpaceIdIn != null">
+        sch_space_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+
+      <if test="schSpaceIdEq != null">
+        sch_space_id = #{schSpaceIdEq,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </update>
+
+  <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
+  <delete id="batchDelete" parameterType="java.util.Map" >
+    delete from wr_sch_device
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="schSpaceIdIn != null">
+      sch_space_id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="schSpaceIdEq != null">
+      sch_space_id = #{schSpaceIdEq,jdbcType=VARCHAR}
+    </if>
+  </delete>
+
+  <!--批量查询 -->
+  <select id="BatchSelect" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wr_sch_device
+    where
+    <if test="idIn != null">
+      is_delete='0' AND id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="schSpaceIdIn != null">
+      is_delete='0' AND sch_space_id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="schSpaceIdEq != null">
+      is_delete='0' AND sch_space_id = #{schSpaceIdEq,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+
+</mapper>

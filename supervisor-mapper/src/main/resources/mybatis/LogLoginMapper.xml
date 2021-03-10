@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.LogLoginMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.LogLogin">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="login_state" jdbcType="CHAR" property="loginState" />
+    <result column="login_code" jdbcType="VARCHAR" property="loginCode" />
+    <result column="login_ua" jdbcType="VARCHAR" property="loginUa" />
+    <result column="os_name" jdbcType="VARCHAR" property="osName" />
+    <result column="os_group_name" jdbcType="VARCHAR" property="osGroupName" />
+    <result column="os_device_type_name" jdbcType="VARCHAR" property="osDeviceTypeName" />
+    <result column="os_manufacturer_name" jdbcType="VARCHAR" property="osManufacturerName" />
+    <result column="os_version" jdbcType="VARCHAR" property="osVersion" />
+    <result column="browser_name" jdbcType="VARCHAR" property="browserName" />
+    <result column="browser_group_name" jdbcType="VARCHAR" property="browserGroupName" />
+    <result column="browser_type_name" jdbcType="VARCHAR" property="browserTypeName" />
+    <result column="browser_manufacturer_name" jdbcType="VARCHAR" property="browserManufacturerName" />
+    <result column="browser_rendering_engine" jdbcType="VARCHAR" property="browserRenderingEngine" />
+    <result column="browser_version" jdbcType="VARCHAR" property="browserVersion" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, login_ip, login_time, login_state, login_code, login_ua, os_name, os_group_name,
+    os_device_type_name, os_manufacturer_name, os_version, browser_name, browser_group_name,
+    browser_type_name, browser_manufacturer_name, browser_rendering_engine, browser_version,
+    create_id, create_by, create_way, create_time, remark, is_delete, delete_time
+  </sql>
+
+  <sql id="Alias_Column_List">
+    wll.id, wll.login_ip, wll.login_time, wll.login_state, wll.login_code, wll.login_ua, wll.os_name, wll.os_group_name,
+    wll.os_device_type_name, wll.os_manufacturer_name, wll.os_version, wll.browser_name, wll.browser_group_name,
+    wll.browser_type_name, wll.browser_manufacturer_name, wll.browser_rendering_engine, wll.browser_version,
+    wll.create_id, wll.create_by, wll.create_way, wll.create_time, wll.remark, wll.is_delete, wll.delete_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_log_login
+    where is_delete='0' and id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="queryListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Alias_Column_List" /> ,
+    wll.create_by user_name,
+    -- wba.user_name,
+    wsu.person_name,
+    GROUP_CONCAT(wsr.role_name) role_name
+    from wr_log_login wll
+    LEFT JOIN wr_basic_auth wba ON wll.create_id=wba.id AND wba.is_delete='0'
+    LEFT JOIN wr_sys_user wsu ON wba.sys_user_id=wsu.id AND wsu.is_delete='0'
+    LEFT JOIN wr_sys_user_role wsur ON wsu.id=wsur.sys_user_id
+    LEFT JOIN wr_sys_role wsr ON wsur.sys_role_id=wsr.id AND wsr.is_delete='0'
+    where wll.is_delete='0'
+    <if test="loginIp!=null and loginIp!=''">
+      AND wll.login_ip = #{loginIp,jdbcType=VARCHAR}
+    </if>
+    <if test="loginState!=null and loginState!=''">
+      AND wll.login_state = #{loginState,jdbcType=CHAR}
+    </if>
+    <if test="loginTimeLike!=null and loginTimeLike!=''">
+      AND wll.login_time LIKE concat('%',#{loginTimeLike,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="loginTimeStart!=null and loginTimeStart!='' and loginTimeEnd!=null and loginTimeEnd!=''">
+      AND wll.login_time <![CDATA[ >= ]]> #{loginTimeStart,jdbcType=VARCHAR} AND wll.login_time <![CDATA[ <= ]]> #{loginTimeEnd,jdbcType=VARCHAR}
+    </if>
+
+    <!-- AND wba.user_name LIKE concat('%',#{userNameLike,jdbcType=VARCHAR},'%') -->
+    <if test="userNameLike!=null and userNameLike!=''">
+      AND wll.create_by LIKE concat('%',#{userNameLike,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="personNameLike!=null and personNameLike!=''">
+      AND wsu.person_name LIKE concat('%',#{personNameLike,jdbcType=VARCHAR},'%')
+    </if>
+    GROUP BY wll.id
+    ORDER BY wll.login_time DESC
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_log_login
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.LogLogin">
+    insert into wr_log_login (id, login_ip, login_time, 
+      login_state, login_code, login_ua, 
+      os_name, os_group_name, os_device_type_name,
+      os_manufacturer_name, os_version, browser_name,
+      browser_group_name, browser_type_name, browser_manufacturer_name,
+      browser_rendering_engine, browser_version,
+      create_id, create_by, create_way,
+      create_time, remark, is_delete,
+      delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{loginIp,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP},
+      #{loginState,jdbcType=CHAR}, #{loginCode,jdbcType=VARCHAR}, #{loginUa,jdbcType=VARCHAR},
+      #{osName,jdbcType=VARCHAR}, #{osGroupName,jdbcType=VARCHAR}, #{osDeviceTypeName,jdbcType=VARCHAR},
+      #{osManufacturerName,jdbcType=VARCHAR}, #{osVersion,jdbcType=VARCHAR}, #{browserName,jdbcType=VARCHAR},
+      #{browserGroupName,jdbcType=VARCHAR}, #{browserTypeName,jdbcType=VARCHAR}, #{browserManufacturerName,jdbcType=VARCHAR},
+      #{browserRenderingEngine,jdbcType=VARCHAR}, #{browserVersion,jdbcType=VARCHAR},
+      #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=CHAR}, 
+      #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.LogLogin">
+    insert into wr_log_login
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="loginIp != null">
+        login_ip,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="loginState != null">
+        login_state,
+      </if>
+      <if test="loginCode != null">
+        login_code,
+      </if>
+      <if test="loginUa != null">
+        login_ua,
+      </if>
+      <if test="osName != null">
+        os_name,
+      </if>
+      <if test="osGroupName != null">
+        os_group_name,
+      </if>
+      <if test="osDeviceTypeName != null">
+        os_device_type_name,
+      </if>
+      <if test="osManufacturerName != null">
+        os_manufacturer_name,
+      </if>
+      <if test="osVersion != null">
+        os_version,
+      </if>
+      <if test="browserName != null">
+        browser_name,
+      </if>
+      <if test="browserGroupName != null">
+        browser_group_name,
+      </if>
+      <if test="browserTypeName != null">
+        browser_type_name,
+      </if>
+      <if test="browserManufacturerName != null">
+        browser_manufacturer_name,
+      </if>
+      <if test="browserRenderingEngine != null">
+        browser_rendering_engine,
+      </if>
+      <if test="browserVersion != null">
+        browser_version,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null">
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginState != null">
+        #{loginState,jdbcType=CHAR},
+      </if>
+      <if test="loginCode != null">
+        #{loginCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loginUa != null">
+        #{loginUa,jdbcType=VARCHAR},
+      </if>
+      <if test="osName != null">
+        #{osName,jdbcType=VARCHAR},
+      </if>
+      <if test="osGroupName != null">
+        #{osGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="osDeviceTypeName != null">
+        #{osDeviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="osManufacturerName != null">
+        #{osManufacturerName,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="browserName != null">
+        #{browserName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserGroupName != null">
+        #{browserGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserTypeName != null">
+        #{browserTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserManufacturerName != null">
+        #{browserManufacturerName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserRenderingEngine != null">
+        #{browserRenderingEngine,jdbcType=VARCHAR},
+      </if>
+      <if test="browserVersion != null">
+        #{browserVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.LogLogin">
+    update wr_log_login
+    <set>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginState != null">
+        login_state = #{loginState,jdbcType=CHAR},
+      </if>
+      <if test="loginCode != null">
+        login_code = #{loginCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loginUa != null">
+        login_ua = #{loginUa,jdbcType=VARCHAR},
+      </if>
+      <if test="osName != null">
+        os_name = #{osName,jdbcType=VARCHAR},
+      </if>
+      <if test="osGroupName != null">
+        os_group_name = #{osGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="osDeviceTypeName != null">
+        os_device_type_name = #{osDeviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="osManufacturerName != null">
+        os_manufacturer_name = #{osManufacturerName,jdbcType=VARCHAR},
+      </if>
+      <if test="osVersion != null">
+        os_version = #{osVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="browserName != null">
+        browser_name = #{browserName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserGroupName != null">
+        browser_group_name = #{browserGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserTypeName != null">
+        browser_type_name = #{browserTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserManufacturerName != null">
+        browser_manufacturer_name = #{browserManufacturerName,jdbcType=VARCHAR},
+      </if>
+      <if test="browserRenderingEngine != null">
+        browser_rendering_engine = #{browserRenderingEngine,jdbcType=VARCHAR},
+      </if>
+      <if test="browserVersion != null">
+        browser_version = #{browserVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.LogLogin">
+    update wr_log_login
+    set login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      login_state = #{loginState,jdbcType=CHAR},
+      login_code = #{loginCode,jdbcType=VARCHAR},
+      login_ua = #{loginUa,jdbcType=VARCHAR},
+      os_name = #{osName,jdbcType=VARCHAR},
+      os_group_name = #{osGroupName,jdbcType=VARCHAR},
+      os_device_type_name = #{osDeviceTypeName,jdbcType=VARCHAR},
+      os_manufacturer_name = #{osManufacturerName,jdbcType=VARCHAR},
+      os_version = #{osVersion,jdbcType=VARCHAR},
+      browser_name = #{browserName,jdbcType=VARCHAR},
+      browser_group_name = #{browserGroupName,jdbcType=VARCHAR},
+      browser_type_name = #{browserTypeName,jdbcType=VARCHAR},
+      browser_manufacturer_name = #{browserManufacturerName,jdbcType=VARCHAR},
+      browser_rendering_engine = #{browserRenderingEngine,jdbcType=VARCHAR},
+      browser_version = #{browserVersion,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,94 @@
+2020-08-11 10:30:35.947 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarting:50 - Starting SupervisorWebMediaTaskApplicationTests on DESKTOP-2HH4BDT with PID 12524 (started by HP-PC in E:\java\JetBrains\Intellij_IDEA\IdeaProjects\supervisor-project-v2\supervisor-web-media-task)
+2020-08-11 10:30:35.952 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStartupProfileInfo:648 - No active profile set, falling back to default profiles: default
+2020-08-11 10:30:39.403 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.multipleStoresDetected:247 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-08-11 10:30:39.416 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-08-11 10:30:39.533 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:185 - Finished Spring Data repository scanning in 79ms. Found 0 Redis repository interfaces.
+2020-08-11 10:30:46.714 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.initialize:171 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-11 10:30:49.370 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.connectAddresses:559 - Attempting to connect to: [127.0.0.1:5672]
+2020-08-11 10:30:49.820 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.createBareConnection:511 - Created new connection: rabbitConnectionFactory#394a6d2b:0/SimpleConnection@2474df51 [delegate=amqp://guest@127.0.0.1:5672/, localPort= 62151]
+2020-08-11 10:30:50.322 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarted:59 - Started SupervisorWebMediaTaskApplicationTests in 15.874 seconds (JVM running for 22.466)
+2020-08-11 10:33:16.251 [main] INFO  com.alibaba.druid.pool.DruidDataSource.init:928 - {dataSource-1} inited
+2020-08-11 10:34:04.832 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 10:34:05.716 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 10:34:05.779 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 10:34:06.720 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 10:34:06.722 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 10:34:07.707 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 10:34:07.722 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 10:34:07.723 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 10:34:07.724 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 10:34:07.726 [Thread-2] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.shutdown:208 - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-08-11 10:34:07.991 [Thread-2] INFO  com.alibaba.druid.pool.DruidDataSource.close:1823 - {dataSource-1} closed
+2020-08-11 10:38:32.398 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarting:50 - Starting SupervisorWebMediaTaskApplicationTests on DESKTOP-2HH4BDT with PID 10056 (started by HP-PC in E:\java\JetBrains\Intellij_IDEA\IdeaProjects\supervisor-project-v2\supervisor-web-media-task)
+2020-08-11 10:38:32.404 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStartupProfileInfo:648 - No active profile set, falling back to default profiles: default
+2020-08-11 10:38:34.725 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.multipleStoresDetected:247 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-08-11 10:38:34.731 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-08-11 10:38:34.845 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:185 - Finished Spring Data repository scanning in 81ms. Found 0 Redis repository interfaces.
+2020-08-11 10:38:40.436 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.initialize:171 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-11 10:38:42.913 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.connectAddresses:559 - Attempting to connect to: [127.0.0.1:5672]
+2020-08-11 10:38:43.065 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.createBareConnection:511 - Created new connection: rabbitConnectionFactory#27bcb4ad:0/SimpleConnection@5e2975ca [delegate=amqp://guest@127.0.0.1:5672/, localPort= 62235]
+2020-08-11 10:38:43.658 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarted:59 - Started SupervisorWebMediaTaskApplicationTests in 12.776 seconds (JVM running for 16.862)
+2020-08-11 10:38:50.295 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 10:38:51.256 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 10:38:51.297 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 10:38:52.273 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 10:38:52.275 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 10:38:53.230 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 10:38:53.253 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 10:38:53.254 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 10:38:53.254 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 10:38:53.256 [Thread-2] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.shutdown:208 - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-08-11 10:39:42.500 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarting:50 - Starting SupervisorWebMediaTaskApplicationTests on DESKTOP-2HH4BDT with PID 1064 (started by HP-PC in E:\java\JetBrains\Intellij_IDEA\IdeaProjects\supervisor-project-v2\supervisor-web-media-task)
+2020-08-11 10:39:42.506 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStartupProfileInfo:648 - No active profile set, falling back to default profiles: default
+2020-08-11 10:39:44.593 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.multipleStoresDetected:247 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-08-11 10:39:44.601 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-08-11 10:39:44.717 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:185 - Finished Spring Data repository scanning in 84ms. Found 0 Redis repository interfaces.
+2020-08-11 10:39:50.210 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.initialize:171 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-11 10:39:52.670 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.connectAddresses:559 - Attempting to connect to: [127.0.0.1:5672]
+2020-08-11 10:39:52.897 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.createBareConnection:511 - Created new connection: rabbitConnectionFactory#4f64d9cb:0/SimpleConnection@647ff23e [delegate=amqp://guest@127.0.0.1:5672/, localPort= 62253]
+2020-08-11 10:39:53.415 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarted:59 - Started SupervisorWebMediaTaskApplicationTests in 12.624 seconds (JVM running for 16.435)
+2020-08-11 10:39:55.707 [main] INFO  com.alibaba.druid.pool.DruidDataSource.init:928 - {dataSource-1} inited
+2020-08-11 10:42:37.272 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 11:01:13.961 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarting:50 - Starting SupervisorWebMediaTaskApplicationTests on DESKTOP-2HH4BDT with PID 10944 (started by HP-PC in E:\java\JetBrains\Intellij_IDEA\IdeaProjects\supervisor-project-v2\supervisor-web-media-task)
+2020-08-11 11:01:13.971 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStartupProfileInfo:648 - No active profile set, falling back to default profiles: default
+2020-08-11 11:01:16.699 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.multipleStoresDetected:247 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-08-11 11:01:16.709 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-08-11 11:01:16.827 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:185 - Finished Spring Data repository scanning in 80ms. Found 0 Redis repository interfaces.
+2020-08-11 11:01:22.887 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.initialize:171 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-11 11:01:25.813 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.connectAddresses:559 - Attempting to connect to: [127.0.0.1:5672]
+2020-08-11 11:01:25.986 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.createBareConnection:511 - Created new connection: rabbitConnectionFactory#5bb2fb2b:0/SimpleConnection@3eb0fd88 [delegate=amqp://guest@127.0.0.1:5672/, localPort= 62431]
+2020-08-11 11:01:26.645 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarted:59 - Started SupervisorWebMediaTaskApplicationTests in 14.08 seconds (JVM running for 18.687)
+2020-08-11 11:01:43.032 [main] INFO  com.alibaba.druid.pool.DruidDataSource.init:928 - {dataSource-1} inited
+2020-08-11 11:08:11.098 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 11:15:15.179 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarting:50 - Starting SupervisorWebMediaTaskApplicationTests on DESKTOP-2HH4BDT with PID 12024 (started by HP-PC in E:\java\JetBrains\Intellij_IDEA\IdeaProjects\supervisor-project-v2\supervisor-web-media-task)
+2020-08-11 11:15:15.187 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStartupProfileInfo:648 - No active profile set, falling back to default profiles: default
+2020-08-11 11:15:17.643 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.multipleStoresDetected:247 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-08-11 11:15:17.650 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-08-11 11:15:17.783 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:185 - Finished Spring Data repository scanning in 88ms. Found 0 Redis repository interfaces.
+2020-08-11 11:15:23.756 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.initialize:171 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-11 11:15:26.659 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.connectAddresses:559 - Attempting to connect to: [127.0.0.1:5672]
+2020-08-11 11:15:26.828 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.createBareConnection:511 - Created new connection: rabbitConnectionFactory#2049e582:0/SimpleConnection@1818390b [delegate=amqp://guest@127.0.0.1:5672/, localPort= 62650]
+2020-08-11 11:15:27.263 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarted:59 - Started SupervisorWebMediaTaskApplicationTests in 13.82 seconds (JVM running for 16.878)
+2020-08-11 11:16:43.869 [main] INFO  com.alibaba.druid.pool.DruidDataSource.init:928 - {dataSource-1} inited
+2020-08-11 11:18:13.372 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 11:19:09.764 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarting:50 - Starting SupervisorWebMediaTaskApplicationTests on DESKTOP-2HH4BDT with PID 7372 (started by HP-PC in E:\java\JetBrains\Intellij_IDEA\IdeaProjects\supervisor-project-v2\supervisor-web-media-task)
+2020-08-11 11:19:09.786 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStartupProfileInfo:648 - No active profile set, falling back to default profiles: default
+2020-08-11 11:19:12.183 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.multipleStoresDetected:247 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-08-11 11:19:12.198 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-08-11 11:19:12.358 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate.registerRepositoriesIn:185 - Finished Spring Data repository scanning in 129ms. Found 0 Redis repository interfaces.
+2020-08-11 11:19:18.484 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.initialize:171 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-11 11:19:21.405 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.connectAddresses:559 - Attempting to connect to: [127.0.0.1:5672]
+2020-08-11 11:19:21.671 [main] INFO  o.s.a.rabbit.connection.CachingConnectionFactory.createBareConnection:511 - Created new connection: rabbitConnectionFactory#76a6f045:0/SimpleConnection@151a6598 [delegate=amqp://guest@127.0.0.1:5672/, localPort= 62677]
+2020-08-11 11:19:22.688 [main] INFO  com.shouzhi.SupervisorWebMediaTaskApplicationTests.logStarted:59 - Started SupervisorWebMediaTaskApplicationTests in 14.718 seconds (JVM running for 18.252)
+2020-08-11 11:19:24.645 [main] INFO  com.alibaba.druid.pool.DruidDataSource.init:928 - {dataSource-1} inited
+2020-08-11 11:23:57.254 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 11:23:58.243 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 11:23:58.303 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 11:23:59.236 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 11:23:59.237 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:591 - Waiting for workers to finish.
+2020-08-11 11:24:00.227 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.doShutdown:594 - Successfully waited for workers to finish.
+2020-08-11 11:24:00.232 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 11:24:00.232 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 11:24:00.233 [Thread-2] INFO  o.s.a.r.listener.SimpleMessageListenerContainer.shutdown:1226 - Shutdown ignored - container is not active already
+2020-08-11 11:24:00.236 [Thread-2] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor.shutdown:208 - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-08-11 11:24:00.291 [Thread-2] INFO  com.alibaba.druid.pool.DruidDataSource.close:1823 - {dataSource-1} closed

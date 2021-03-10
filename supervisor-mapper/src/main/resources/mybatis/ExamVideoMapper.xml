@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.ExamVideoMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.ExamVideo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="examination_hall_id" jdbcType="VARCHAR" property="examinationHallId" />
+    <result column="examination_hall_code" jdbcType="VARCHAR" property="examinationHallCode" />
+    <result column="examinee_id" jdbcType="VARCHAR" property="examineeId" />
+    <result column="student_code" jdbcType="VARCHAR" property="studentCode" />
+    <result column="original_file" jdbcType="VARCHAR" property="originalFile" />
+    <result column="video_name" jdbcType="VARCHAR" property="videoName" />
+    <result column="video_path" jdbcType="VARCHAR" property="videoPath" />
+    <result column="video_duration" jdbcType="VARCHAR" property="videoDuration" />
+    <result column="video_cover_img" jdbcType="VARCHAR" property="videoCoverImg" />
+    <result column="video_size" jdbcType="BIGINT" property="videoSize" />
+    <result column="video_status" jdbcType="VARCHAR" property="videoStatus" />
+    <result column="watch_count" jdbcType="BIGINT" property="watchCount" />
+    <result column="exam_abnormal" jdbcType="CHAR" property="examAbnormal" />
+    <result column="abnormal_millis" jdbcType="VARCHAR" property="abnormalMillis" />
+    <result column="abnormal_time" jdbcType="TIMESTAMP" property="abnormalTime" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, examination_hall_id, examination_hall_code, examinee_id, student_code, original_file,
+    video_name, video_path, video_duration, video_cover_img, video_size, video_status,
+    watch_count, exam_abnormal, abnormal_millis, abnormal_time,
+    create_id, create_by, create_way, create_time, remark, is_delete, delete_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_exam_video
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据参数查询，返回单个实例-->
+  <select id="selectOneByParam" parameterType="com.shouzhi.pojo.db.ExamVideo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_exam_video wev
+    where wev.is_delete='0'
+    <if test="examinationHallId!=null and examinationHallId!=''">
+      AND wev.examination_hall_id = #{examinationHallId,jdbcType=VARCHAR}
+    </if>
+    <if test="examineeId!=null and examineeId!=''">
+      AND wev.examinee_id = #{examineeId,jdbcType=VARCHAR}
+    </if>
+    <if test="examinationHallCode!=null and examinationHallCode!=''">
+      AND wev.examination_hall_code = #{examinationHallCode,jdbcType=VARCHAR}
+    </if>
+    <if test="studentCode!=null and studentCode!=''">
+      AND wev.student_code = #{studentCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <select id="queryListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    wev.id, wev.examination_hall_id, wev.examination_hall_code, wev.examinee_id, wev.student_code, wev.original_file,
+    wev.video_name,
+    CONCAT(wsh.host_protocol,wsh.host_addr,wsh.host_port,wev.video_path) video_path,
+    wev.video_duration,
+    CONCAT(wsh.host_protocol,wsh.host_addr,wsh.host_port,wev.video_cover_img) video_cover_img,
+    wev.video_size, wev.video_status, watch_count, wev.exam_abnormal, wev.abnormal_millis, wev.abnormal_time,
+    wev.create_id, wev.create_by, wev.create_way, wev.create_time, wev.remark, wev.is_delete, wev.delete_time
+    from wr_exam_video wev
+    CROSS JOIN wr_server_host wsh
+    where wev.is_delete='0' AND wsh.host_type=3
+    <if test="examinationHallId!=null and examinationHallId!=''">
+      AND wev.examination_hall_id = #{examinationHallId,jdbcType=VARCHAR}
+    </if>
+    <if test="videoStatus!=null and videoStatus!=''">
+      AND wev.video_status = #{videoStatus,jdbcType=VARCHAR}
+    </if>
+    ORDER BY wev.exam_abnormal DESC
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_exam_video
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.ExamVideo">
+    insert into wr_exam_video (id, examination_hall_id, examination_hall_code, 
+      examinee_id, student_code, original_file,
+      video_name, video_path, video_duration, 
+      video_cover_img, video_size, video_status,
+    watch_count, exam_abnormal, abnormal_millis, abnormal_time,
+    create_id, create_by, create_way,
+      create_time, remark, is_delete, 
+      delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{examinationHallId,jdbcType=VARCHAR}, #{examinationHallCode,jdbcType=VARCHAR}, 
+      #{examineeId,jdbcType=VARCHAR}, #{studentCode,jdbcType=VARCHAR}, #{originalFile,jdbcType=VARCHAR},
+      #{videoName,jdbcType=VARCHAR}, #{videoPath,jdbcType=VARCHAR}, #{videoDuration,jdbcType=VARCHAR}, 
+      #{videoCoverImg,jdbcType=VARCHAR}, #{videoSize,jdbcType=BIGINT}, #{videoStatus,jdbcType=VARCHAR},
+    #{watchCount,jdbcType=BIGINT},
+    #{examAbnormal,jdbcType=CHAR}, #{abnormalMillis,jdbcType=VARCHAR}, #{abnormalTime,jdbcType=TIMESTAMP},
+    #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=CHAR}, 
+      #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.ExamVideo">
+    insert into wr_exam_video
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="examinationHallId != null">
+        examination_hall_id,
+      </if>
+      <if test="examinationHallCode != null">
+        examination_hall_code,
+      </if>
+      <if test="examineeId != null">
+        examinee_id,
+      </if>
+      <if test="studentCode != null">
+        student_code,
+      </if>
+      <if test="originalFile != null">
+        original_file,
+      </if>
+      <if test="videoName != null">
+        video_name,
+      </if>
+      <if test="videoPath != null">
+        video_path,
+      </if>
+      <if test="videoDuration != null">
+        video_duration,
+      </if>
+      <if test="videoCoverImg != null">
+        video_cover_img,
+      </if>
+      <if test="videoSize != null">
+        video_size,
+      </if>
+      <if test="videoStatus != null">
+        video_status,
+      </if>
+      <if test="watchCount != null">
+        watch_count,
+      </if>
+      <if test="examAbnormal != null">
+        exam_abnormal,
+      </if>
+      <if test="abnormalMillis != null">
+        abnormal_millis,
+      </if>
+      <if test="abnormalTime != null">
+        abnormal_time,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationHallId != null">
+        #{examinationHallId,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationHallCode != null">
+        #{examinationHallCode,jdbcType=VARCHAR},
+      </if>
+      <if test="examineeId != null">
+        #{examineeId,jdbcType=VARCHAR},
+      </if>
+      <if test="studentCode != null">
+        #{studentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originalFile != null">
+        #{originalFile,jdbcType=VARCHAR},
+      </if>
+      <if test="videoName != null">
+        #{videoName,jdbcType=VARCHAR},
+      </if>
+      <if test="videoPath != null">
+        #{videoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="videoDuration != null">
+        #{videoDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="videoCoverImg != null">
+        #{videoCoverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="videoSize != null">
+        #{videoSize,jdbcType=BIGINT},
+      </if>
+      <if test="videoStatus != null">
+        #{videoStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="watchCount != null">
+        #{watchCount,jdbcType=BIGINT},
+      </if>
+      <if test="examAbnormal != null">
+        #{examAbnormal,jdbcType=CHAR},
+      </if>
+      <if test="abnormalMillis != null">
+        #{abnormalMillis,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalTime != null">
+        #{abnormalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.ExamVideo">
+    update wr_exam_video
+    <set>
+      <if test="examinationHallId != null">
+        examination_hall_id = #{examinationHallId,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationHallCode != null">
+        examination_hall_code = #{examinationHallCode,jdbcType=VARCHAR},
+      </if>
+      <if test="examineeId != null">
+        examinee_id = #{examineeId,jdbcType=VARCHAR},
+      </if>
+      <if test="studentCode != null">
+        student_code = #{studentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originalFile != null">
+        original_file = #{originalFile,jdbcType=VARCHAR},
+      </if>
+      <if test="videoName != null">
+        video_name = #{videoName,jdbcType=VARCHAR},
+      </if>
+      <if test="videoPath != null">
+        video_path = #{videoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="videoDuration != null">
+        video_duration = #{videoDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="videoCoverImg != null">
+        video_cover_img = #{videoCoverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="videoSize != null">
+        video_size = #{videoSize,jdbcType=BIGINT},
+      </if>
+      <if test="videoStatus != null">
+        video_status = #{videoStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="watchCount != null">
+        watch_count = #{watchCount,jdbcType=BIGINT},
+      </if>
+      <if test="examAbnormal != null">
+        exam_abnormal = #{examAbnormal,jdbcType=CHAR},
+      </if>
+      <if test="abnormalMillis != null">
+        abnormal_millis = #{abnormalMillis,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalTime != null">
+        abnormal_time = #{abnormalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.ExamVideo">
+    update wr_exam_video
+    set examination_hall_id = #{examinationHallId,jdbcType=VARCHAR},
+      examination_hall_code = #{examinationHallCode,jdbcType=VARCHAR},
+      examinee_id = #{examineeId,jdbcType=VARCHAR},
+      student_code = #{studentCode,jdbcType=VARCHAR},
+      original_file = #{originalFile,jdbcType=VARCHAR},
+      video_name = #{videoName,jdbcType=VARCHAR},
+      video_path = #{videoPath,jdbcType=VARCHAR},
+      video_duration = #{videoDuration,jdbcType=VARCHAR},
+      video_cover_img = #{videoCoverImg,jdbcType=VARCHAR},
+      video_size = #{videoSize,jdbcType=BIGINT},
+      video_status = #{videoStatus,jdbcType=VARCHAR},
+    watch_count = #{watchCount,jdbcType=BIGINT},
+    exam_abnormal = #{examAbnormal,jdbcType=CHAR},
+      abnormal_millis = #{abnormalMillis,jdbcType=VARCHAR},
+      abnormal_time = #{abnormalTime,jdbcType=TIMESTAMP},
+    create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量更新 -->
+  <update id="BatchUpdate" parameterType="java.util.Map">
+    UPDATE wr_exam_video
+    <set>
+      <if test="examinationHallCode != null">
+        examination_hall_code = #{examinationHallCode,jdbcType=VARCHAR},
+      </if>
+      <if test="studentCode != null">
+        student_code = #{studentCode,jdbcType=VARCHAR},
+      </if>
+
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <where>
+      <if test="idIn != null">
+        id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+
+      <if test="examinationHallIdIn != null">
+        examination_hall_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+
+      <if test="examinationHallIdEq != null">
+        examination_hall_id = #{examinationHallIdEq,jdbcType=VARCHAR}
+      </if>
+
+      <if test="examineeIdIn != null">
+        examinee_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+      </if>
+
+      <if test="examineeIdEq != null">
+        examinee_id = #{examineeIdEq,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </update>
+
+
+  <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
+  <delete id="batchDelete" parameterType="java.util.Map" >
+    delete from wr_exam_video
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="examinationHallIdIn != null">
+      examination_hall_id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="examinationHallIdEq != null">
+      examination_hall_id = #{examinationHallIdEq,jdbcType=VARCHAR}
+    </if>
+
+    <if test="examineeIdIn != null">
+      examinee_id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="examineeIdEq != null">
+      examinee_id = #{examineeIdEq,jdbcType=VARCHAR}
+    </if>
+  </delete>
+
+  <!--批量查询 -->
+  <select id="BatchSelect" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wr_exam_video
+    where
+    <if test="idIn != null">
+      id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="examinationHallIdIn != null">
+      examination_hall_id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="examinationHallIdEq != null">
+      examination_hall_id = #{examinationHallIdEq,jdbcType=VARCHAR}
+    </if>
+
+    <if test="examineeIdIn != null">
+      examinee_id IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+
+    <if test="examineeIdEq != null">
+      examinee_id = #{examineeIdEq,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+</mapper>

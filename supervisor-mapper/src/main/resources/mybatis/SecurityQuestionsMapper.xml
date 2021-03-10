@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shouzhi.mapper.SecurityQuestionsMapper">
+  <resultMap id="BaseResultMap" type="com.shouzhi.pojo.db.SecurityQuestions">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="question_code" jdbcType="VARCHAR" property="questionCode" />
+    <result column="question_desc" jdbcType="VARCHAR" property="questionDesc" />
+    <result column="is_locked" jdbcType="CHAR" property="isLocked" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_way" jdbcType="VARCHAR" property="createWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, question_code, question_desc, is_locked, create_id, create_by, create_way, create_time, 
+    remark, is_delete, delete_time
+  </sql>
+
+  <sql id="Alias_Column_List">
+    wsq.id, wsq.question_code, wsq.question_desc, wsq.is_locked, wsq.create_id, wsq.create_by, wsq.create_way, wsq.create_time,
+    wsq.remark, wsq.is_delete, wsq.delete_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wr_security_questions
+    where is_delete='0' and id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="queryListByPage" parameterType="com.shouzhi.pojo.db.SecurityQuestions" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wr_security_questions wsq
+    where wsq.is_delete='0'
+    <if test="questionDesc!=null and questionDesc!=''">
+      AND wsq.question_desc LIKE concat('%',#{questionDesc,jdbcType=VARCHAR},'%')
+    </if>
+
+  </select>
+
+
+  <select id="selectByBasicAuthId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Alias_Column_List" />
+    FROM wr_security_questions wsq
+    LEFT JOIN wr_security_question_set wsqs ON wsq.id=wsqs.security_question_id AND wsqs.is_delete='0'
+    WHERE wsq.is_delete='0' AND wsqs.basic_auth_id = #{basicAuthId,jdbcType=VARCHAR}
+    ORDER BY wsqs.rank
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wr_security_questions
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.shouzhi.pojo.db.SecurityQuestions">
+    insert into wr_security_questions (id, question_code, question_desc, 
+      is_locked, create_id, create_by, 
+      create_way, create_time, remark, 
+      is_delete, delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{questionCode,jdbcType=VARCHAR}, #{questionDesc,jdbcType=VARCHAR}, 
+      #{isLocked,jdbcType=CHAR}, #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=CHAR}, #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.shouzhi.pojo.db.SecurityQuestions">
+    insert into wr_security_questions
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="questionCode != null">
+        question_code,
+      </if>
+      <if test="questionDesc != null">
+        question_desc,
+      </if>
+      <if test="isLocked != null">
+        is_locked,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createWay != null">
+        create_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="questionCode != null">
+        #{questionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="questionDesc != null">
+        #{questionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null">
+        #{isLocked,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.shouzhi.pojo.db.SecurityQuestions">
+    update wr_security_questions
+    <set>
+      <if test="questionCode != null">
+        question_code = #{questionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="questionDesc != null">
+        question_desc = #{questionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isLocked != null">
+        is_locked = #{isLocked,jdbcType=CHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createWay != null">
+        create_way = #{createWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.shouzhi.pojo.db.SecurityQuestions">
+    update wr_security_questions
+    set question_code = #{questionCode,jdbcType=VARCHAR},
+      question_desc = #{questionDesc,jdbcType=VARCHAR},
+      is_locked = #{isLocked,jdbcType=CHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_way = #{createWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
