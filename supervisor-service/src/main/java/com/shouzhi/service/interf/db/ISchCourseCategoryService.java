@@ -2,6 +2,7 @@ package com.shouzhi.service.interf.db;
 
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseCategory;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -106,4 +107,28 @@ public interface ISchCourseCategoryService {
      */
     Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception;
 
+    /**
+     * 后台管理-基础设置-课程类别的导入
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile excel文件
+     * @author Dingjd
+     * @date 2021-03-12 09:55:36
+     */
+    Integer impCourseCategoryService(String permId, MultipartFile excelFile, HttpServletRequest req) throws Exception;
+
+    /**
+     * 批量插入
+     * @param list
+     * @author Dingjd
+     * @date 2021-03-12 11:10:00
+     */
+    Integer batchInsert(List<SchCourseCategory> list) throws Exception;
+
+    /**
+     * 批量插入
+     * @param list
+     * @author Dingjd
+     * @date 2021-03-12 11:10:00
+     */
+    Integer batchSave(List<SchCourseCategory> list, HttpServletRequest req) throws Exception;
 }

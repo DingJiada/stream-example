@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -149,4 +150,27 @@ public class SchCourseCategoryController extends BaseController {
         return result;
     }
 
+    /**
+     * 后台管理-基础设置-课程类别的导入
+     * @apiNote 后台管理-基础设置-课程类别的导入
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile input标签的name值
+     * @author Dingjd
+     * @date 2021-03-12 09:55:19
+     */
+    @PostMapping("/imp/{permId}")
+    public CommonResult impCourseCategory(@PathVariable("permId") String permId, HttpServletRequest req,
+                                          @RequestParam("excelFile") MultipartFile excelFile) {
+        logger.info("url={},ParameterMap={}，file.isEmpty={}，file.getSize={}，file.getContentType={}，file.getOriginalFilename={}，", req.getServletPath(), JSON.toJSONString(req.getParameterMap()),excelFile.isEmpty(),excelFile.getSize(),excelFile.getContentType(),excelFile.getOriginalFilename());
+        CommonResult<String> result = new CommonResult<>();
+        try {
+
+            Integer count = schCourseCategoryService.impCourseCategoryService(permId, excelFile, req);
+
+            result.setStatus(1).setMsg("导入成功" + count + "条");
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+        return result;
+    }
 }

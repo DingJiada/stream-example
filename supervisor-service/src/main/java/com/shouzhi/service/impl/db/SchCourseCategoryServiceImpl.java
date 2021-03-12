@@ -7,21 +7,21 @@ import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseCategory;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
+import com.shouzhi.service.customexception.FileImportException;
 import com.shouzhi.service.interf.db.ILogOperService;
 import com.shouzhi.service.interf.db.ISchCourseCategoryService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 学校课程类别表业务层接口实现类
@@ -113,6 +113,36 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
     @Override
     public List<SchCourseCategory> BatchSelect(Map<String, Object> map) {
         return schCourseCategoryMapper.BatchSelect(map);
+    }
+
+    /**
+     * 批量插入
+     * @param list
+     * @author Dingjd
+     * @date 2021-03-12 11:10:00
+     */
+    @Override
+    public Integer batchInsert(List<SchCourseCategory> list) throws Exception {
+        return schCourseCategoryMapper.batchInsert(list);
+    }
+
+    /**
+     * 课程类别的导入
+     * @param list 从excel导出的model
+     * @param req
+     * @author Dingjd
+     * @date 2021-03-12 11:10:00
+     * @throws Exception
+     */
+    @Override
+    public Integer batchSave(List<SchCourseCategory> list, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        //  批量新增学校空间信息
+        Integer count = this.batchInsert(list);
+        // 批量插入操作日志
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_SPACE, DBConst.OPER_TYPE_BATCH_INSERT, null, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, list);
+        Assert.isTrue(count == list.size() && b ,"DB_SQL_INSERT_ERROR");
+        return count;
     }
 
     /**
@@ -217,4 +247,49 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
     public Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception {
         return null;
     }
+
+    /**
+     * 后台管理-基础设置-课程类别的导入
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile excel文件
+     * @author Dingjd
+     * @date 2021-03-12 09:55:36
+     */
+    @Override
+    public Integer impCourseCategoryService(String permId, MultipartFile excelFile, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        List<ArrayList<String>> ttcList = baseService.verifyImpExcel(excelFile, 3);
+
+        // 将excel内数据取出组装成 List<SchCourseCategory>
+        List<SchCourseCategory> list = new ArrayList<>();
+
+        for (int i = 2; i < ttcList.size(); i++) {                  //从第三行开始取
+            ArrayList<String> row = ttcList.get(i);					//获取当前行
+            if (row == null) continue;                              //判断是否为空
+            if(StringUtils.isBlank(row.get(0)) || StringUtils.isBlank(row.get(1)) || StringUtils.isBlank(row.get(2)) ) {
+                throw new FileImportException("当前sheet内存在无效数据，请填写完整或清除后重新上传！参考有效行(空行除外)：第"+(i+1)+"行");
+            }
+            //excel数据填充到model(尚不确定model对应字段的数据)
+            SchCourseCategory schCourseCategory = new SchCourseCategory();
+            schCourseCategory.setId(UuidUtil.get32UUID());
+            schCourseCategory.setCategoryCode(row.get(0));
+            schCourseCategory.setCategoryName(row.get(1));
+            schCourseCategory.setRemark(2 < row.size() && StringUtils.isNotBlank(row.get(2)) ? row.get(2) : null);
+
+            //代码填充
+            schCourseCategory.setCreateId(userInfo.getId());
+            schCourseCategory.setCreateBy(userInfo.getUserName());
+            schCourseCategory.setCreateWay("1");
+            schCourseCategory.setCreateTime(new Date());
+
+            list.add(schCourseCategory);
+
+        }
+
+        Integer count = this.batchSave(list,req);
+
+        return count;
+    }
+
+
 }

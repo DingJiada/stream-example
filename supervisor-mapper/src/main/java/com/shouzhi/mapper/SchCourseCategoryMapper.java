@@ -55,4 +55,12 @@ public interface SchCourseCategoryMapper {
      * @date 2020-12-02 14:24:38
      */
     List<SchCourseCategory> BatchSelect(Map<String, Object> map);
+
+    /**
+     * 批量插入
+     * @param list
+     * @author Dingjd
+     * @date 2021-03-12 11:10:00
+     */
+    Integer batchInsert(List<SchCourseCategory> list) throws Exception;
 }
