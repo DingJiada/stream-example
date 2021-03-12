@@ -51,6 +51,9 @@ public class FileDownloadController extends BaseController {
             case "sch_device":
                 FileDownloadUtil.projectFile("学校设备导入模板.xls", FilePathConst.REL_EXCEL_IMP_PATH+"sch_device.xls", req, resp);
                 break;
+            case "sch_course_category_part":
+                FileDownloadUtil.projectFile("学校课程类别导入模板.xls", FilePathConst.REL_EXCEL_IMP_PATH+"sch_course_category_part.xls", req, resp);
+                break;
             default:
                 throw new FileDownloadException("下载excel模板失败，未找到该文件");
         }
