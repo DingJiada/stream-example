@@ -127,7 +127,7 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
     }
 
     /**
-     * 课程类别的导入
+     * 批量保存
      * @param list 从excel导出的model
      * @param req
      * @author Dingjd
@@ -135,12 +135,12 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
      * @throws Exception
      */
     @Override
-    public Integer batchSave(List<SchCourseCategory> list, HttpServletRequest req) throws Exception {
+    public Integer batchSave(List<SchCourseCategory> list, String permId, HttpServletRequest req) throws Exception {
         BasicAuth userInfo = baseService.getUserInfo(req);
-        //  批量新增学校空间信息
+        //  批量新增课程类别
         Integer count = this.batchInsert(list);
         // 批量插入操作日志
-        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_SPACE, DBConst.OPER_TYPE_BATCH_INSERT, null, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, list);
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_CATEGORY, DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, list);
         Assert.isTrue(count == list.size() && b ,"DB_SQL_INSERT_ERROR");
         return count;
     }
@@ -266,7 +266,7 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
         for (int i = 2; i < ttcList.size(); i++) {                  //从第三行开始取
             ArrayList<String> row = ttcList.get(i);					//获取当前行
             if (row == null) continue;                              //判断是否为空
-            if(StringUtils.isBlank(row.get(0)) || StringUtils.isBlank(row.get(1)) || StringUtils.isBlank(row.get(2)) ) {
+            if (StringUtils.isBlank(row.get(0)) || StringUtils.isBlank(row.get(1)) || StringUtils.isBlank(row.get(2)) ) {
                 throw new FileImportException("当前sheet内存在无效数据，请填写完整或清除后重新上传！参考有效行(空行除外)：第"+(i+1)+"行");
             }
             //excel数据填充到model(尚不确定model对应字段的数据)
@@ -286,7 +286,7 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
 
         }
 
-        Integer count = this.batchSave(list,req);
+        Integer count = this.batchSave(list,permId,req);
 
         return count;
     }

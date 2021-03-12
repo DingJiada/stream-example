@@ -125,10 +125,10 @@ public interface ISchCourseCategoryService {
     Integer batchInsert(List<SchCourseCategory> list) throws Exception;
 
     /**
-     * 批量插入
+     * 批量保存
      * @param list
      * @author Dingjd
      * @date 2021-03-12 11:10:00
      */
-    Integer batchSave(List<SchCourseCategory> list, HttpServletRequest req) throws Exception;
+    Integer batchSave(List<SchCourseCategory> list, String permId, HttpServletRequest req) throws Exception;
 }
