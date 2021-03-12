@@ -129,8 +129,8 @@ public class SecurityQuestionSetServiceImpl implements ISecurityQuestionSetServi
     @Override
     public Integer save(String basicAuthId, String permId, List<SecurityQuestionSet> securityQuestionSets, HttpServletRequest req) throws Exception {
         BasicAuth userInfo = baseService.getUserInfo(req);
-        // 删除该账号ID对应的密保问题
-        this.batchDeleteByMultiParam("basicAuthId", basicAuthId, permId, userInfo, true);
+        // 删除该账号ID对应的密保问题,注册后首次登录时库里是没有basicAuthId对应记录的,所以不会删除成功,所以strictMode应为false
+        this.batchDeleteByMultiParam("basicAuthId", basicAuthId, permId, userInfo, false);
         securityQuestionSets.forEach(record -> {
             record.setId(UuidUtil.get32UUID());
             record.setCreateId(userInfo.getId());
