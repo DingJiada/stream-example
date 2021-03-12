@@ -82,6 +82,7 @@
     <if test="includeParentRegion!=null and includeParentRegion!=''">
       AND (wsp.parent_id = #{includeParentRegion,jdbcType=VARCHAR} OR wsp.id = #{includeParentRegion,jdbcType=VARCHAR})
     </if>
+    ORDER BY wsp.parent_space_names, wsp.space_name
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
