@@ -66,7 +66,7 @@
     SELECT count(0) FROM wr_sch_course_table_live wsctl WHERE wsctl.is_delete = '0'
   </select>
 
-  <!-- 后台管理的页面不需要设备拉流地址、服务器地址前缀，所以单写了 上边 foregroundListByPage -->
+  <!--  -->
   <select id="queryListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
     <include refid="Alias_Column_List" /> ,
@@ -289,6 +289,25 @@
       delete_time = #{deleteTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+
+  <!--批量插入-->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_sch_course_table_live (id, sch_course_table_base_id, course_desc,
+    weeks, date_for_weeks, is_record, plan_form,
+    is_cancel, create_id, create_by,
+    create_way, create_time, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=VARCHAR}, #{item.schCourseTableBaseId,jdbcType=VARCHAR}, #{item.courseDesc,jdbcType=VARCHAR},
+      #{item.weeks,jdbcType=INTEGER}, #{item.dateForWeeks,jdbcType=TIMESTAMP}, #{item.isRecord,jdbcType=CHAR}, #{item.planForm,jdbcType=VARCHAR},
+      #{item.isCancel,jdbcType=CHAR}, #{item.createId,jdbcType=VARCHAR}, #{item.createBy,jdbcType=VARCHAR},
+      #{item.createWay,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+
 
   <!--批量删除 此操作很危险，不允许where后携带1=1，一旦参数未传将会删除整张表数据-->
   <delete id="batchDelete" parameterType="java.util.Map" >

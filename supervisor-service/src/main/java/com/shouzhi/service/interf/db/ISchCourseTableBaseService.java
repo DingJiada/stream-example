@@ -60,6 +60,24 @@ public interface ISchCourseTableBaseService {
     List<SchCourseTableBase> queryListByPage(Map<String, Object> map);
 
     /**
+     * 批量更新根据ID
+     * @param map 参数列表
+     * @author WX
+     * @date 2021-03-12 17:59:35
+     */
+    Integer BatchUpdate(Map<String, Object> map) throws Exception;
+
+
+    /**
+     * 批量更新根据ID，不同列，注意SQL的长度限制，可根据情况分批次执行，或也可以更新mysql的设置来扩展
+     * @param list 数据列表
+     * @author WX
+     * @date 2021-03-15 17:18:09
+     */
+    Integer BatchUpdateDiffColumn(List<SchCourseTableBase> list) throws Exception;
+
+
+    /**
      * 批量删除
      * @param map
      * @author WX

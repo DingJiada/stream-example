@@ -2,6 +2,7 @@ package com.shouzhi.service.interf.db;
 
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseTableLive;
+import com.shouzhi.pojo.dto.SchCourseTableLiveDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -57,6 +58,16 @@ public interface ISchCourseTableLiveService {
      */
     List<SchCourseTableLive> queryListByPage(Map<String, Object> map);
 
+
+    /**
+     * 批量插入
+     * @param list
+     * @author WX
+     * @date 2021-03-12 17:43:36
+     */
+    Integer batchInsert(List<SchCourseTableLive> list) throws Exception;
+
+
     /**
      * 批量删除
      * @param map
@@ -82,6 +93,28 @@ public interface ISchCourseTableLiveService {
      * @date 2021-02-23 14:18:03
      */
     Integer save(SchCourseTableLive record, String permId, HttpServletRequest req) throws Exception;
+
+
+    /**
+     * 批量新增
+     * @param list
+     * @param permId
+     * @author WX
+     * @date 2021-03-12 17:47:39
+     */
+    Integer batchSave(List<SchCourseTableLive> list, String permId, HttpServletRequest req) throws Exception;
+
+
+
+    /**
+     * 加入(发布)自定义直播计划
+     * @param records
+     * @param permId
+     * @author WX
+     * @date 2021-03-12 10:57:26
+     */
+    Integer joinCustomLivePlan(List<SchCourseTableLiveDto> records, String permId, HttpServletRequest req) throws Exception;
+
 
     /**
      * 根据ID更新

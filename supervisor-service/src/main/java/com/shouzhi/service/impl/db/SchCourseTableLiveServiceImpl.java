@@ -1,16 +1,20 @@
 package com.shouzhi.service.impl.db;
 
 import com.alibaba.fastjson.JSON;
+import com.shouzhi.basic.constants.DatePatterns;
 import com.shouzhi.basic.utils.UuidUtil;
-import com.shouzhi.mapper.SchCourseTableBaseMapper;
+import com.shouzhi.basic.utils.WeeksUtil;
 import com.shouzhi.mapper.SchCourseTableLiveMapper;
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.db.SchCourseTableLive;
+import com.shouzhi.pojo.db.SchSemester;
+import com.shouzhi.pojo.dto.SchCourseTableLiveDto;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 学校直播课程表表业务层接口实现类
@@ -44,7 +49,7 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     private ISchSemesterService schSemesterService;
 
     @Autowired
-    private ISchSpaceService schSpaceService;
+    private ISchCourseTableBaseService schCourseTableBaseService;
 
     @Autowired
     private IServerHostService serverHostService;
@@ -119,6 +124,17 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     }
 
     /**
+     * 批量插入
+     * @param list
+     * @author WX
+     * @date 2021-03-12 17:43:36
+     */
+    @Override
+    public Integer batchInsert(List<SchCourseTableLive> list) throws Exception {
+        return schCourseTableLiveMapper.batchInsert(list);
+    }
+
+    /**
      * 批量删除
      * @param map
      * @author WX
@@ -158,6 +174,110 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         // 插入操作日志
         logOperService.insertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE, DBConst.OPER_TYPE_INSERT,
                 permId, DBConst.NO_CASCADE, null, userInfo, record.getId(), null, JSON.toJSONString(record));
+        return count;
+    }
+
+    /**
+     * 批量新增
+     * @param list
+     * @param permId
+     * @author WX
+     * @date 2021-03-12 17:47:39
+     */
+    @Override
+    public Integer batchSave(List<SchCourseTableLive> list, String permId, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        //  批量新增学校直播课程表信息
+        Integer count = this.batchInsert(list);
+        // 批量插入操作日志
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE, DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, list);
+        Assert.isTrue(count==list.size() && b,"DB_SQL_INSERT_ERROR");
+        return count;
+    }
+
+    /**
+     * 加入(发布)自定义直播计划
+     * @param records
+     * @param permId
+     * @author WX
+     * @date 2021-03-12 10:57:26
+     */
+    @Override
+    public Integer joinCustomLivePlan(List<SchCourseTableLiveDto> records, String permId, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        // 获取当前最新学期的开始时间和结束时间，并根据开始时间和结束时间获取周数天数列表
+        Map<String, Object> map = new HashMap<>();
+        map.put("isCurrentSem", "1");
+        SchSemester ss = schSemesterService.selectOneByParam(map);
+        Map<String, Object> weeksDaysList = WeeksUtil.weeksDaysList(DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateStart()), DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateEnd()));
+
+        Set<String> sctbIds = new HashSet<>();
+        Map<String, List<String>> sctbIdWeeks = new HashMap<>();
+
+        // 组装数据
+        List<SchCourseTableLive> schCourseTableLives = records.parallelStream().map(r -> {
+            // 收集基础课表ID，及该ID对应的周数列表
+            sctbIds.add(r.getSchCourseTableBaseId());
+            if(sctbIdWeeks.get(r.getSchCourseTableBaseId())!=null){
+                sctbIdWeeks.get(r.getSchCourseTableBaseId()).add(String.valueOf(r.getWeeks()));
+            }else {
+                List<String> list = new ArrayList<>();
+                list.add(String.valueOf(r.getWeeks()));
+                sctbIdWeeks.put(r.getSchCourseTableBaseId(), list);
+            }
+            // 根据 周数、周几 推算出对应的日期，如：12周的周三对应的是XXXX年XX月XX日
+            LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, String.valueOf(r.getWeeks()), String.valueOf(r.getWeek()), false);
+            Date from = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            SchCourseTableLive sctl = new SchCourseTableLive();
+            sctl.setSchCourseTableBaseId(r.getSchCourseTableBaseId());
+            sctl.setWeeks(r.getWeeks());
+            sctl.setDateForWeeks(from);
+            sctl.setIsRecord(r.getIsRecord());
+            sctl.setPlanForm(userInfo.getSysUser().getPersonName());
+            sctl.setIsCancel("0");
+            sctl.setId(UuidUtil.get32UUID());
+            sctl.setCreateId(userInfo.getId());
+            sctl.setCreateBy(userInfo.getUserName());
+            sctl.setCreateWay("0");
+            sctl.setCreateTime(new Date());
+            return sctl;
+        }).collect(Collectors.toList());
+
+        // 批量查询 sctbIds 对应的基础课表数据
+        Map<String, Object> sctbQMap = new HashMap<>();
+        sctbQMap.put("list",sctbIds);
+        sctbQMap.put("idIn","1");
+        List<SchCourseTableBase> originalSctbList = schCourseTableBaseService.BatchSelect(sctbQMap);
+        Map<String, SchCourseTableBase> originalSctbIdWeeks = originalSctbList.parallelStream().collect(Collectors.toMap(s -> s.getId(), s -> s));
+
+        // 组装已经加入直播课表所对应的基础课表数据
+        List<SchCourseTableBase> sctbList = sctbIds.parallelStream().map(s -> {
+            SchCourseTableBase sctb = new SchCourseTableBase();
+            sctb.setId(s);
+            sctb.setIsJoinLive("1");
+            if(!"0".equals(originalSctbIdWeeks.get(s).getIsJoinLive())){
+                String liveWeeks = Stream.of(Arrays.asList(originalSctbIdWeeks.get(s).getJoinLiveWeeks().split("/")), sctbIdWeeks.get(s))
+                        .flatMap(Collection::stream).filter(StringUtils::isNotBlank).distinct().collect(Collectors.joining("/", "/", "/"));
+                sctb.setJoinLiveWeeks(liveWeeks);
+            } else {
+                sctb.setJoinLiveWeeks(sctbIdWeeks.get(s).parallelStream().collect(Collectors.joining("/", "/", "/")));
+            }
+            return sctb;
+        }).collect(Collectors.toList());
+
+        // 批量插入
+        Integer count = this.batchSave(schCourseTableLives, permId, req);
+        // 批量更新已经加入直播课表的基础课表对应记录状态(要注意的问题是SQL语句的长度)
+        schCourseTableBaseService.BatchUpdateDiffColumn(sctbList);
+
+        weeksDaysList.clear();
+        sctbIds.clear();
+        sctbIdWeeks.clear();
+        schCourseTableLives.clear();schCourseTableLives=null;
+        sctbQMap.clear();sctbQMap=null;
+        originalSctbList.clear();originalSctbList=null;
+        originalSctbIdWeeks.clear();
+        sctbList.clear();sctbList=null;
         return count;
     }
 

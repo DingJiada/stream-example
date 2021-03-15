@@ -16,6 +16,9 @@ public enum DBEnum {
     user_mobile_uniqueIndex("user_mobile_uniqueIndex", "用户手机已存在"),
     user_email_uniqueIndex("user_email_uniqueIndex", "用户邮箱已存在"),
 
+    // wr_sch_course_table_live
+    sch_course_table_base_id_weeks_uniqueIndex("sch_course_table_base_id_weeks_uniqueIndex", "基础课表唯一标识+对应周数的直播计划已存在"),
+
     // wr_sch_device
     ip_addr_uniqueIndex("ip_addr_uniqueIndex", "IP地址已存在"),
     rtmp_get_url_uniqueIndex("rtmp_get_url_uniqueIndex", "rtmp stream 地址已存在"),

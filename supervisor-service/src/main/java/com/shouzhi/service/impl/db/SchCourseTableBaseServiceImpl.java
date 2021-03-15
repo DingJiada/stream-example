@@ -135,6 +135,30 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
     }
 
     /**
+     * 批量更新根据ID
+     * @param map 参数列表
+     * @author WX
+     * @date 2021-03-12 17:59:35
+     */
+    @Override
+    public Integer BatchUpdate(Map<String, Object> map) throws Exception {
+        return schCourseTableBaseMapper.BatchUpdate(map);
+    }
+
+
+    /**
+     * 批量更新根据ID，不同列，注意SQL的长度限制，可根据情况分批次执行，或也可以更新mysql的设置来扩展
+     * @param list 数据列表
+     * @author WX
+     * @date 2021-03-15 17:18:09
+     */
+    @Override
+    public Integer BatchUpdateDiffColumn(List<SchCourseTableBase> list) throws Exception {
+        return schCourseTableBaseMapper.BatchUpdateDiffColumn(list);
+    }
+
+
+    /**
      * 批量删除
      * @param map
      * @author WX

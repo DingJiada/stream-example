@@ -5,10 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shouzhi.basic.common.CommonResult;
 import com.shouzhi.controller.BaseController;
-import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.db.SchCourseTableLive;
 import com.shouzhi.pojo.vo.PageInfoVo;
-import com.shouzhi.service.interf.db.ISchCourseTableBaseService;
+import com.shouzhi.pojo.dto.SchCourseTableLiveDto;
 import com.shouzhi.service.interf.db.ISchCourseTableLiveService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ import java.util.Map;
 
 /**
  * 学校直播课程表接口
- * @description (直播课表数据来源学校课程表基础表，基础表内一条数据对应本表内多条数据，如：基础表id=1的1-6周有课，则本表最多会产生6条对应数据)
+ * @description (直播课表数据来源学校课程表基础表，基础表内一条数据对应本表内多条数据，如：基础表id=1的1-6周有课，则本表最多会产生6条对应数据，每个周都会被分割成单独一条记录)
  * @author WX
  * @date 2021-02-23 14:49:51
  */
@@ -71,6 +70,31 @@ public class SchCourseTableLiveController extends BaseController {
         PageInfo<SchCourseTableLive> pageInfo = new PageInfo<>(schCourseTableLives);
         return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
     }
+
+
+    /**
+     * 加入(发布)自定义直播计划
+     * @apiNote 加入(发布)自定义直播计划
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param schCourseTableLive
+     * @author WX
+     * @date 2021-03-12 10:46:16
+     */
+    @PostMapping("/joinCustomLive/{permId}")
+    public CommonResult<String> joinCustomLivePlan(@PathVariable("permId") String permId,
+                                                   @RequestBody List<SchCourseTableLiveDto> schCourseTableLive, HttpServletRequest req) {
+        logger.info("url={},schCourseTableLive={}", req.getServletPath(),JSON.toJSONString(schCourseTableLive));
+        CommonResult<String> result = new CommonResult<>();
+        try {
+            schCourseTableLiveService.joinCustomLivePlan(schCourseTableLive, permId, req);
+            result.setStatus(1).setMsg("加入(发布)成功");
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+        return result;
+    }
+
+
 
     /**
      * 删除学校直播课程表

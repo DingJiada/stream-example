@@ -57,6 +57,16 @@ public interface SchCourseTableLiveMapper {
      */
     List<SchCourseTableLive> queryListByPage(Map<String, Object> map);
 
+
+    /**
+     * 批量插入
+     * @param list
+     * @author WX
+     * @date 2021-03-12 17:43:36
+     */
+    Integer batchInsert(List<SchCourseTableLive> list) throws Exception;
+
+
     /**
      * 批量删除
      * @param map

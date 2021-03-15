@@ -88,6 +88,11 @@ public class SchCourseTableBase implements Serializable {
     private String isJoinLive;
 
     /**
+     * 加入直播课表计划的周数，如：1、2、5、18等
+     */
+    private String joinLiveWeeks;
+
+    /**
      * 系统用户ID
      */
     private String sysUserId;
@@ -328,6 +333,14 @@ public class SchCourseTableBase implements Serializable {
         this.isJoinLive = isJoinLive;
     }
 
+    public String getJoinLiveWeeks() {
+        return joinLiveWeeks;
+    }
+
+    public void setJoinLiveWeeks(String joinLiveWeeks) {
+        this.joinLiveWeeks = joinLiveWeeks;
+    }
+
     public String getSysUserId() {
         return sysUserId;
     }
@@ -513,6 +526,7 @@ public class SchCourseTableBase implements Serializable {
                 ", weeks='" + weeks + '\'' +
                 ", weeksV='" + weeksV + '\'' +
                 ", isJoinLive='" + isJoinLive + '\'' +
+                ", joinLiveWeeks='" + joinLiveWeeks + '\'' +
                 ", sysUserId='" + sysUserId + '\'' +
                 ", schSpaceId='" + schSpaceId + '\'' +
                 ", schCourseCategoryId='" + schCourseCategoryId + '\'' +
