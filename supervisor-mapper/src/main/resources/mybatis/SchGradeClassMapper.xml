@@ -219,4 +219,17 @@
     </if>
   </select>
 
+  <!--批量插入 -->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_sch_grade_class
+    (id, grade_year, grade_name, class_name, create_id, create_by,
+    create_way, create_time, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.gradeYear,jdbcType=INTEGER},
+      #{item.gradeName,jdbcType=INTEGER}, #{item.className,jdbcType=VARCHAR}, #{item.createId,jdbcType=VARCHAR},
+      #{item.createBy,jdbcType=VARCHAR}, #{item.createWay,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
 </mapper>

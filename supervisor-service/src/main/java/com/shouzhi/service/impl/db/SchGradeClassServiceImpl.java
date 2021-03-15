@@ -7,21 +7,21 @@ import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchGradeClass;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
+import com.shouzhi.service.customexception.FileImportException;
 import com.shouzhi.service.interf.db.ILogOperService;
 import com.shouzhi.service.interf.db.ISchGradeClassService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 学校年级班级表业务层接口实现类
@@ -216,5 +216,80 @@ public class SchGradeClassServiceImpl implements ISchGradeClassService {
     @Override
     public Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception {
         return null;
+    }
+
+    /**
+     * 后台管理-基础设置-班级数据的导入
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile excel文件
+     * @author Dingjd
+     * @date 2021-03-15 11:32:36
+     */
+    @Override
+    public Integer impGradeClassService(String permId, MultipartFile excelFile, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        List<ArrayList<String>> ttcList = baseService.verifyImpExcel(excelFile, 3);
+
+        // 将excel内数据取出组装成 List<SchGradeClass>
+        List<SchGradeClass> list = new ArrayList<>();
+
+        for (int i = 2; i < ttcList.size(); i++) {                  //从第三行开始取
+            ArrayList<String> row = ttcList.get(i);                 //获取当前行
+            if (row == null) continue;                              //判断是否为空
+            if (StringUtils.isBlank(row.get(0)) || StringUtils.isBlank(row.get(2))) {
+                throw new FileImportException("当前sheet内存在无效数据，请填写完整或清除后重新上传！参考有效行(空行除外)：第" + (i + 1) + "行");
+            }
+            //excel数据填充到model
+            SchGradeClass schGradeClass = new SchGradeClass();
+            schGradeClass.setId(UuidUtil.get32UUID());
+            schGradeClass.setGradeYear(Integer.parseInt(row.get(0)));
+            schGradeClass.setGradeName(Integer.parseInt(1 < row.size() && StringUtils.isNotBlank(row.get(1)) ? row.get(1) : "0"));
+            schGradeClass.setClassName(row.get(2));
+            schGradeClass.setRemark(3 < row.size() && StringUtils.isNotBlank(row.get(3)) ? row.get(3) : null);
+
+            //代码填充
+            schGradeClass.setCreateId(userInfo.getId());
+            schGradeClass.setCreateBy(userInfo.getUserName());
+            schGradeClass.setCreateWay("1");
+            schGradeClass.setCreateTime(new Date());
+
+            list.add(schGradeClass);
+        }
+
+        Integer count = this.batchSave(list, permId, req);
+
+        return count;
+    }
+
+    /**
+     * 批量保存
+     * @author Dingjd
+     * @date 2021/3/15 13:38
+     * @param list
+     * @param permId
+     * @param req
+     * @return java.lang.Integer
+     **/
+    @Override
+    public Integer batchSave(List<SchGradeClass> list, String permId, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        //  批量新增班级数据
+        Integer count = this.batchInsert(list);
+        // 批量插入操作日志
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_GRADE_CLASS, DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, list);
+        Assert.isTrue(count == list.size() && b ,"DB_SQL_INSERT_ERROR");
+        return count;
+    }
+
+    /**
+     * 批量新增
+     * @author Dingjd
+     * @date 2021/3/15 13:25
+     * @param list
+     * @return java.lang.Integer
+     **/
+    @Override
+    public Integer batchInsert(List<SchGradeClass> list) throws Exception {
+        return schGradeClassMapper.batchInsert(list);
     }
 }

@@ -55,4 +55,13 @@ public interface SchGradeClassMapper {
      * @date 2020-12-01 16:13:30
      */
     List<SchGradeClass> BatchSelect(Map<String, Object> map);
+
+    /**
+     * 批量新增
+     * @author Dingjd
+     * @date 2021/3/15 13:24
+     * @param list
+     * @return java.lang.Integer
+     **/
+    Integer batchInsert(List<SchGradeClass> list);
 }
