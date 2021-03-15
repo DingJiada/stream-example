@@ -29,7 +29,7 @@ public class FileDownloadController extends BaseController {
      * 下载excel模板
      * @apiNote 下载excel模板。
      *          sys_user：系统用户导入模板.xls、sch_space_part：学校空间部分导入模板.xls、sch_space_all：学校空间全部导入模板.xls、
-     *          sch_device：学校设备导入模板.xls、sch_course_category：学校课程类别导入模板.xls、
+     *          sch_device：学校设备导入模板.xls、sch_course_category：学校课程类别导入模板.xls、sch_grade_class：学校班级数据导入模板.xls、
      * @param fName 文件名称，具体模板对应名称见上方接口描述
      * @param req req
      * @author WX
@@ -53,6 +53,9 @@ public class FileDownloadController extends BaseController {
                 break;
             case "sch_course_category":
                 FileDownloadUtil.projectFile("学校课程类别导入模板.xls", FilePathConst.REL_EXCEL_IMP_PATH+"sch_course_category.xls", req, resp);
+                break;
+            case "sch_grade_class":
+                FileDownloadUtil.projectFile("学校班级数据导入模板.xls", FilePathConst.REL_EXCEL_IMP_PATH+"sch_grade_class.xls", req, resp);
                 break;
             default:
                 throw new FileDownloadException("下载excel模板失败，未找到该文件");
