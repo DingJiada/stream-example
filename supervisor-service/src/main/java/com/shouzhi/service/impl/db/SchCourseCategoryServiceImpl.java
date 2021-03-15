@@ -269,7 +269,7 @@ public class SchCourseCategoryServiceImpl implements ISchCourseCategoryService {
             if (StringUtils.isBlank(row.get(0)) || StringUtils.isBlank(row.get(1)) || StringUtils.isBlank(row.get(2)) ) {
                 throw new FileImportException("当前sheet内存在无效数据，请填写完整或清除后重新上传！参考有效行(空行除外)：第"+(i+1)+"行");
             }
-            //excel数据填充到model(尚不确定model对应字段的数据)
+            //excel数据填充到model
             SchCourseCategory schCourseCategory = new SchCourseCategory();
             schCourseCategory.setId(UuidUtil.get32UUID());
             schCourseCategory.setCategoryCode(row.get(0));
