@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -170,6 +171,34 @@ public class SysDepartmentController extends BaseController {
         try {
             sysDepartmentService.batchDelete(sysDepartmentIds, permId, req);
             result.setStatus(1).setMsg("删除成功");
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+        return result;
+    }
+
+    /**
+     * 后台管理-基础设置-组织单位的导入
+     * @author Dingjd
+     * @date 2021/3/15 17:06
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile input标签的name值
+     * @param parentId 父节点id
+     * @param ascriptionType 归属类型，1：校区/院/系或专业(学生)，2：职能部门(老师)
+     * @return com.shouzhi.basic.common.CommonResult
+     **/
+    @PostMapping("/imp/{permId}")
+    public CommonResult impDepartment(@PathVariable("permId") String permId, HttpServletRequest req,
+                                      @RequestParam("excelFile") MultipartFile excelFile,
+                                      @RequestParam("parentId") String parentId,
+                                      @RequestParam("ascriptionType") String ascriptionType) {
+        logger.info("url={},ParameterMap={}，file.isEmpty={}，file.getSize={}，file.getContentType={}，file.getOriginalFilename={}，", req.getServletPath(), JSON.toJSONString(req.getParameterMap()),excelFile.isEmpty(),excelFile.getSize(),excelFile.getContentType(),excelFile.getOriginalFilename());
+        CommonResult<String> result = new CommonResult<>();
+        try {
+
+            Integer count = sysDepartmentService.impDepartmentService(permId, excelFile, parentId, ascriptionType, req);
+
+            result.setStatus(1).setMsg("导入成功"+count+"条");
         } catch (Exception e) {
             this.fillIllegalArgResult(result, e, true, true, logger);
         }

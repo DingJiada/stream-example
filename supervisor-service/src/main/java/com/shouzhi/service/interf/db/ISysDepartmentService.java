@@ -3,6 +3,7 @@ package com.shouzhi.service.interf.db;
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SysDepartment;
 import com.shouzhi.pojo.vo.TreeNodeVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -118,4 +119,35 @@ public interface ISysDepartmentService {
      */
     List<SysDepartment> batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception;
 
+    /**
+     * 后台管理-基础设置-组织单位的导入
+     * @author Dingjd
+     * @date 2021/3/15 17:16
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile input标签的name值
+     * @param parentId 父节点id
+     * @param ascriptionType 归属类型，1：校区/院/系或专业(学生)，2：职能部门(老师)
+     * @return java.lang.Integer
+     **/
+    Integer impDepartmentService(String permId, MultipartFile excelFile, String parentId, String ascriptionType, HttpServletRequest req) throws Exception;
+
+    /**
+     * 批量保存
+     * @author Dingjd
+     * @date 2021/3/16 9:16
+     * @param list
+     * @param permId
+     * @param req
+     * @return java.lang.Integer
+     **/
+    Integer batchSave(List<SysDepartment> list, String permId, HttpServletRequest req) throws Exception;
+
+    /**
+     * 批量新增
+     * @author Dingjd
+     * @date 2021/3/16 9:17
+     * @param [list, req]
+     * @return java.lang.Integer
+     **/
+    Integer batchInsert(List<SysDepartment> list) throws Exception;
 }

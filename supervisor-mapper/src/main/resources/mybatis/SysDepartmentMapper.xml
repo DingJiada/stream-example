@@ -312,4 +312,21 @@
     </if>
   </select>
 
+  <!--批量插入-->
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into wr_sys_department (id, parent_id, parent_ids,
+    dep_name, dep_code, dep_desc, dep_type, sort_num, ascription_type, create_id,
+    create_by, create_way, create_time, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=VARCHAR}, #{item.parentId,jdbcType=VARCHAR}, #{item.parentIds,jdbcType=VARCHAR},
+      #{item.depName,jdbcType=VARCHAR}, #{item.depCode,jdbcType=VARCHAR}, #{item.depDesc,jdbcType=VARCHAR},
+      #{item.depType,jdbcType=VARCHAR}, #{item.sortNum,jdbcType=INTEGER}, #{item.ascriptionType,jdbcType=VARCHAR},
+      #{item.createId,jdbcType=VARCHAR}, #{item.createBy,jdbcType=VARCHAR}, #{item.createWay,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+
 </mapper>

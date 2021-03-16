@@ -9,6 +9,7 @@ import com.shouzhi.pojo.db.SysDepartment;
 import com.shouzhi.pojo.vo.TreeNodeVo;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
+import com.shouzhi.service.customexception.FileImportException;
 import com.shouzhi.service.interf.db.ILogOperService;
 import com.shouzhi.service.interf.db.ISysDepartmentService;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,12 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -313,4 +312,89 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
         return sysDepartments;
     }
 
+    /**
+     *
+     * @author Dingjd
+     * @date 2021/3/15 17:16
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param excelFile input标签的name值
+     * @param parentId 父节点id
+     * @param ascriptionType 归属类型，1：校区/院/系或专业(学生)，2：职能部门(老师)
+     * @return java.lang.Integer
+     **/
+    @Override
+    public Integer impDepartmentService(String permId, MultipartFile excelFile, String parentId, String ascriptionType, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        List<ArrayList<String>> ttcList = baseService.verifyImpExcel(excelFile, 3);
+
+        List<SysDepartment> list = new ArrayList<>();
+
+        for (int i = 2; i < ttcList.size(); i++) {                          //从第三行开始取
+            ArrayList<String> row = ttcList.get(i);                         //获取当前行
+            if (row == null) continue;                                      //判断是否为空
+            if (StringUtils.isBlank(row.get(0)) || StringUtils.isBlank(row.get(1)) || StringUtils.isBlank(row.get(2))
+                                                || StringUtils.isBlank(row.get(3)) || StringUtils.isBlank(row.get(4))) {
+                throw new FileImportException("当前sheet内存在无效数据，请填写完整或清除后重新上传！参考有效行(空行除外)：第" + (i + 1) + "行");
+            }
+            //excel数据填充到model
+            SysDepartment sysDepartment = new SysDepartment();
+            sysDepartment.setId(UuidUtil.get32UUID());
+            sysDepartment.setDepName(row.get(0));
+            sysDepartment.setDepCode(row.get(1));
+            sysDepartment.setDepDesc(row.get(2));
+            sysDepartment.setDepType(row.get(3));
+            sysDepartment.setSortNum(Integer.parseInt(row.get(4)));
+            sysDepartment.setRemark(5 < row.size() && StringUtils.isNotBlank(row.get(5)) ? row.get(5) : null);
+
+            //代码填充
+            sysDepartment.setParentIds("/0/");
+            sysDepartment.setParentId(parentId);
+            sysDepartment.setAscriptionType(ascriptionType);
+
+            sysDepartment.setCreateId(userInfo.getId());
+            sysDepartment.setCreateBy(userInfo.getUserName());
+            sysDepartment.setCreateWay("1");
+            sysDepartment.setCreateTime(new Date());
+
+            list.add(sysDepartment);
+        }
+
+        Integer count = this.batchSave(list, permId, req);
+
+        return count;
+    }
+
+    /**
+     * 批量保存
+     * @author Dingjd
+     * @date 2021/3/16 9:16
+     * @param list
+     * @param permId
+     * @param req
+     * @return java.lang.Integer
+     **/
+    @Override
+    public Integer batchSave(List<SysDepartment> list, String permId, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        //  批量新增学校组织数据
+        Integer count = this.batchInsert(list);
+        // 批量插入操作日志
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SYS_DEPARTMENT, DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, list);
+        Assert.isTrue(count == list.size() && b,"DB_SQL_INSERT_ERROR");
+
+        return count;
+
+    }
+
+    /**
+     * 批量新增
+     * @author Dingjd
+     * @date 2021/3/16 9:17
+     * @param [list, req]
+     * @return java.lang.Integer
+     **/
+    @Override
+    public Integer batchInsert(List<SysDepartment> list) throws Exception {
+        return sysDepartmentMapper.batchInsert(list);
+    }
 }

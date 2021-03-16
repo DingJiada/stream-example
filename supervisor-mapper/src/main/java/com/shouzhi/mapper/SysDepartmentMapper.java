@@ -55,4 +55,13 @@ public interface SysDepartmentMapper {
      * @date 2020-11-30 14:06:56
      */
     List<SysDepartment> BatchSelect(Map<String, Object> map);
+
+    /**
+     * 批量新增
+     * @author Dingjd
+     * @date 2021/3/16 9:25
+     * @param list
+     * @return java.lang.Integer
+     **/
+    Integer batchInsert(List<SysDepartment> list);
 }
