@@ -2,6 +2,7 @@ package com.shouzhi.service.interf.db;
 
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseTableBase;
+import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
 import com.shouzhi.pojo.vo.TreeNodeVo;
 
@@ -150,6 +151,15 @@ public interface ISchCourseTableBaseService {
      * @date 2020-12-07 10:40:43
      */
     SchCourseTableGridVo findTableGrid(Map<String, Object> map);
+
+    /**
+     * 查询学校基础课程表-课表直播源
+     * @param record
+     * @author WX
+     * @date 2021-03-16 09:33:16
+     */
+    List<SchCourseTableBaseLiveSourceVo> courseLiveSource(List<SchCourseTableBase> record);
+
 
     /**
      * 查询巡课详情

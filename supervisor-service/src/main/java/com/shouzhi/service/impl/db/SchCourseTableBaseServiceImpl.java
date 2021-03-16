@@ -6,6 +6,7 @@ import com.shouzhi.basic.constants.DatePatterns;
 import com.shouzhi.basic.utils.UuidUtil;
 import com.shouzhi.mapper.SchCourseTableBaseMapper;
 import com.shouzhi.pojo.db.*;
+import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
 import com.shouzhi.pojo.vo.SchDeviceOperateVo;
 import com.shouzhi.pojo.vo.TreeNodeVo;
@@ -423,6 +424,32 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
         return dayList;
     }
     /*************************************** findTableGrid End ***************************************/
+
+
+
+    /**
+     * 查询学校基础课程表-课表直播源
+     * @param record
+     * @author WX
+     * @date 2021-03-16 09:33:16
+     */
+    @Override
+    public List<SchCourseTableBaseLiveSourceVo> courseLiveSource(List<SchCourseTableBase> record) {
+        return record.stream().map(s -> {
+            List<String> weekList = null;
+            Stream<String> weeks = Arrays.asList(s.getWeeks().split("/")).stream().filter(StringUtils::isNotBlank);
+            // 从未加入过
+            if ("0".equals(s.getIsJoinLive())) {
+                weekList = weeks.collect(Collectors.toList());
+            } else {
+                List<String> joinLiveWeeks = Arrays.asList(s.getJoinLiveWeeks().split("/")).stream().filter(StringUtils::isNotBlank).collect(Collectors.toList());
+                weekList = weeks.filter(s1 -> !joinLiveWeeks.contains(s1)).collect(Collectors.toList());
+            }
+            return new SchCourseTableBaseLiveSourceVo(s.getId(),s.getCourseName(),s.getPeopleNum(),s.getSectionNumV(),
+                    s.getStartTime(),s.getEndTime(),s.getWeek(),s.getWeekV(),s.getWeeks(),s.getWeeksV(),s.getSysPersonName(),
+                    s.getSysDepName(),s.getSchSpaceName(),s.getSchClassNames(),weekList,weekList);
+        }).collect(Collectors.toList());
+    }
 
 
     /**

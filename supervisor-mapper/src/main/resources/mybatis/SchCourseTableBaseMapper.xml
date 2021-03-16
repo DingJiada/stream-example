@@ -192,6 +192,9 @@
     <if test="weeksLike!=null and weeksLike!=''">
       AND wsctb.weeks LIKE concat('%',#{weeksLike,jdbcType=VARCHAR},'%')
     </if>
+    <if test="isJoinedLiveAll!=null and isJoinedLiveAll!=''">
+      AND wsctb.is_joined_live_all = #{isJoinedLiveAll,jdbcType=CHAR}
+    </if>
     <if test="sysUserId!=null and sysUserId!=''">
       AND wsctb.sys_user_id = #{sysUserId,jdbcType=VARCHAR}
     </if>

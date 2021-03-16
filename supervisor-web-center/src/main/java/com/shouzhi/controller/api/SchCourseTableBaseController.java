@@ -7,6 +7,7 @@ import com.shouzhi.basic.common.CommonResult;
 import com.shouzhi.controller.BaseController;
 import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.vo.PageInfoVo;
+import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
 import com.shouzhi.service.interf.db.ISchCourseTableBaseService;
 import org.apache.commons.lang3.StringUtils;
@@ -105,6 +106,40 @@ public class SchCourseTableBaseController extends BaseController {
         SchCourseTableGridVo tableGrid = schCourseTableBaseService.findTableGrid(map);
         return result.setStatus(1).setMsg("查询成功").setResultBody(tableGrid);
     }
+
+
+    /**
+     * 查询学校基础课程表-课表直播源
+     * @apiNote 询学校基础课程表-课表直播源，直播课程表的记录源于此接口。
+     * @param courseName 课程名称
+     * @param week 周几，星期几，如：1、2、7等
+     * @param weeks 周数，如：1、2、5、18等
+     * @param sectionNum 节次数，如：1、2、8、12等
+     * @param sysUserId 系统用户ID
+     * @param schSpaceId 学校空间信息id
+     * @param sysDepartmentId 部门组织id
+     * @author WX
+     * @date 2021-03-16 09:33:16
+     */
+    @PostMapping("/courseLiveSource/{pageNum}/{pageSize}")
+    public CommonResult<PageInfoVo<SchCourseTableBaseLiveSourceVo>>
+    courseLiveSource(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize,
+            @RequestParam(value="courseName",required=false) String courseName, @RequestParam(value="week",required=false) String week,
+                  @RequestParam(value="weeks",required=false) String weeks, @RequestParam(value="sectionNum",required=false) String sectionNum,
+                  @RequestParam(value="sysUserId",required=false) String sysUserId, @RequestParam(value="schSpaceId",required=false) String schSpaceId,
+                  @RequestParam(value="sysDepartmentId",required=false) String sysDepartmentId, HttpServletRequest req){
+        logger.info("url={},ParameterMap={}", req.getServletPath(),JSON.toJSONString(req.getParameterMap()));
+        CommonResult<PageInfoVo<SchCourseTableBaseLiveSourceVo>> result = new CommonResult<>();
+        Map<String, Object> map = this.buildQMap(courseName, week, weeks, sectionNum, sysUserId, schSpaceId, sysDepartmentId);
+        map.put("isJoinedLiveAll", "0");
+        PageHelper.startPage(pageNum,pageSize);
+        List<SchCourseTableBase> schCourseTableBases = schCourseTableBaseService.queryListByPage(map);
+        List<SchCourseTableBaseLiveSourceVo> r = schCourseTableBaseService.courseLiveSource(schCourseTableBases);
+        PageInfo<SchCourseTableBaseLiveSourceVo> pageInfo = new PageInfo<>(r);
+        return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
+    }
+
+
 
     // 前端界面没有增删改操作，所以暂时注释掉
     /**
