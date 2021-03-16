@@ -179,13 +179,13 @@ public class SysDepartmentController extends BaseController {
 
     /**
      * 后台管理-基础设置-组织单位的导入
-     * @author Dingjd
-     * @date 2021/3/15 17:06
+     * @apiNote 后台管理-基础设置-组织单位的导入
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param excelFile input标签的name值
      * @param parentId 父节点id
      * @param ascriptionType 归属类型，1：校区/院/系或专业(学生)，2：职能部门(老师)
-     * @return com.shouzhi.basic.common.CommonResult
+     * @author Dingjd
+     * @date 2021/3/15 17:06
      **/
     @PostMapping("/imp/{permId}")
     public CommonResult impDepartment(@PathVariable("permId") String permId, HttpServletRequest req,
@@ -203,6 +203,26 @@ public class SysDepartmentController extends BaseController {
             this.fillIllegalArgResult(result, e, true, true, logger);
         }
         return result;
+    }
+
+    /**
+     * 后台管理-根据部门类型查询部门信息
+     * @apiNote 根据部门类型查询部门信息 无分页
+     * @param depType 部门类型：1_1：校区、1_2：院、1_3：系(专业)
+     * @author Dingjd
+     * @date 2021/3/16 16:38
+     **/
+    @PostMapping("/listByType/{depType}")
+    public CommonResult<List<SysDepartment>> listByType(@PathVariable("depType") String depType, HttpServletRequest req){
+        logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
+        CommonResult<List<SysDepartment>> result = new CommonResult<>();
+
+        SysDepartment sysDepartment = new SysDepartment();
+        sysDepartment.setDepType(depType);
+
+        List<SysDepartment> sysDepartments = sysDepartmentService.queryListByDepType(sysDepartment);
+
+        return result.setStatus(1).setMsg("查询成功").setResultBody(sysDepartments);
     }
 
 }

@@ -42,6 +42,13 @@ public interface ISysDepartmentService {
      */
     List<SysDepartment> queryListByPage(Map<String, Object> map);
 
+    /**
+     * 根据参数查询列表
+     * @param depType
+     * @author Dingjd
+     * @date 2021/3/16 16:42
+     **/
+    List<SysDepartment> queryListByDepType(SysDepartment depType);
 
     /**
      * 批量删除
@@ -121,33 +128,31 @@ public interface ISysDepartmentService {
 
     /**
      * 后台管理-基础设置-组织单位的导入
-     * @author Dingjd
-     * @date 2021/3/15 17:16
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param excelFile input标签的name值
      * @param parentId 父节点id
      * @param ascriptionType 归属类型，1：校区/院/系或专业(学生)，2：职能部门(老师)
-     * @return java.lang.Integer
+     * @author Dingjd
+     * @date 2021/3/15 17:16
      **/
     Integer impDepartmentService(String permId, MultipartFile excelFile, String parentId, String ascriptionType, HttpServletRequest req) throws Exception;
 
     /**
      * 批量保存
-     * @author Dingjd
-     * @date 2021/3/16 9:16
      * @param list
      * @param permId
      * @param req
-     * @return java.lang.Integer
+     * @author Dingjd
+     * @date 2021/3/16 9:16
      **/
     Integer batchSave(List<SysDepartment> list, String permId, HttpServletRequest req) throws Exception;
 
     /**
      * 批量新增
+     * @param list
      * @author Dingjd
      * @date 2021/3/16 9:17
-     * @param [list, req]
-     * @return java.lang.Integer
      **/
     Integer batchInsert(List<SysDepartment> list) throws Exception;
+
 }

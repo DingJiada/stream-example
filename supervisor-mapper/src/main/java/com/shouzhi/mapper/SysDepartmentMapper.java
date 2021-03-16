@@ -41,6 +41,14 @@ public interface SysDepartmentMapper {
     List<SysDepartment> queryListByPage(Map<String, Object> map);
 
     /**
+     * 根据参数查询列表
+     * @param depType
+     * @author Dingjd
+     * @date 2021/3/16 16:43
+     **/
+    List<SysDepartment> queryListByDepType(SysDepartment depType);
+
+    /**
      * 批量删除
      * @param map
      * @author WX
@@ -58,10 +66,10 @@ public interface SysDepartmentMapper {
 
     /**
      * 批量新增
+     * @param list
      * @author Dingjd
      * @date 2021/3/16 9:25
-     * @param list
-     * @return java.lang.Integer
      **/
     Integer batchInsert(List<SysDepartment> list);
+
 }

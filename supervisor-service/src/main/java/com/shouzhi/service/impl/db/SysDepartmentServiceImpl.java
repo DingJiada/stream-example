@@ -98,6 +98,17 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
     }
 
     /**
+     * 根据参数查询列表
+     * @param depType
+     * @author Dingjd
+     * @date 2021/3/16 16:42
+     **/
+    @Override
+    public List<SysDepartment> queryListByDepType(SysDepartment depType) {
+        return sysDepartmentMapper.queryListByDepType(depType);
+    }
+
+    /**
      * 批量删除
      * @param map
      * @author WX
@@ -314,14 +325,13 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
     }
 
     /**
-     *
-     * @author Dingjd
-     * @date 2021/3/15 17:16
+     * 后台管理-基础设置-组织单位的导入
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param excelFile input标签的name值
      * @param parentId 父节点id
      * @param ascriptionType 归属类型，1：校区/院/系或专业(学生)，2：职能部门(老师)
-     * @return java.lang.Integer
+     * @author Dingjd
+     * @date 2021/3/15 17:16
      **/
     @Override
     public Integer impDepartmentService(String permId, MultipartFile excelFile, String parentId, String ascriptionType, HttpServletRequest req) throws Exception {
@@ -333,7 +343,13 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
 
         List<SysDepartment> list = new ArrayList<>();
 
-        // TODO 补上混合交叉导入校验
+        // TODO 混合交叉导入校验
+        String depType = null; //保证部门类型一致
+        if (ttcList.size() > 2) {
+            ArrayList<String> row = ttcList.get(3);
+            depType = row.get(3);//取第一行部门类型用做对比
+            System.out.println("dd:" + depType);
+        }
 
         for (int i = 2; i < ttcList.size(); i++) {                          //从第三行开始取
             ArrayList<String> row = ttcList.get(i);                         //获取当前行
@@ -348,7 +364,15 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
             sysDepartment.setDepName(row.get(0));
             sysDepartment.setDepCode(row.get(1));
             sysDepartment.setDepDesc(row.get(2));
-            sysDepartment.setDepType(row.get(3));
+
+            if (depType != null ) {
+                if (depType.equals(row.get(3))) {               //与第一行部门类型数据对比
+                    sysDepartment.setDepType(row.get(3));
+                } else {
+                    throw new FileImportException("模板内存在不同部门类型数据，不可混合交叉导入！");
+                }
+            }
+
             sysDepartment.setSortNum(Integer.parseInt(row.get(4)));
             sysDepartment.setRemark(5 < row.size() && StringUtils.isNotBlank(row.get(5)) ? row.get(5) : null);
 
@@ -372,12 +396,11 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
 
     /**
      * 批量保存
-     * @author Dingjd
-     * @date 2021/3/16 9:16
      * @param list
      * @param permId
      * @param req
-     * @return java.lang.Integer
+     * @author Dingjd
+     * @date 2021/3/16 9:16
      **/
     @Override
     public Integer batchSave(List<SysDepartment> list, String permId, HttpServletRequest req) throws Exception {
@@ -389,15 +412,13 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
         Assert.isTrue(count == list.size() && b,"DB_SQL_INSERT_ERROR");
 
         return count;
-
     }
 
     /**
      * 批量新增
+     * @param list
      * @author Dingjd
      * @date 2021/3/16 9:17
-     * @param [list, req]
-     * @return java.lang.Integer
      **/
     @Override
     public Integer batchInsert(List<SysDepartment> list) throws Exception {
