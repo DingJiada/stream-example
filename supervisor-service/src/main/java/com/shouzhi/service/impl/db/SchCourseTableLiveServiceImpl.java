@@ -212,17 +212,17 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         Map<String, Object> weeksDaysList = WeeksUtil.weeksDaysList(DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateStart()), DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateEnd()));
 
         Set<String> sctbIds = new HashSet<>();
-        Map<String, List<String>> sctbIdWeeks = new HashMap<>();
+        Map<String, List<Integer>> sctbIdWeeks = new HashMap<>();
 
         // 组装数据
         List<SchCourseTableLive> schCourseTableLives = records.parallelStream().map(r -> {
             // 收集基础课表ID，及该ID对应的周数列表
             sctbIds.add(r.getSchCourseTableBaseId());
             if(sctbIdWeeks.get(r.getSchCourseTableBaseId())!=null){
-                sctbIdWeeks.get(r.getSchCourseTableBaseId()).add(String.valueOf(r.getWeeks()));
+                sctbIdWeeks.get(r.getSchCourseTableBaseId()).add(r.getWeeks());
             }else {
-                List<String> list = new ArrayList<>();
-                list.add(String.valueOf(r.getWeeks()));
+                List<Integer> list = new ArrayList<>();
+                list.add(r.getWeeks());
                 sctbIdWeeks.put(r.getSchCourseTableBaseId(), list);
             }
             // 根据 周数、周几 推算出对应的日期，如：12周的周三对应的是XXXX年XX月XX日
@@ -255,11 +255,11 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
             SchCourseTableBase sctb = new SchCourseTableBase();
             sctb.setId(s);
             if(!"0".equals(originalSctbIdWeeks.get(s).getIsJoinLive())){
-                String liveWeeks = Stream.of(Arrays.asList(originalSctbIdWeeks.get(s).getJoinLiveWeeks().split("/")), sctbIdWeeks.get(s))
-                        .flatMap(Collection::stream).filter(StringUtils::isNotBlank).distinct().collect(Collectors.joining("/", "/", "/"));
+                String liveWeeks = Stream.of(Arrays.asList(originalSctbIdWeeks.get(s).getJoinLiveWeeks().split("/")).stream().filter(StringUtils::isNotBlank).map(Integer::valueOf), sctbIdWeeks.get(s).stream())
+                        .flatMap(integerStream -> integerStream).distinct().sorted().map(String::valueOf).collect(Collectors.joining("/", "/", "/"));
                 sctb.setJoinLiveWeeks(liveWeeks);
             } else {
-                sctb.setJoinLiveWeeks(sctbIdWeeks.get(s).parallelStream().collect(Collectors.joining("/", "/", "/")));
+                sctb.setJoinLiveWeeks(sctbIdWeeks.get(s).parallelStream().sorted().map(String::valueOf).collect(Collectors.joining("/", "/", "/")));
                 sctb.setIsJoinLive("1");
             }
             if(originalSctbIdWeeks.get(s).getWeeks().length()==sctb.getJoinLiveWeeks().length()){
