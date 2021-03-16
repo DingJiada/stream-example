@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.shouzhi.basic.utils.UuidUtil;
 import com.shouzhi.mapper.SysDepartmentMapper;
 import com.shouzhi.pojo.db.BasicAuth;
+import com.shouzhi.pojo.db.SchSpace;
 import com.shouzhi.pojo.db.SysDepartment;
 import com.shouzhi.pojo.vo.TreeNodeVo;
 import com.shouzhi.service.common.BaseService;
@@ -326,8 +327,13 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
     public Integer impDepartmentService(String permId, MultipartFile excelFile, String parentId, String ascriptionType, HttpServletRequest req) throws Exception {
         BasicAuth userInfo = baseService.getUserInfo(req);
         List<ArrayList<String>> ttcList = baseService.verifyImpExcel(excelFile, 3);
+        SysDepartment parentSysDep = this.selectByPrimaryKey(parentId);
+        if (parentSysDep == null) throw new FileImportException("父节点不存在");
+        Assert.isTrue(!"1_3".equals(parentSysDep.getDepType()), "SYS_DEP_SELECTED_PARENT_DEP_NOT_INSERT_ERROR");
 
         List<SysDepartment> list = new ArrayList<>();
+
+        // TODO 补上混合交叉导入校验
 
         for (int i = 2; i < ttcList.size(); i++) {                          //从第三行开始取
             ArrayList<String> row = ttcList.get(i);                         //获取当前行
@@ -347,7 +353,7 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
             sysDepartment.setRemark(5 < row.size() && StringUtils.isNotBlank(row.get(5)) ? row.get(5) : null);
 
             //代码填充
-            sysDepartment.setParentIds("/0/");
+            sysDepartment.setParentIds(parentSysDep.getParentIds()+parentSysDep.getId()+"/");
             sysDepartment.setParentId(parentId);
             sysDepartment.setAscriptionType(ascriptionType);
 

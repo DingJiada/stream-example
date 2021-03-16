@@ -184,6 +184,9 @@ public class BaseController {
             case "SYS_DEP_TYPE_NOT_EQUAL_ERROR":
                 result.setErrorResult(ErrorCodeEnum.SYS_DEP_TYPE_NOT_EQUAL_ERROR);
                 break;
+            case "SYS_DEP_SELECTED_PARENT_DEP_NOT_INSERT_ERROR":
+                result.setErrorResult(ErrorCodeEnum.SYS_DEP_SELECTED_PARENT_DEP_NOT_INSERT_ERROR);
+                break;
 
             case "SCH_SEMESTER_TOTAL_WEEKS_NOT_EQUAL_ERROR":
                 result.setErrorResult(ErrorCodeEnum.SCH_SEMESTER_TOTAL_WEEKS_NOT_EQUAL_ERROR);
