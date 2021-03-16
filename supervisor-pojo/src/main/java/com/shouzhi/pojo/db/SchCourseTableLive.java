@@ -43,9 +43,14 @@ public class SchCourseTableLive implements Serializable {
     private String isRecord;
 
     /**
-     * 计划来源，填名字，如：张三
+     * 计划来源，1_1：基础课表自动生成、1_1：基础课表自定义创建、2_1：其它
      */
     private String planForm;
+
+    /**
+     * 计划创建人，填名字，如：张三
+     */
+    private String planCreator;
 
     /**
      * 是否取消，默认否（0：未取消，1：已取消）
@@ -233,6 +238,14 @@ public class SchCourseTableLive implements Serializable {
 
     public void setPlanForm(String planForm) {
         this.planForm = planForm;
+    }
+
+    public String getPlanCreator() {
+        return planCreator;
+    }
+
+    public void setPlanCreator(String planCreator) {
+        this.planCreator = planCreator;
     }
 
     public String getIsCancel() {

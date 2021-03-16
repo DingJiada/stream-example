@@ -9,6 +9,7 @@
     <result column="date_for_weeks" jdbcType="TIMESTAMP" property="dateForWeeks" />
     <result column="is_record" jdbcType="CHAR" property="isRecord" />
     <result column="plan_form" jdbcType="VARCHAR" property="planForm" />
+    <result column="plan_creator" jdbcType="VARCHAR" property="planCreator" />
     <result column="is_cancel" jdbcType="CHAR" property="isCancel" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
@@ -34,12 +35,12 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, sch_course_table_base_id, course_desc, weeks, date_for_weeks, is_record, plan_form, is_cancel,
+    id, sch_course_table_base_id, course_desc, weeks, date_for_weeks, is_record, plan_form, plan_creator, is_cancel,
     create_id, create_by, create_way, create_time, remark, is_delete, delete_time
   </sql>
 
   <sql id="Alias_Column_List">
-    wsctl.id, wsctl.sch_course_table_base_id, wsctl.course_desc, wsctl.weeks, wsctl.date_for_weeks, wsctl.is_record, wsctl.plan_form, wsctl.is_cancel,
+    wsctl.id, wsctl.sch_course_table_base_id, wsctl.course_desc, wsctl.weeks, wsctl.date_for_weeks, wsctl.is_record, wsctl.plan_form, wsctl.plan_creator, wsctl.is_cancel,
     wsctl.create_id, wsctl.create_by, wsctl.create_way, wsctl.create_time, wsctl.remark, wsctl.is_delete, wsctl.delete_time
   </sql>
 
@@ -113,12 +114,12 @@
 
   <insert id="insert" parameterType="com.shouzhi.pojo.db.SchCourseTableLive">
     insert into wr_sch_course_table_live (id, sch_course_table_base_id, course_desc, 
-      weeks, date_for_weeks, is_record, plan_form,
+      weeks, date_for_weeks, is_record, plan_form, plan_creator,
       is_cancel, create_id, create_by, 
       create_way, create_time, remark, 
       is_delete, delete_time)
     values (#{id,jdbcType=VARCHAR}, #{schCourseTableBaseId,jdbcType=VARCHAR}, #{courseDesc,jdbcType=VARCHAR}, 
-      #{weeks,jdbcType=INTEGER}, #{dateForWeeks,jdbcType=TIMESTAMP}, #{isRecord,jdbcType=CHAR}, #{planForm,jdbcType=VARCHAR},
+      #{weeks,jdbcType=INTEGER}, #{dateForWeeks,jdbcType=TIMESTAMP}, #{isRecord,jdbcType=CHAR}, #{planForm,jdbcType=VARCHAR}, #{planCreator,jdbcType=VARCHAR},
       #{isCancel,jdbcType=CHAR}, #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
       #{createWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=CHAR}, #{deleteTime,jdbcType=TIMESTAMP})
@@ -147,6 +148,9 @@
       </if>
       <if test="planForm != null">
         plan_form,
+      </if>
+      <if test="planCreator != null">
+        plan_creator,
       </if>
       <if test="isCancel != null">
         is_cancel,
@@ -194,6 +198,9 @@
       </if>
       <if test="planForm != null">
         #{planForm,jdbcType=VARCHAR},
+      </if>
+      <if test="planCreator != null">
+        #{planCreator,jdbcType=VARCHAR},
       </if>
       <if test="isCancel != null">
         #{isCancel,jdbcType=CHAR},
@@ -243,6 +250,9 @@
       <if test="planForm != null">
         plan_form = #{planForm,jdbcType=VARCHAR},
       </if>
+      <if test="planCreator != null">
+        plan_creator = #{planCreator,jdbcType=VARCHAR},
+      </if>
       <if test="isCancel != null">
         is_cancel = #{isCancel,jdbcType=CHAR},
       </if>
@@ -279,7 +289,8 @@
       date_for_weeks = #{dateForWeeks,jdbcType=TIMESTAMP},
       is_record = #{isRecord,jdbcType=CHAR},
       plan_form = #{planForm,jdbcType=VARCHAR},
-      is_cancel = #{isCancel,jdbcType=CHAR},
+    plan_creator = #{planCreator,jdbcType=VARCHAR},
+    is_cancel = #{isCancel,jdbcType=CHAR},
       create_id = #{createId,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=VARCHAR},
       create_way = #{createWay,jdbcType=VARCHAR},
@@ -294,14 +305,14 @@
   <!--批量插入-->
   <insert id="batchInsert" parameterType="java.util.List" >
     insert into wr_sch_course_table_live (id, sch_course_table_base_id, course_desc,
-    weeks, date_for_weeks, is_record, plan_form,
+    weeks, date_for_weeks, is_record, plan_form, plan_creator,
     is_cancel, create_id, create_by,
     create_way, create_time, remark)
     values
     <foreach collection="list" item="item" index="index" separator=",">
       (
       #{item.id,jdbcType=VARCHAR}, #{item.schCourseTableBaseId,jdbcType=VARCHAR}, #{item.courseDesc,jdbcType=VARCHAR},
-      #{item.weeks,jdbcType=INTEGER}, #{item.dateForWeeks,jdbcType=TIMESTAMP}, #{item.isRecord,jdbcType=CHAR}, #{item.planForm,jdbcType=VARCHAR},
+      #{item.weeks,jdbcType=INTEGER}, #{item.dateForWeeks,jdbcType=TIMESTAMP}, #{item.isRecord,jdbcType=CHAR}, #{item.planForm,jdbcType=VARCHAR}, #{item.planCreator,jdbcType=VARCHAR},
       #{item.isCancel,jdbcType=CHAR}, #{item.createId,jdbcType=VARCHAR}, #{item.createBy,jdbcType=VARCHAR},
       #{item.createWay,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}
       )
