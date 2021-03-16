@@ -17,6 +17,7 @@
     <result column="weeks_v" jdbcType="VARCHAR" property="weeksV" />
     <result column="is_join_live" jdbcType="CHAR" property="isJoinLive" />
     <result column="join_live_weeks" jdbcType="VARCHAR" property="joinLiveWeeks" />
+    <result column="is_joined_live_all" jdbcType="CHAR" property="isJoinedLiveAll" />
     <result column="sys_user_id" jdbcType="VARCHAR" property="sysUserId" />
     <result column="sch_space_id" jdbcType="VARCHAR" property="schSpaceId" />
     <result column="sch_course_category_id" jdbcType="VARCHAR" property="schCourseCategoryId" />
@@ -39,14 +40,14 @@
 
   <sql id="Base_Column_List">
     id, course_code, course_name, course_type, people_num, section_num, section_num_v, start_time, end_time,
-    week, week_v, weeks, weeks_v, is_join_live, join_live_weeks, sys_user_id, sch_space_id, sch_course_category_id,
+    week, week_v, weeks, weeks_v, is_join_live, join_live_weeks, is_joined_live_all, sys_user_id, sch_space_id, sch_course_category_id,
     sys_department_id, create_id, create_by, create_way, create_time, remark, is_delete, 
     delete_time
   </sql>
 
   <sql id="Alias_Column_List">
     wsctb.id, wsctb.course_code, wsctb.course_name, wsctb.course_type, wsctb.people_num, wsctb.section_num, wsctb.section_num_v, wsctb.start_time, wsctb.end_time,
-    wsctb.week, wsctb.week_v, wsctb.weeks, wsctb.weeks_v, wsctb.is_join_live, wsctb.join_live_weeks, wsctb.sys_user_id, wsctb.sch_space_id, wsctb.sch_course_category_id,
+    wsctb.week, wsctb.week_v, wsctb.weeks, wsctb.weeks_v, wsctb.is_join_live, wsctb.join_live_weeks, wsctb.is_joined_live_all, wsctb.sys_user_id, wsctb.sch_space_id, wsctb.sch_course_category_id,
     wsctb.sys_department_id, wsctb.create_id, wsctb.create_by, wsctb.create_way, wsctb.create_time, wsctb.remark, wsctb.is_delete,
     wsctb.delete_time
   </sql>
@@ -216,7 +217,7 @@
     insert into wr_sch_course_table_base (id, course_code, course_name, 
       course_type, people_num, section_num, section_num_v,
       start_time, end_time, week, week_v,
-      weeks, weeks_v, is_join_live, join_live_weeks, sys_user_id, sch_space_id,
+      weeks, weeks_v, is_join_live, join_live_weeks, is_joined_live_all, sys_user_id, sch_space_id,
       sch_course_category_id, sys_department_id,
       create_id, create_by, create_way, 
       create_time, remark, is_delete, 
@@ -224,7 +225,7 @@
     values (#{id,jdbcType=VARCHAR}, #{courseCode,jdbcType=VARCHAR}, #{courseName,jdbcType=VARCHAR}, 
       #{courseType,jdbcType=CHAR}, #{peopleNum,jdbcType=INTEGER}, #{sectionNum,jdbcType=VARCHAR},  #{sectionNumV,jdbcType=VARCHAR},
     #{startTime,jdbcType=TIME}, #{endTime,jdbcType=TIME}, #{week,jdbcType=INTEGER}, #{weekV,jdbcType=VARCHAR},
-      #{weeks,jdbcType=VARCHAR}, #{weeksV,jdbcType=VARCHAR}, #{isJoinLive,jdbcType=CHAR}, #{joinLiveWeeks,jdbcType=VARCHAR}, #{sysUserId,jdbcType=VARCHAR}, #{schSpaceId,jdbcType=VARCHAR},
+      #{weeks,jdbcType=VARCHAR}, #{weeksV,jdbcType=VARCHAR}, #{isJoinLive,jdbcType=CHAR}, #{joinLiveWeeks,jdbcType=VARCHAR}, #{isJoinedLiveAll,jdbcType=CHAR}, #{sysUserId,jdbcType=VARCHAR}, #{schSpaceId,jdbcType=VARCHAR},
       #{schCourseCategoryId,jdbcType=VARCHAR}, #{sysDepartmentId,jdbcType=VARCHAR},
       #{createId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createWay,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=CHAR}, 
@@ -278,6 +279,9 @@
       </if>
       <if test="joinLiveWeeks != null">
         join_live_weeks,
+      </if>
+      <if test="isJoinedLiveAll != null">
+        is_joined_live_all,
       </if>
       <if test="sysUserId != null">
         sys_user_id,
@@ -358,6 +362,9 @@
       </if>
       <if test="joinLiveWeeks != null">
         #{joinLiveWeeks,jdbcType=VARCHAR},
+      </if>
+      <if test="isJoinedLiveAll != null">
+        #{isJoinedLiveAll,jdbcType=CHAR},
       </if>
       <if test="sysUserId != null">
         #{sysUserId,jdbcType=VARCHAR},
@@ -440,6 +447,9 @@
       <if test="joinLiveWeeks != null">
         join_live_weeks = #{joinLiveWeeks,jdbcType=VARCHAR},
       </if>
+      <if test="isJoinedLiveAll != null">
+        is_joined_live_all = #{isJoinedLiveAll,jdbcType=CHAR},
+      </if>
       <if test="sysUserId != null">
         sys_user_id = #{sysUserId,jdbcType=VARCHAR},
       </if>
@@ -493,6 +503,7 @@
     weeks_v = #{weeksV,jdbcType=VARCHAR},
     is_join_live = #{isJoinLive,jdbcType=CHAR},
     join_live_weeks = #{joinLiveWeeks,jdbcType=VARCHAR},
+    is_joined_live_all = #{isJoinedLiveAll,jdbcType=CHAR},
     sys_user_id = #{sysUserId,jdbcType=VARCHAR},
       sch_space_id = #{schSpaceId,jdbcType=VARCHAR},
       sch_course_category_id = #{schCourseCategoryId,jdbcType=VARCHAR},
@@ -539,6 +550,10 @@
           <if test="item.isJoinLive!=null and item.isJoinLive!=''">
             when id=#{item.id} then #{item.isJoinLive}
           </if>
+          <!-- 原数据 -->
+          <if test="item.isJoinLive==null or item.isJoinLive==''">
+            when id=#{item.id} then wr_sch_course_table_base.is_join_live
+          </if>
         </foreach>
       </trim>
 
@@ -546,6 +561,18 @@
         <foreach collection="list" item="item" index="index">
           <if test="item.joinLiveWeeks!=null and item.joinLiveWeeks!=''">
             when id=#{item.id} then #{item.joinLiveWeeks}
+          </if>
+        </foreach>
+      </trim>
+
+      <trim prefix="is_joined_live_all =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          <if test="item.isJoinedLiveAll!=null and item.isJoinedLiveAll!=''">
+            when id=#{item.id} then #{item.isJoinedLiveAll}
+          </if>
+          <!-- 原数据 -->
+          <if test="item.isJoinedLiveAll==null or item.isJoinedLiveAll==''">
+            when id=#{item.id} then wr_sch_course_table_base.is_joined_live_all
           </if>
         </foreach>
       </trim>

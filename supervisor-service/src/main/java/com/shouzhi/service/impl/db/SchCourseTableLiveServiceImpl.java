@@ -250,17 +250,20 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         List<SchCourseTableBase> originalSctbList = schCourseTableBaseService.BatchSelect(sctbQMap);
         Map<String, SchCourseTableBase> originalSctbIdWeeks = originalSctbList.parallelStream().collect(Collectors.toMap(s -> s.getId(), s -> s));
 
-        // 组装已经加入直播课表所对应的基础课表数据
+        // 组装已经加入直播课表所对应的基础课表数据，用于批量更新
         List<SchCourseTableBase> sctbList = sctbIds.parallelStream().map(s -> {
             SchCourseTableBase sctb = new SchCourseTableBase();
             sctb.setId(s);
-            sctb.setIsJoinLive("1");
             if(!"0".equals(originalSctbIdWeeks.get(s).getIsJoinLive())){
                 String liveWeeks = Stream.of(Arrays.asList(originalSctbIdWeeks.get(s).getJoinLiveWeeks().split("/")), sctbIdWeeks.get(s))
                         .flatMap(Collection::stream).filter(StringUtils::isNotBlank).distinct().collect(Collectors.joining("/", "/", "/"));
                 sctb.setJoinLiveWeeks(liveWeeks);
             } else {
                 sctb.setJoinLiveWeeks(sctbIdWeeks.get(s).parallelStream().collect(Collectors.joining("/", "/", "/")));
+                sctb.setIsJoinLive("1");
+            }
+            if(originalSctbIdWeeks.get(s).getWeeks().length()==sctb.getJoinLiveWeeks().length()){
+                sctb.setIsJoinedLiveAll("1");
             }
             return sctb;
         }).collect(Collectors.toList());
