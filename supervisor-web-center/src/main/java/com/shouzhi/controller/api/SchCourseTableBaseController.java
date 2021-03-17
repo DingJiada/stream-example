@@ -111,6 +111,8 @@ public class SchCourseTableBaseController extends BaseController {
     /**
      * 查询学校基础课程表-课表直播源
      * @apiNote 询学校基础课程表-课表直播源，直播课程表的记录源于此接口。
+     * @param pageNum 页码(如第1页)
+     * @param pageSize 每页数量(如每页10条)
      * @param courseName 课程名称
      * @param week 周几，星期几，如：1、2、7等
      * @param weeks 周数，如：1、2、5、18等
