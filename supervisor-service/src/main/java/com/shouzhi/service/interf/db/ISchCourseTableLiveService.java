@@ -182,4 +182,21 @@ public interface ISchCourseTableLiveService {
      * @date 2021/3/17 15:15
      **/
     Integer batchUpdate(Map<String, Object> map);
+
+    /**
+     * 一键取消（一键恢复）计划接口
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param isCancel 批量取消或恢复 0 或 1
+     * @author Dingjd
+     * @date 2021/3/17 16:40
+     **/
+    Integer oneKeyChangePlanService(String permId, String isCancel, HttpServletRequest req) throws Exception;
+
+    /**
+     * 根据isCancel查询所有数据
+     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @author Dingjd
+     * @date 2021/3/17 17:48
+     **/
+    List<SchCourseTableLive> queryModelListByIsCancel(String isCancel) throws Exception;
 }

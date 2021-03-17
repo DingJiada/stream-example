@@ -90,4 +90,12 @@ public interface SchCourseTableLiveMapper {
      * @date 2021/3/17 15:15
      **/
     Integer batchUpdate(Map<String, Object> map);
+
+    /**
+     * 根据isCancel查询所有数据
+     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @author Dingjd
+     * @date 2021/3/17 17:48
+     **/
+    List<SchCourseTableLive> queryModelListByIsCancel(String isCancel) throws Exception;
 }

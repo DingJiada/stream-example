@@ -358,4 +358,10 @@
       #{item,jdbcType=VARCHAR}
     </foreach>
   </update>
+
+  <select id="queryModelListByIsCancel" resultMap="BaseResultMap">
+    select id
+    from wr_sch_course_table_live
+    where is_cancel = #{isCancel,jdbcType=CHAR}
+  </select>
 </mapper>

@@ -431,4 +431,41 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     public Integer batchUpdate(Map<String, Object> map) {
         return schCourseTableLiveMapper.batchUpdate(map);
     }
+
+    /**
+     * 一键取消（一键恢复）计划接口
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param isCancel 批量取消或恢复 0 或 1
+     * @author Dingjd
+     * @date 2021/3/17 16:40
+     **/
+    @Override
+    public Integer oneKeyChangePlanService(String permId, String isCancel, HttpServletRequest req) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<String> list = new ArrayList<>();
+
+        List<SchCourseTableLive> schCourseTableLives = this.queryModelListByIsCancel(isCancel);
+        for (SchCourseTableLive schCourseTableLive : schCourseTableLives) {
+            list.add(schCourseTableLive.getId());
+        }
+        map.put("list",list);
+        map.put("isCancel",Integer.parseInt(isCancel) == 0 ? "1" : "0");//状态置反
+
+        Integer count = this.batchUpdate(map);
+
+        return count;
+    }
+
+    /**
+     * 根据isCancel查询所有数据
+     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @author Dingjd
+     * @date 2021/3/17 17:48
+     **/
+    @Override
+    public List<SchCourseTableLive> queryModelListByIsCancel(String isCancel) throws Exception {
+        return schCourseTableLiveMapper.queryModelListByIsCancel(isCancel);
+    }
 }

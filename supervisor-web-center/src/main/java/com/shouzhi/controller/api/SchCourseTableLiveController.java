@@ -199,4 +199,31 @@ public class SchCourseTableLiveController extends BaseController {
         return result;
 
     }
+
+    /**
+     * 一键取消（一键恢复）计划接口
+     * @apiNote 后台管理-直播管理-直播课表-一键取消（一键恢复）计划接口 将isCancel字段值置反，
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @author Dingjd
+     * @date 2021/3/17 16:41
+     **/
+    @PostMapping(value = "/oneKeyChangePlan/{permId}/{isCancel}")
+    public CommonResult<String> oneKeyChangePlan(@PathVariable("permId") String permId,
+                                                 @PathVariable("isCancel") String isCancel, HttpServletRequest req) {
+        logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
+        CommonResult<String> result = new CommonResult<>();
+
+        try {
+
+            schCourseTableLiveService.oneKeyChangePlanService(permId, isCancel, req);
+            result.setStatus(1).setMsg("批量修改成功");
+
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+
+        return result;
+
+    }
 }
