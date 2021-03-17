@@ -335,7 +335,7 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
         // TODO 混合交叉导入校验
         String depType = null; //保证部门类型一致
         if (ttcList.size() > 2) {
-            ArrayList<String> row = ttcList.get(3);
+            ArrayList<String> row = ttcList.get(2);
             depType = row.get(3);//取第一行部门类型用做对比
 
         }
