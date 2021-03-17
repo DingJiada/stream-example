@@ -395,4 +395,40 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
                 permId, DBConst.NO_CASCADE, null, userInfo, schCourseTableLive.getId(), null, JSON.toJSONString(schCourseTableLive));
         return count;
     }
+
+    /**
+     * 批量取消（批量恢复）计划
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param ids 筛选id 多个,隔开
+     * @param isCancel 批量取消或恢复 0 或 1
+     * @author Dingjd
+     * @date 2021/3/17 14:55
+     **/
+    @Override
+    public Integer batchChangePlanService(String permId, String ids, String isCancel, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+
+        List<String> list = Arrays.asList(ids.split(","));
+        Assert.isTrue(CollectionUtils.isNotEmpty(list),"COMMON_INVALID_ARG_ERROR");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("isCancel", isCancel);
+        map.put("list", list);
+
+        Integer count = this.batchUpdate(map);
+
+
+        return count;
+    }
+
+    /**
+     * 批量更新
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/17 15:15
+     **/
+    @Override
+    public Integer batchUpdate(Map<String, Object> map) {
+        return schCourseTableLiveMapper.batchUpdate(map);
+    }
 }

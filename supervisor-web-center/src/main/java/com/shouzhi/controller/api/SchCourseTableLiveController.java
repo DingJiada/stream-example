@@ -171,5 +171,32 @@ public class SchCourseTableLiveController extends BaseController {
         return result;
     }
 
+    /**
+     * 批量取消（批量恢复）计划
+     * @apiNote 后台管理-直播管理-直播课表-批量取消（批量恢复）计划接口
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param ids 筛选id 多个,隔开
+     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @author Dingjd
+     * @date 2021/3/17 14:57
+     **/
+    @PostMapping(value = "/batchChangePlan/{permId}/{isCancel}")
+    public CommonResult<String> batchChangePlan(@PathVariable("permId") String permId,
+                                                @RequestParam("ids") String ids,
+                                                @PathVariable("isCancel") String isCancel, HttpServletRequest req) {
+        logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
+        CommonResult<String> result = new CommonResult<>();
 
+        try {
+
+            schCourseTableLiveService.batchChangePlanService(permId, ids, isCancel, req);
+            result.setStatus(1).setMsg("批量修改成功");
+
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+
+        return result;
+
+    }
 }

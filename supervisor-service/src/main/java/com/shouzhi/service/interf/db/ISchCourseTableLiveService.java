@@ -164,4 +164,22 @@ public interface ISchCourseTableLiveService {
      * @date 2021/3/17 13:46
      **/
     Integer changePlanService(String permId, SchCourseTableLive schCourseTableLive, HttpServletRequest req) throws Exception;
+
+    /**
+     * 批量取消（批量恢复）计划
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param ids 筛选id 多个,隔开
+     * @param isCancel 批量取消或恢复 0 或 1
+     * @author Dingjd
+     * @date 2021/3/17 14:55
+     **/
+    Integer batchChangePlanService(String permId, String ids, String isCancel, HttpServletRequest req) throws Exception;
+
+    /**
+     * 批量更新
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/17 15:15
+     **/
+    Integer batchUpdate(Map<String, Object> map);
 }

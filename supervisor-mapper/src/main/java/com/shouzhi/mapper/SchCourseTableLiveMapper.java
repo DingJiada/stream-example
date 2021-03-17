@@ -82,4 +82,12 @@ public interface SchCourseTableLiveMapper {
      * @date 2021-02-23 11:06:18
      */
     List<SchCourseTableLive> BatchSelect(Map<String, Object> map);
+
+    /**
+     * 批量更新
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/17 15:15
+     **/
+    Integer batchUpdate(Map<String, Object> map);
 }
