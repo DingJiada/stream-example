@@ -375,4 +375,24 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     public Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception {
         return null;
     }
+
+    /**
+     * 取消计划（恢复计划）
+     * @param permId
+     * @param schCourseTableLive
+     * @author Dingjd
+     * @date 2021/3/17 14:24
+     **/
+    @Override
+    public Integer changePlanService(String permId, SchCourseTableLive schCourseTableLive, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+
+        Integer count = this.updateByPrimaryKeySelective(schCourseTableLive);
+
+        Assert.isTrue(count == 1,"更新学校直播课程表失败！");
+        // 插入操作日志
+        logOperService.insertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE, DBConst.OPER_TYPE_UPDATE,
+                permId, DBConst.NO_CASCADE, null, userInfo, schCourseTableLive.getId(), null, JSON.toJSONString(schCourseTableLive));
+        return count;
+    }
 }

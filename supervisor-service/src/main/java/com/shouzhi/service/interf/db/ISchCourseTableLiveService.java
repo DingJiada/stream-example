@@ -156,4 +156,12 @@ public interface ISchCourseTableLiveService {
      */
     Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception;
 
+    /**
+     * 取消计划（恢复计划）
+     * @param permId
+     * @param schCourseTableLive
+     * @author Dingjd
+     * @date 2021/3/17 13:46
+     **/
+    Integer changePlanService(String permId, SchCourseTableLive schCourseTableLive, HttpServletRequest req) throws Exception;
 }
