@@ -43,14 +43,6 @@ public interface ISysDepartmentService {
     List<SysDepartment> queryListByPage(Map<String, Object> map);
 
     /**
-     * 根据参数查询列表
-     * @param depType
-     * @author Dingjd
-     * @date 2021/3/16 16:42
-     **/
-    List<SysDepartment> queryListByDepType(SysDepartment depType);
-
-    /**
      * 批量删除
      * @param map
      * @author WX

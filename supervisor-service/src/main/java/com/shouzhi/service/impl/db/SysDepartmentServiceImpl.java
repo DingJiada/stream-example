@@ -98,17 +98,6 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
     }
 
     /**
-     * 根据参数查询列表
-     * @param depType
-     * @author Dingjd
-     * @date 2021/3/16 16:42
-     **/
-    @Override
-    public List<SysDepartment> queryListByDepType(SysDepartment depType) {
-        return sysDepartmentMapper.queryListByDepType(depType);
-    }
-
-    /**
      * 批量删除
      * @param map
      * @author WX
@@ -348,7 +337,7 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
         if (ttcList.size() > 2) {
             ArrayList<String> row = ttcList.get(3);
             depType = row.get(3);//取第一行部门类型用做对比
-            System.out.println("dd:" + depType);
+
         }
 
         for (int i = 2; i < ttcList.size(); i++) {                          //从第三行开始取

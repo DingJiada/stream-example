@@ -329,15 +329,4 @@
     </foreach>
   </insert>
 
-  <select id="queryListByDepType" parameterType="com.shouzhi.pojo.db.SysDepartment" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from wr_sys_department
-    where is_delete='0'
-    <if test="depType!=null and depType!=''">
-      AND dep_type = #{depType,jdbcType=VARCHAR}
-    </if>
-
-  </select>
-
 </mapper>

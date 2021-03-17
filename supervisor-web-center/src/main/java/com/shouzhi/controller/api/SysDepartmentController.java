@@ -217,10 +217,10 @@ public class SysDepartmentController extends BaseController {
         logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
         CommonResult<List<SysDepartment>> result = new CommonResult<>();
 
-        SysDepartment sysDepartment = new SysDepartment();
-        sysDepartment.setDepType(depType);
+        Map<String, Object> map = new HashMap<>();
+        map.put("depType",depType);
 
-        List<SysDepartment> sysDepartments = sysDepartmentService.queryListByDepType(sysDepartment);
+        List<SysDepartment> sysDepartments = sysDepartmentService.queryListByPage(map);
 
         return result.setStatus(1).setMsg("查询成功").setResultBody(sysDepartments);
     }
