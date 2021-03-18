@@ -106,6 +106,18 @@ public class SchCourseTableBaseLiveSourceVo implements Serializable {
     private List<String> recWeekList;
 
 
+    /**
+     * 直播周数容器，前端-后台管理-直播管理-制定计划-自定义直播计划需要此字段，后端无任何使用
+     * @ignore
+     */
+    private List<String> liveWeeks;
+
+    /**
+     * 录制周数容器，前端-后台管理-直播管理-制定计划-自定义直播计划需要此字段，后端无任何使用
+     */
+    private List<String> recWeeks;
+
+
     public SchCourseTableBaseLiveSourceVo() {
     }
 
@@ -258,5 +270,21 @@ public class SchCourseTableBaseLiveSourceVo implements Serializable {
 
     public void setRecWeekList(List<String> recWeekList) {
         this.recWeekList = recWeekList;
+    }
+
+    public List<String> getLiveWeeks() {
+        return liveWeeks;
+    }
+
+    public void setLiveWeeks(List<String> liveWeeks) {
+        this.liveWeeks = liveWeeks;
+    }
+
+    public List<String> getRecWeeks() {
+        return recWeeks;
+    }
+
+    public void setRecWeeks(List<String> recWeeks) {
+        this.recWeeks = recWeeks;
     }
 }
