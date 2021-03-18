@@ -325,4 +325,18 @@ public class SchSemesterServiceImpl implements ISchSemesterService {
         map.put("isCurrentSem", "1");
         return this.currentWeekBySem(map);
     }
+
+    /**
+     * 根据当前最新学期的开始时间和结束时间获取周数天数列表
+     * @author WX
+     * @date 2021-03-18 15:20:09
+     */
+    @Override
+    public Map<String, Object> weeksDaysListByCurrentSem() {
+        // 获取当前最新学期的开始时间和结束时间，并根据开始时间和结束时间获取周数天数列表
+        Map<String, Object> map = new HashMap<>();
+        map.put("isCurrentSem", "1");
+        SchSemester ss = this.selectOneByParam(map);
+        return WeeksUtil.weeksDaysList(DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateStart()), DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateEnd()));
+    }
 }

@@ -227,11 +227,8 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     @Override
     public Integer joinCustomLivePlan(List<SchCourseTableLiveDto> records, String permId, HttpServletRequest req) throws Exception {
         BasicAuth userInfo = baseService.getUserInfo(req);
-        // 获取当前最新学期的开始时间和结束时间，并根据开始时间和结束时间获取周数天数列表
-        Map<String, Object> map = new HashMap<>();
-        map.put("isCurrentSem", "1");
-        SchSemester ss = schSemesterService.selectOneByParam(map);
-        Map<String, Object> weeksDaysList = WeeksUtil.weeksDaysList(DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateStart()), DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateEnd()));
+        // 获取当前最新学期的周数天数列表
+        Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
 
         Set<String> sctbIds = new HashSet<>();
         Map<String, List<Integer>> sctbIdWeeks = new HashMap<>();

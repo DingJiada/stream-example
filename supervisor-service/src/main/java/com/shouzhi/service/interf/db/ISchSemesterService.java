@@ -147,4 +147,11 @@ public interface ISchSemesterService {
      * @date 2021-01-06 16:05:18
      */
     String currentWeekByCurrentSem();
+
+    /**
+     * 根据当前最新学期的开始时间和结束时间获取周数天数列表
+     * @author WX
+     * @date 2021-03-18 15:20:09
+     */
+    Map<String, Object> weeksDaysListByCurrentSem();
 }
