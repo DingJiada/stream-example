@@ -96,6 +96,15 @@ public interface ISchCourseTableLiveService {
 
 
     /**
+     * 批量更新
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/17 15:15
+     **/
+    Integer batchUpdate(Map<String, Object> map);
+
+
+    /**
      * 新增
      * @param record
      * @param permId
@@ -175,14 +184,6 @@ public interface ISchCourseTableLiveService {
      * @date 2021/3/17 14:55
      **/
     Integer batchChangePlanService(String permId, String ids, String isCancel, HttpServletRequest req) throws Exception;
-
-    /**
-     * 批量更新
-     * @param map
-     * @author Dingjd
-     * @date 2021/3/17 15:15
-     **/
-    Integer batchUpdate(Map<String, Object> map);
 
     /**
      * 一键取消（一键恢复）计划

@@ -168,6 +168,17 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     }
 
     /**
+     * 批量更新
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/17 15:15
+     **/
+    @Override
+    public Integer batchUpdate(Map<String, Object> map) {
+        return schCourseTableLiveMapper.batchUpdate(map);
+    }
+
+    /**
      * 新增
      * @param record
      * @param permId
@@ -410,17 +421,6 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
 
 
         return count;
-    }
-
-    /**
-     * 批量更新
-     * @param map
-     * @author Dingjd
-     * @date 2021/3/17 15:15
-     **/
-    @Override
-    public Integer batchUpdate(Map<String, Object> map) {
-        return schCourseTableLiveMapper.batchUpdate(map);
     }
 
     /**
