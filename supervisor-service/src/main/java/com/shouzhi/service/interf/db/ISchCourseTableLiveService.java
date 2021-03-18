@@ -50,6 +50,16 @@ public interface ISchCourseTableLiveService {
      */
     // List<SchCourseTableLive> foregroundListByPage(Map<String, Object> map);
 
+
+    /**
+     * 根据参数查询列表  无连接表 NoJoinTable
+     * @param map
+     * @author WX
+     * @date 2021-03-18 09:53:19
+     **/
+    List<SchCourseTableLive> queryListByPageNJT(Map<String, Object> map);
+
+
     /**
      * 根据参数查询列表
      * @param map
@@ -192,11 +202,4 @@ public interface ISchCourseTableLiveService {
      **/
     Integer oneKeyChangePlanService(String permId, String isCancel, HttpServletRequest req) throws Exception;
 
-    /**
-     * 根据isCancel查询所有数据
-     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
-     * @author Dingjd
-     * @date 2021/3/17 17:48
-     **/
-    List<SchCourseTableLive> queryModelListByIsCancel(String isCancel) throws Exception;
 }

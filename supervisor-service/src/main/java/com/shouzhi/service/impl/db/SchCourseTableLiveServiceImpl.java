@@ -113,6 +113,17 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     }
 
     /**
+     * 根据参数查询列表  无连接表 NoJoinTable
+     * @param map
+     * @author WX
+     * @date 2021-03-18 09:53:19
+     **/
+    @Override
+    public List<SchCourseTableLive> queryListByPageNJT(Map<String, Object> map) {
+        return schCourseTableLiveMapper.queryListByPageNJT(map);
+    }
+
+    /**
      * 根据参数查询列表
      * @param map
      * @author WX
@@ -445,11 +456,14 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         Map<String, Object> map = new HashMap<>();
 
         List<String> list = new ArrayList<>();
+        map.put("isCancel", isCancel);
 
-        List<SchCourseTableLive> schCourseTableLives = this.queryModelListByIsCancel(isCancel);
+        List<SchCourseTableLive> schCourseTableLives = this.queryListByPageNJT(map);
         for (SchCourseTableLive schCourseTableLive : schCourseTableLives) {
             list.add(schCourseTableLive.getId());
         }
+
+        map = new HashMap<>();
         map.put("list",list);
         map.put("isCancel",Integer.parseInt(isCancel) == 0 ? "1" : "0");//状态置反
 
@@ -458,14 +472,5 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         return count;
     }
 
-    /**
-     * 根据isCancel查询所有数据
-     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
-     * @author Dingjd
-     * @date 2021/3/17 17:48
-     **/
-    @Override
-    public List<SchCourseTableLive> queryModelListByIsCancel(String isCancel) throws Exception {
-        return schCourseTableLiveMapper.queryModelListByIsCancel(isCancel);
-    }
+
 }
