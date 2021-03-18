@@ -210,6 +210,12 @@
     GROUP BY wsctb.id
   </select>
 
+  <select id="detectWeekOnLike" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from wr_sch_course_table_base
+    where weeks like concat('%/',#{week,jdbcType=VARCHAR},'%')
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from wr_sch_course_table_base

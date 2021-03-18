@@ -94,6 +94,13 @@ public interface ISchCourseTableBaseService {
      */
     List<SchCourseTableBase> BatchSelect(Map<String, Object> map);
 
+    /**
+     * 检测week，模糊查找
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 15:36
+     **/
+    List<SchCourseTableBase> detectWeekOnLike(String week) throws Exception;
 
     /**
      * 新增
@@ -177,4 +184,14 @@ public interface ISchCourseTableBaseService {
      * @date 2021-01-06 15:50:35
      */
     List<TreeNodeVo> fgCourseTree(HttpServletRequest req);
+
+    /**
+     * 检测week
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 15:37
+     **/
+    Integer detectWeek(String permId, String week, HttpServletRequest req) throws Exception;
+
 }

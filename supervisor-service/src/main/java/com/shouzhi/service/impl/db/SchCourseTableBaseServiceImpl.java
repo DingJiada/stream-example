@@ -182,6 +182,17 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
     }
 
     /**
+     * 检测week，模糊查找
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 15:37
+     **/
+    @Override
+    public List<SchCourseTableBase> detectWeekOnLike(String week) throws Exception {
+        return schCourseTableBaseMapper.detectWeekOnLike(week);
+    }
+
+    /**
      * 新增
      * @param record
      * @param permId
@@ -558,4 +569,30 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
         schSpaceIdMap.clear();
         return TreeNodeVo.buildTree(treeNodeVos, "0");
     }
+
+    /**
+     * 检测week
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 15:37
+     **/
+    @Override
+    public Integer detectWeek(String permId, String week, HttpServletRequest req) throws Exception {
+
+        List<SchCourseTableBase> schCourseTableBases = this.detectWeekOnLike(week);
+
+        List<String> isJoinLives = schCourseTableBases.stream().map(SchCourseTableBase::getIsJoinLive).collect(Collectors.toList());
+
+        List<String> isJoinLiveAll = schCourseTableBases.stream().map(SchCourseTableBase::getIsJoinedLiveAll).collect(Collectors.toList());
+
+        for (int i = 0; i < isJoinLives.size(); i ++) {
+            if (Integer.parseInt(isJoinLives.get(i)) != 0) return -1;//is_join_live 只要有不为0的，返-1
+
+            if (Integer.parseInt(isJoinLiveAll.get(i)) != 0) return -2;//join_live_all 只要有不为0的，返-2
+        }
+
+        return 1; //都为0，返1
+    }
+
 }

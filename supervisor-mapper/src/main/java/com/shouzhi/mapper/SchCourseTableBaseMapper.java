@@ -91,4 +91,12 @@ public interface SchCourseTableBaseMapper {
      * @date 2020-12-03 14:23:16
      */
     List<SchCourseTableBase> BatchSelect(Map<String, Object> map);
+
+    /**
+     * 模糊查询包含week
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 15:40
+     **/
+    List<SchCourseTableBase> detectWeekOnLike(String week);
 }

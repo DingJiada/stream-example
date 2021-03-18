@@ -237,4 +237,27 @@ public class SchCourseTableBaseController extends BaseController {
         return result;
     }*/
 
+    /**
+     * 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-检测接口
+     * @apiNote 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-检测接口
+     * 根据week查询的结果然后根据基础课表中的 is_join_live 和 join_live_all 判断， is_join_live 只要有不为0的，返-1， join_live_all 只要有不为0的，返-2，都为0，返1
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 15:38
+     **/
+    @PostMapping("/detectWeek/{permId}/{week}")
+    public CommonResult<String> detectWeek(@PathVariable("permId") String permId, @PathVariable("week") String week, HttpServletRequest req) {
+        logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
+        CommonResult<String> result = new CommonResult<>();
+        try {
+            Integer count = schCourseTableBaseService.detectWeek(permId, week, req);
+
+            result.setStatus(1).setMsg("检测成功").setResultBody(count.toString());
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+        return result;
+
+    }
 }
