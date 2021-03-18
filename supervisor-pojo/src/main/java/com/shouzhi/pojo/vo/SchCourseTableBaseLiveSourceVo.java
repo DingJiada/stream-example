@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -110,12 +111,12 @@ public class SchCourseTableBaseLiveSourceVo implements Serializable {
      * 直播周数容器，前端-后台管理-直播管理-制定计划-自定义直播计划需要此字段，后端无任何使用
      * @ignore
      */
-    private List<String> liveWeeks;
+    private List<String> liveWeeks = new ArrayList<>();
 
     /**
      * 录制周数容器，前端-后台管理-直播管理-制定计划-自定义直播计划需要此字段，后端无任何使用
      */
-    private List<String> recWeeks;
+    private List<String> recWeeks = new ArrayList<>();
 
 
     public SchCourseTableBaseLiveSourceVo() {
