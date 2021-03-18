@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2021-03-16 20:05:26
+Date: 2021-03-18 20:16:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -428,6 +428,7 @@ INSERT INTO `wr_log_oper` VALUES ('185e694744734911b75a6839361c0005', 'wr_sys_pe
 INSERT INTO `wr_log_oper` VALUES ('18650841aeeb4d6db83f234f75c8cacf', 'wr_sch_space', '5', '108', '0', null, '1', 'lisi', '0', '2021-03-03 11:05:26', null, '0', null);
 INSERT INTO `wr_log_oper` VALUES ('188ee7edbf324837ac8e2f0223c66277', 'wr_sys_permission', '5', '108', '0', null, '1', 'lisi', '0', '2020-11-23 10:31:07', null, '0', null);
 INSERT INTO `wr_log_oper` VALUES ('19896a3bbc984647892eca6f2b530988', 'wr_sys_user_role', '4', '108', '0', null, '1', 'lisi', '0', '2020-11-23 14:20:25', null, '0', null);
+INSERT INTO `wr_log_oper` VALUES ('1adee3efd5314a20b7784a389b40957f', 'wr_sys_department', '4', '108', '0', null, '1', 'lisi', '0', '2021-03-17 16:43:15', null, '0', null);
 INSERT INTO `wr_log_oper` VALUES ('1c9c6d962cf84c33bdaf99362e95ce8e', 'wr_school_space', '3', '108', '0', null, '1', 'lisi', '0', '2020-11-17 14:25:18', null, '0', null);
 INSERT INTO `wr_log_oper` VALUES ('1d8c30e63629412bade0a26a27dbfd54', 'wr_examinee', '3', '18', '0', null, '1', 'lisi', '0', '2020-08-11 20:11:33', null, '0', null);
 INSERT INTO `wr_log_oper` VALUES ('20a07b78315c4220bd86a2dffd4749e5', 'wr_sys_permission', '5', '108', '0', null, '1', 'lisi', '0', '2021-01-12 14:10:12', null, '0', null);
@@ -944,6 +945,7 @@ INSERT INTO `wr_log_oper_detail` VALUES ('a78082f22848434ca73180c138b11e60', 'a4
 INSERT INTO `wr_log_oper_detail` VALUES ('a83f0bd11f89427e9300e17fd620943c', '2423246bc39543789162b01dc86ab11f', 'b3e9af199cf74194ad8c7be9359ddc3d', null, '{\"createBy\":\"lisi\",\"createId\":\"1\",\"createTime\":1615189680163,\"createWay\":\"1\",\"deviceLocation\":\"PF\",\"deviceName\":\"讲台计算机\",\"deviceType\":\"2\",\"flvGetUrl\":\"/live/ZJCMXY_XSXQ_JXL1_1F_102_VGA.flv\",\"hlsGetUrl\":\"/live/ZJCMXY_XSXQ_JXL1_1F_102_VGA.m3u8\",\"id\":\"b3e9af199cf74194ad8c7be9359ddc3d\",\"ipAddr\":\"192.168.1.129\",\"isActive\":\"1\",\"remark\":\"讲台计算机设备\",\"rtmpGetUrl\":\"/live/ZJCMXY_XSXQ_JXL1_1F_102_VGA\",\"schSpaceId\":\"11\",\"serialNumber\":\"\"}');
 INSERT INTO `wr_log_oper_detail` VALUES ('a908ba9e148746a3b562fd989ed2b0b7', '703d1e32ab804e74b72b7e76ab61e178', '701f69d4c5b54b5aaeb30e6f278e14a0', null, '{\"createBy\":\"lisi\",\"createId\":\"1\",\"deviceLocation\":\"讲台\",\"deviceName\":\"讲台计算机\",\"deviceType\":\"2\",\"flvGetUrl\":\"/live/ZJCMXY_XSXQ_JXL1_1F_101_vga.flv\",\"hlsGetUrl\":\"/live/ZJCMXY_XSXQ_JXL1_1F_101_vga.m3u8\",\"id\":\"701f69d4c5b54b5aaeb30e6f278e14a0\",\"ipAddr\":\"192.168.1.68\",\"rtmpGetUrl\":\"/live/ZJCMXY_XSXQ_JXL1_1F_101_vga\",\"schoolSpaceId\":\"10\",\"serialNumber\":\"11111111111\"}');
 INSERT INTO `wr_log_oper_detail` VALUES ('a918d461a9a44d1394b7b089faab146d', '90c5b74cfa4f4b1891225eba9d51f946', '24', '{\"ascriptionType\":\"1\",\"createBy\":\"admin\",\"createId\":\"1\",\"createTime\":1606784425000,\"createWay\":\"0\",\"depCode\":\"ceshiyu\",\"depDesc\":\"测试语1\",\"depName\":\"测试语1\",\"depType\":\"1_3\",\"id\":\"24\",\"isDelete\":\"0\",\"parentId\":\"23\",\"parentIds\":\"/0/1/12/23/\",\"sortNum\":1}', null);
+INSERT INTO `wr_log_oper_detail` VALUES ('a91cd47376db4bc79234d3574d29fb69', '1adee3efd5314a20b7784a389b40957f', '851c398a16e44140af46265ac5d095fa', null, '{\"ascriptionType\":\"1\",\"createBy\":\"lisi\",\"createId\":\"1\",\"createTime\":1615970576497,\"createWay\":\"1\",\"depCode\":\"2\",\"depDesc\":\"学院\",\"depName\":\"计算机网络\",\"depType\":\"1_3\",\"id\":\"851c398a16e44140af46265ac5d095fa\",\"parentId\":\"1\",\"parentIds\":\"/0/1/\",\"remark\":\"计算机类\",\"sortNum\":2}');
 INSERT INTO `wr_log_oper_detail` VALUES ('a9ad499620cc4a6fbb7fa7958d726731', '49a277eafa6e4b98a50a52663ac6701c', '2e20710f87214d1db8dc34ab97813616', null, '{\"createBy\":\"lisi\",\"createId\":\"1\",\"examinationHallCode\":\"xs0002\",\"examinationHallId\":\"2\",\"examineeId\":\"3c7c13c4fd994234964d45924c44862d\",\"id\":\"2e20710f87214d1db8dc34ab97813616\",\"studentCode\":\"XS00004\"}');
 INSERT INTO `wr_log_oper_detail` VALUES ('a9cacbf9f3c349dea69933005647d344', 'd149eb5f0cc04943837a58b4ddc75cff', '3', '{\"createBy\":\"lisi\",\"createId\":\"1\",\"createTime\":1596705734000,\"createWay\":\"0\",\"examinationHallCode\":\"xs0001\",\"examinationHallId\":\"1\",\"examineeId\":\"1\",\"id\":\"3\",\"isDelete\":\"0\",\"originalName\":\"fqff5few61gt6r.flv\",\"remark\":\"\",\"studentCode\":\"XS00001\",\"videoCoverImg\":\"697/img/thumbnail.png\",\"videoDuration\":\"00:38:20\",\"videoName\":\"2020-08-03_xs0001_高等数学1_XS00001\",\"videoPath\":\"697/chunk/index.m3u8\",\"videoSize\":68.0,\"videoStatus\":\"4\"}', '{\"deleteTime\":1596710798642,\"id\":\"3\",\"isDelete\":\"1\"}');
 INSERT INTO `wr_log_oper_detail` VALUES ('aacef439949a458bb33a71dcf36a7e1b', 'c3eca118694d4d29a4c0c36678b92abf', '35', '{\"ascriptionType\":\"2\",\"createBy\":\"1\",\"createId\":\"1\",\"createTime\":1606359891000,\"iconStyle\":\"\",\"iconUrl\":\"\",\"id\":\"35\",\"isDelete\":\"0\",\"isLocked\":\"0\",\"name\":\"X\",\"parentId\":\"1\",\"parentIds\":\"/0/1/\",\"percode\":\"\",\"sortNum\":1,\"type\":\"1\",\"url\":\"/xxx/xxx\"}', null);
@@ -1541,8 +1543,8 @@ CREATE TABLE `wr_sch_semester` (
 -- ----------------------------
 INSERT INTO `wr_sch_semester` VALUES ('1', '2019-2020-1', '2019', '2020', '1', '2019-09-01', '2020-01-23', '22', '0', '1', '李四', '0', '2020-12-04 11:01:11', null, '0', null);
 INSERT INTO `wr_sch_semester` VALUES ('2', '2019-2020-2', '2019', '2020', '2', '2020-02-28', '2020-07-01', '19', '0', '1', '李四', '0', '2020-12-04 11:02:00', null, '0', null);
-INSERT INTO `wr_sch_semester` VALUES ('3', '2020-2021-1', '2020', '2021', '1', '2020-09-01', '2021-01-23', '21', '1', '1', '李四', '0', '2020-12-30 09:55:44', null, '0', null);
-INSERT INTO `wr_sch_semester` VALUES ('4', '2020-2021-2', '2021', '2021', '2', '2021-02-28', '2021-07-01', '19', '0', '1', '李四', '0', '2020-12-30 09:56:56', null, '0', null);
+INSERT INTO `wr_sch_semester` VALUES ('3', '2020-2021-1', '2020', '2021', '1', '2020-09-01', '2021-01-23', '21', '0', '1', '李四', '0', '2020-12-30 09:55:44', null, '0', null);
+INSERT INTO `wr_sch_semester` VALUES ('4', '2020-2021-2', '2021', '2021', '2', '2021-02-15', '2021-07-30', '24', '1', '1', '李四', '0', '2020-12-30 09:56:56', null, '0', null);
 
 -- ----------------------------
 -- Table structure for wr_sch_space
