@@ -167,15 +167,6 @@ public interface ISchCourseTableLiveService {
     Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception;
 
     /**
-     * 取消计划（恢复计划）
-     * @param permId
-     * @param schCourseTableLive
-     * @author Dingjd
-     * @date 2021/3/17 13:46
-     **/
-    Integer changePlanService(String permId, SchCourseTableLive schCourseTableLive, HttpServletRequest req) throws Exception;
-
-    /**
      * 批量取消（批量恢复）计划
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param ids 筛选id 多个,隔开
@@ -194,7 +185,7 @@ public interface ISchCourseTableLiveService {
     Integer batchUpdate(Map<String, Object> map);
 
     /**
-     * 一键取消（一键恢复）计划接口
+     * 一键取消（一键恢复）计划
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param isCancel 批量取消或恢复 0 或 1
      * @author Dingjd

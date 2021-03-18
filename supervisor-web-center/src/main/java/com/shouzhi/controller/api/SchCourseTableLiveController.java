@@ -161,7 +161,7 @@ public class SchCourseTableLiveController extends BaseController {
             schCourseTableLive.setId(id);
             schCourseTableLive.setIsCancel(isCancel);
 
-            schCourseTableLiveService.changePlanService(permId, schCourseTableLive, req);
+            schCourseTableLiveService.update(schCourseTableLive, permId, req);
             result.setStatus(1).setMsg("修改成功");
 
         } catch (Exception e) {

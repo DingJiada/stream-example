@@ -388,26 +388,6 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     }
 
     /**
-     * 取消计划（恢复计划）
-     * @param permId
-     * @param schCourseTableLive
-     * @author Dingjd
-     * @date 2021/3/17 14:24
-     **/
-    @Override
-    public Integer changePlanService(String permId, SchCourseTableLive schCourseTableLive, HttpServletRequest req) throws Exception {
-        BasicAuth userInfo = baseService.getUserInfo(req);
-
-        Integer count = this.updateByPrimaryKeySelective(schCourseTableLive);
-
-        Assert.isTrue(count == 1,"更新学校直播课程表失败！");
-        // 插入操作日志
-        logOperService.insertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE, DBConst.OPER_TYPE_UPDATE,
-                permId, DBConst.NO_CASCADE, null, userInfo, schCourseTableLive.getId(), null, JSON.toJSONString(schCourseTableLive));
-        return count;
-    }
-
-    /**
      * 批量取消（批量恢复）计划
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param ids 筛选id 多个,隔开
@@ -444,7 +424,7 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     }
 
     /**
-     * 一键取消（一键恢复）计划接口
+     * 一键取消（一键恢复）计划
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param isCancel 批量取消或恢复 0 或 1
      * @author Dingjd
@@ -456,16 +436,15 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         Map<String, Object> map = new HashMap<>();
 
         List<String> list = new ArrayList<>();
-        map.put("isCancel", isCancel);
+        map.put("isCancel", Integer.parseInt(isCancel) == 0 ? "1" : "0");
 
         List<SchCourseTableLive> schCourseTableLives = this.queryListByPageNJT(map);
-        for (SchCourseTableLive schCourseTableLive : schCourseTableLives) {
-            list.add(schCourseTableLive.getId());
-        }
+
+        schCourseTableLives.forEach(o -> list.add(o.getId()));
 
         map = new HashMap<>();
         map.put("list",list);
-        map.put("isCancel",Integer.parseInt(isCancel) == 0 ? "1" : "0");//状态置反
+        map.put("isCancel",isCancel);
 
         Integer count = this.batchUpdate(map);
 
