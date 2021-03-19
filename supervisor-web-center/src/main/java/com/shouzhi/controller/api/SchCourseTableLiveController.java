@@ -226,4 +226,37 @@ public class SchCourseTableLiveController extends BaseController {
         return result;
 
     }
+
+    /**
+     * 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-发布接口
+     * @apiNote 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-发布接口，发布之前先检测，结果为1时：检测成功
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param isRecord 是否录制，默认否（0：否，1：是）
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/19 9:59
+     **/
+    @PostMapping("/publishLivePlan/{permId}/{isRecord}/{week}")
+    public CommonResult<String> publishLivePlan(@PathVariable("permId") String permId,
+                                                @PathVariable("isRecord") String isRecord,
+                                                @PathVariable("week") String week, HttpServletRequest req) {
+        logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
+        CommonResult<String> result = new CommonResult<>();
+
+        try {
+
+            Integer count = schCourseTableLiveService.publishLivePlanService(permId, isRecord, week, req);
+
+            if (count != 0) {
+                result.setStatus(1).setMsg("批量新增成功" + count + "条");
+            } else {
+                result.setStatus(1).setMsg("检测失败");
+            }
+
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
+
+        return result;
+    }
 }

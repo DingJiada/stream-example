@@ -448,5 +448,46 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         return count;
     }
 
+    /**
+     * 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-发布业务
+     * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
+     * @param isRecord 是否录制，默认否（0：否，1：是）
+     * @param week 周数
+     * @author Dingjd
+     * @date 2021/3/18 16:48
+     **/
+    @Override
+    public Integer publishLivePlanService(String permId, String isRecord, String week, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        // 获取当前最新学期的周数天数列表
+        Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
+
+        Integer result = schCourseTableBaseService.detectWeek(permId, week, req);
+
+        if (result != 1) return 0;//检测结果(result) = 1 才能进行新增操作
+
+        List<SchCourseTableBase> schCourseTableBases = schCourseTableBaseService.detectWeekOnLike(week);
+
+        List<SchCourseTableLive> schCourseTableLiveList = schCourseTableBases.stream().map(s -> {
+            String id = s.getId();
+            return Arrays.stream(s.getWeeks().substring(1).split("/")).map( str -> {
+                LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, String.valueOf(str), String.valueOf(s.getWeek()), false);
+                Date from = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                SchCourseTableLive schCourseTableLive = new SchCourseTableLive();
+                schCourseTableLive.setId(UuidUtil.get32UUID());//主键id
+                schCourseTableLive.setSchCourseTableBaseId(id);//外键id
+                schCourseTableLive.setWeeks(Integer.parseInt(str));//weeks(拆分后)
+                schCourseTableLive.setDateForWeeks(from);
+                schCourseTableLive.setIsRecord(isRecord);//是否录制
+                schCourseTableLive.setPlanForm("1_1");//来源：1_1(自动生成)
+                schCourseTableLive.setPlanCreator(userInfo.getSysUser().getPersonName());//管理员名称
+                schCourseTableLive.setIsCancel("0");//填充默认值0
+                schCourseTableLive.setCreateId(userInfo.getId());
+                schCourseTableLive.setCreateBy(userInfo.getUserName());
+                schCourseTableLive.setCreateWay("1");
+                schCourseTableLive.setCreateTime(new Date());
+                return schCourseTableLive;
+            }).collect(Collectors.toList());
+        }).flatMap(List::stream).collect(Collectors.toList());
 
 }
