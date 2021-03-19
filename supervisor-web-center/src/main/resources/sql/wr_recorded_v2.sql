@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2021-03-18 20:16:56
+Date: 2021-03-19 09:26:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1544,7 +1544,7 @@ CREATE TABLE `wr_sch_semester` (
 INSERT INTO `wr_sch_semester` VALUES ('1', '2019-2020-1', '2019', '2020', '1', '2019-09-01', '2020-01-23', '22', '0', '1', '李四', '0', '2020-12-04 11:01:11', null, '0', null);
 INSERT INTO `wr_sch_semester` VALUES ('2', '2019-2020-2', '2019', '2020', '2', '2020-02-28', '2020-07-01', '19', '0', '1', '李四', '0', '2020-12-04 11:02:00', null, '0', null);
 INSERT INTO `wr_sch_semester` VALUES ('3', '2020-2021-1', '2020', '2021', '1', '2020-09-01', '2021-01-23', '21', '0', '1', '李四', '0', '2020-12-30 09:55:44', null, '0', null);
-INSERT INTO `wr_sch_semester` VALUES ('4', '2020-2021-2', '2021', '2021', '2', '2021-02-15', '2021-07-30', '24', '1', '1', '李四', '0', '2020-12-30 09:56:56', null, '0', null);
+INSERT INTO `wr_sch_semester` VALUES ('4', '2020-2021-2', '2021', '2021', '2', '2021-02-15', '2021-08-01', '24', '1', '1', '李四', '0', '2020-12-30 09:56:56', null, '0', null);
 
 -- ----------------------------
 -- Table structure for wr_sch_space
