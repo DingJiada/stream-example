@@ -9,6 +9,7 @@ import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.vo.PageInfoVo;
 import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
+import com.shouzhi.service.impl.other.DetectWeekResult;
 import com.shouzhi.service.interf.db.ISchCourseTableBaseService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -251,9 +252,9 @@ public class SchCourseTableBaseController extends BaseController {
         logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
         CommonResult<String> result = new CommonResult<>();
         try {
-            Integer count = schCourseTableBaseService.detectWeek(permId, week, req);
+            DetectWeekResult detectWeekResult = schCourseTableBaseService.detectWeek(permId, week, req);
 
-            result.setStatus(1).setMsg("检测成功").setResultBody(count.toString());
+            result.setStatus(1).setMsg("检测成功").setResultBody(detectWeekResult.getResult().toString());
         } catch (Exception e) {
             this.fillIllegalArgResult(result, e, true, true, logger);
         }

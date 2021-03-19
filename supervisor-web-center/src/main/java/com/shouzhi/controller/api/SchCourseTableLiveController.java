@@ -247,11 +247,7 @@ public class SchCourseTableLiveController extends BaseController {
 
             Integer count = schCourseTableLiveService.publishLivePlanService(permId, isRecord, week, req);
 
-            if (count != 0) {
-                result.setStatus(1).setMsg("批量新增成功" + count + "条");
-            } else {
-                result.setStatus(1).setMsg("检测失败");
-            }
+            result.setStatus(1).setMsg("批量新增成功" + count + "条");
 
         } catch (Exception e) {
             this.fillIllegalArgResult(result, e, true, true, logger);

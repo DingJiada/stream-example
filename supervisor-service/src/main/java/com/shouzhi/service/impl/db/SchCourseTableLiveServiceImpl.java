@@ -12,6 +12,7 @@ import com.shouzhi.pojo.db.SchSemester;
 import com.shouzhi.pojo.dto.SchCourseTableLiveDto;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
+import com.shouzhi.service.impl.other.DetectWeekResult;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -458,15 +459,18 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
      **/
     @Override
     public Integer publishLivePlanService(String permId, String isRecord, String week, HttpServletRequest req) throws Exception {
+
+        DetectWeekResult detectWeekResult = schCourseTableBaseService.detectWeek(permId, week, req);//先检测
+
+        if (detectWeekResult.getResult() != 1) { //检测结果(result) == 1 才能进行新增操作
+            return 0;
+        }
+
         BasicAuth userInfo = baseService.getUserInfo(req);
         // 获取当前最新学期的周数天数列表
         Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
 
-        Integer result = schCourseTableBaseService.detectWeek(permId, week, req);
-
-        if (result != 1) return 0;//检测结果(result) = 1 才能进行新增操作
-
-        List<SchCourseTableBase> schCourseTableBases = schCourseTableBaseService.detectWeekOnLike(week);
+        List<SchCourseTableBase> schCourseTableBases = detectWeekResult.getSchCourseTableLiveList();
 
         List<SchCourseTableLive> schCourseTableLiveList = schCourseTableBases.stream().map(s -> {
             String id = s.getId();
@@ -477,7 +481,7 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
                 schCourseTableLive.setId(UuidUtil.get32UUID());//主键id
                 schCourseTableLive.setSchCourseTableBaseId(id);//外键id
                 schCourseTableLive.setWeeks(Integer.parseInt(str));//weeks(拆分后)
-                schCourseTableLive.setDateForWeeks(from);
+                schCourseTableLive.setDateForWeeks(from);//计算后的日期
                 schCourseTableLive.setIsRecord(isRecord);//是否录制
                 schCourseTableLive.setPlanForm("1_1");//来源：1_1(自动生成)
                 schCourseTableLive.setPlanCreator(userInfo.getSysUser().getPersonName());//管理员名称
@@ -490,6 +494,7 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
             }).collect(Collectors.toList());
         }).flatMap(List::stream).collect(Collectors.toList());
 
+        //批量新增直播计划
         Integer count = this.batchInsert(schCourseTableLiveList);
 
         // 批量插入操作日志
