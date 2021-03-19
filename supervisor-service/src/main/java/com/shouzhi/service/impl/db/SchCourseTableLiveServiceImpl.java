@@ -490,4 +490,12 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
             }).collect(Collectors.toList());
         }).flatMap(List::stream).collect(Collectors.toList());
 
+        Integer count = this.batchInsert(schCourseTableLiveList);
+
+        // 批量插入操作日志
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE, DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, schCourseTableLiveList);
+        Assert.isTrue(count == schCourseTableLiveList.size() && b,"DB_SQL_INSERT_ERROR");
+
+        return count;
+    }
 }
