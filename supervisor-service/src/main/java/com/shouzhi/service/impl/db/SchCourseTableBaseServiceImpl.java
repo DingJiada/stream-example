@@ -12,7 +12,7 @@ import com.shouzhi.pojo.vo.SchDeviceOperateVo;
 import com.shouzhi.pojo.vo.TreeNodeVo;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
-import com.shouzhi.pojo.vo.DetectWeekResultVo;
+import com.shouzhi.pojo.vo.DetectWeekVo;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -580,7 +580,7 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
      * @date 2021/3/18 15:37
      **/
     @Override
-    public DetectWeekResultVo detectWeek(String permId, String weeks, boolean isSaveDetectData, HttpServletRequest req) throws Exception {
+    public DetectWeekVo detectWeek(String permId, String weeks, boolean isSaveDetectData, HttpServletRequest req) throws Exception {
 
         Map<String, Object> map = new HashMap<>();
         map.put("weeks",weeks);
@@ -588,15 +588,15 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
         List<SchCourseTableBase> schCourseTableBases = this.queryListByPageNJT(map);
 
         if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinLive()) != 0)) {//is_join_live 只要有不为0的，返-1
-            return new DetectWeekResultVo(-1, null);
+            return new DetectWeekVo(-1, null);
         }
         if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinedLiveAll()) != 0)) {//join_live_all 只要有不为0的，返-2
-            return new DetectWeekResultVo(-2, null);
+            return new DetectWeekVo(-2, null);
         }
         if (isSaveDetectData) {
-            return new DetectWeekResultVo(1, schCourseTableBases);//都为0，返1
+            return new DetectWeekVo(1, schCourseTableBases);//都为0，返1
         } else {
-            return new DetectWeekResultVo(1, null);
+            return new DetectWeekVo(1, null);
         }
 
     }

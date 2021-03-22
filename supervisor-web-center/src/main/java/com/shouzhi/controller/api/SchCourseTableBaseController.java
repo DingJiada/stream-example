@@ -9,7 +9,7 @@ import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.vo.PageInfoVo;
 import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
-import com.shouzhi.pojo.vo.DetectWeekResultVo;
+import com.shouzhi.pojo.vo.DetectWeekVo;
 import com.shouzhi.service.interf.db.ISchCourseTableBaseService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -241,20 +241,18 @@ public class SchCourseTableBaseController extends BaseController {
     /**
      * 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-检测接口
      * @apiNote 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-检测接口
-     * 根据week查询的结果然后根据基础课表中的 is_join_live 和 join_live_all 判断， is_join_live 只要有不为0的，返-1， join_live_all 只要有不为0的，返-2，都为0，返1
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param weeks 周数
      * @author Dingjd
      * @date 2021/3/18 15:38
      **/
     @PostMapping("/detectWeek/{permId}/{weeks}")
-    public CommonResult<String> detectWeek(@PathVariable("permId") String permId, @PathVariable("weeks") String weeks, HttpServletRequest req) {
+    public CommonResult<DetectWeekVo> detectWeek(@PathVariable("permId") String permId, @PathVariable("weeks") String weeks, HttpServletRequest req) {
         logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
-        CommonResult<String> result = new CommonResult<>();
+        CommonResult<DetectWeekVo> result = new CommonResult<>();
         try {
-            DetectWeekResultVo detectWeekResult = schCourseTableBaseService.detectWeek(permId, weeks, false, req);
-
-            result.setStatus(1).setMsg("检测成功").setResultBody(detectWeekResult.getResult().toString());
+            DetectWeekVo detectWeekResult = schCourseTableBaseService.detectWeek(permId, weeks, false, req);
+            result.setStatus(1).setMsg("检测成功").setResultBody(detectWeekResult);
         } catch (Exception e) {
             this.fillIllegalArgResult(result, e, true, true, logger);
         }

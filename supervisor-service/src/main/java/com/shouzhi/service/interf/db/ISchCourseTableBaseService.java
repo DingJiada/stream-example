@@ -5,7 +5,7 @@ import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
 import com.shouzhi.pojo.vo.TreeNodeVo;
-import com.shouzhi.pojo.vo.DetectWeekResultVo;
+import com.shouzhi.pojo.vo.DetectWeekVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -194,6 +194,6 @@ public interface ISchCourseTableBaseService {
      * @author Dingjd
      * @date 2021/3/18 15:37
      **/
-    DetectWeekResultVo detectWeek(String permId, String weeks, boolean isSaveDetectData, HttpServletRequest req) throws Exception;
+    DetectWeekVo detectWeek(String permId, String weeks, boolean isSaveDetectData, HttpServletRequest req) throws Exception;
 
 }

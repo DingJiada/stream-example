@@ -145,7 +145,7 @@ public class SchCourseTableLiveController extends BaseController {
      * @apiNote 后台管理-直播管理-直播课表-取消计划（恢复计划）接口
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param id 表id 筛选用
-     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @param isCancel 是否取消（0：恢复，1：取消）
      * @author Dingjd
      * @date 2021/3/17 13:43
      **/
@@ -176,7 +176,7 @@ public class SchCourseTableLiveController extends BaseController {
      * @apiNote 后台管理-直播管理-直播课表-批量取消（批量恢复）计划接口
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param ids 筛选id 多个,隔开
-     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @param isCancel 是否取消（0：恢复，1：取消）
      * @author Dingjd
      * @date 2021/3/17 14:57
      **/
@@ -204,7 +204,7 @@ public class SchCourseTableLiveController extends BaseController {
      * 一键取消（一键恢复）计划接口
      * @apiNote 后台管理-直播管理-直播课表-一键取消（一键恢复）计划接口 将isCancel字段值置反，
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
-     * @param isCancel 是否取消，默认否（0：未取消，1：已取消）
+     * @param isCancel 是否取消（0：恢复，1：取消）
      * @author Dingjd
      * @date 2021/3/17 16:41
      **/

@@ -10,7 +10,7 @@ import com.shouzhi.pojo.db.SchCourseTableLive;
 import com.shouzhi.pojo.dto.SchCourseTableLiveDto;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
-import com.shouzhi.pojo.vo.DetectWeekResultVo;
+import com.shouzhi.pojo.vo.DetectWeekVo;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -458,16 +458,16 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     @Override
     public Integer publishLivePlanService(String permId, String isRecord, String weeks, HttpServletRequest req) throws Exception {
 
-        DetectWeekResultVo detectWeekResult = schCourseTableBaseService.detectWeek(permId, weeks, true, req);//先检测
+        DetectWeekVo detectWeek = schCourseTableBaseService.detectWeek(permId, weeks, true, req);//先检测
 
-        if (detectWeekResult.getResult() != 1) { //检测结果(result) == 1 才能进行新增操作
-            Assert.isTrue(detectWeekResult.getResult() == 1,"SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR");
+        if (detectWeek.getDetectResult() != 1) { //检测结果(result) == 1 才能进行新增操作
+            Assert.isTrue(detectWeek.getDetectResult() == 1,"SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR");
             return 0;
         }
 
         BasicAuth userInfo = baseService.getUserInfo(req);
 
-        List<SchCourseTableBase> schCourseTableBases = detectWeekResult.getSchCourseTableLiveList();
+        List<SchCourseTableBase> schCourseTableBases = detectWeek.getSchCourseTableLiveList();
         // 获取当前最新学期的周数天数列表
         Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
 
