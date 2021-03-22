@@ -7,6 +7,7 @@ import com.shouzhi.basic.utils.WeeksUtil;
 import com.shouzhi.mapper.SchSemesterMapper;
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchSemester;
+import com.shouzhi.pojo.vo.DateListOfWeeksVo;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
 import com.shouzhi.service.interf.db.ILogOperService;
@@ -284,6 +285,18 @@ public class SchSemesterServiceImpl implements ISchSemesterService {
     }
 
     /**
+     * 查询当前最新学期
+     * @author WX
+     * @date 2021-03-22 19:20:07
+     */
+    @Override
+    public SchSemester selectCurrentSem() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("isCurrentSem", "1");
+        return this.selectOneByParam(map);
+    }
+
+    /**
      * 查询某个学期周数列表
      * @param map
      * @author WX
@@ -334,9 +347,22 @@ public class SchSemesterServiceImpl implements ISchSemesterService {
     @Override
     public Map<String, Object> weeksDaysListByCurrentSem() {
         // 获取当前最新学期的开始时间和结束时间，并根据开始时间和结束时间获取周数天数列表
-        Map<String, Object> map = new HashMap<>();
-        map.put("isCurrentSem", "1");
-        SchSemester ss = this.selectOneByParam(map);
+        SchSemester ss = this.selectCurrentSem();
         return WeeksUtil.weeksDaysList(DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateStart()), DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateEnd()));
+    }
+
+    /**
+     * 查询某个周的日期列表，默认返回当前最新学期周数范围内某个周的日期列表
+     * @param weeks
+     * @author WX
+     * @date 2021-03-22 19:14:16
+     */
+    @Override
+    public DateListOfWeeksVo dateListOfWeeks(String weeks) {
+        // 获取当前最新学期的开始时间和结束时间，并根据开始时间和结束时间获取某个周的日期列表
+        SchSemester ss = this.selectCurrentSem();
+        List<String> dateStrList = WeeksUtil.dateStrListOfWeeks(DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateStart()), DatePatterns.NORM_DATE_FORMAT.format(ss.getSemDateEnd()), weeks);
+        Map<Integer, String> weekDate = WeeksUtil.weekOfDateStrList(dateStrList);
+        return new DateListOfWeeksVo(dateStrList, weekDate);
     }
 }

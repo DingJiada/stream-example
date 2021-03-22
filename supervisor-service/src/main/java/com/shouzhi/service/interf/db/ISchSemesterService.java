@@ -2,6 +2,7 @@ package com.shouzhi.service.interf.db;
 
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchSemester;
+import com.shouzhi.pojo.vo.DateListOfWeeksVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -126,6 +127,13 @@ public interface ISchSemesterService {
     Integer batchDeleteByMultiParam(String paramKey, Object paramVal, String permId, String isCascade, String cascadeId, BasicAuth userInfo, boolean strictMode) throws Exception;
 
     /**
+     * 查询当前最新学期
+     * @author WX
+     * @date 2021-03-22 19:20:07
+     */
+    SchSemester selectCurrentSem();
+
+    /**
      * 查询某个学期周数列表
      * @param map
      * @author WX
@@ -154,4 +162,13 @@ public interface ISchSemesterService {
      * @date 2021-03-18 15:20:09
      */
     Map<String, Object> weeksDaysListByCurrentSem();
+
+    /**
+     * 查询某个周的日期列表，默认返回当前最新学期周数范围内某个周的日期列表
+     * @param weeks
+     * @author WX
+     * @date 2021-03-22 19:14:16
+     */
+    DateListOfWeeksVo dateListOfWeeks(String weeks);
+
 }

@@ -9,6 +9,7 @@ import com.shouzhi.basic.constants.DatePatterns;
 import com.shouzhi.basic.utils.WeeksUtil;
 import com.shouzhi.controller.BaseController;
 import com.shouzhi.pojo.db.SchSemester;
+import com.shouzhi.pojo.vo.DateListOfWeeksVo;
 import com.shouzhi.pojo.vo.PageInfoVo;
 import com.shouzhi.service.interf.db.ISchSemesterService;
 import org.apache.commons.lang3.StringUtils;
@@ -252,5 +253,21 @@ public class SchSemesterController extends BaseController {
         HashMap<String, Integer> retMap = new HashMap<>();
         retMap.put("currentWeek", StringUtils.isNotBlank(currentWeek)?Integer.valueOf(currentWeek):null);
         return result.setStatus(1).setMsg("查询成功").setResultBody(retMap);
+    }
+
+
+    /**
+     * 查询某个周的日期列表
+     * @apiNote 查询某个周的日期列表，默认返回当前最新学期周数范围内某个周的日期列表
+     * @param weeks 周数
+     * @author WX
+     * @date 2021-03-22 18:33:26
+     */
+    @PostMapping("/dateListOfWeeks")
+    public CommonResult<DateListOfWeeksVo> dateListOfWeeks(@RequestParam("weeks") String weeks, HttpServletRequest req){
+        logger.info("url={},ParameterMap={}", req.getServletPath(),JSON.toJSONString(req.getParameterMap()));
+        CommonResult<DateListOfWeeksVo> result = new CommonResult<>();
+        DateListOfWeeksVo dateListOfWeeksVo = schSemesterService.dateListOfWeeks(weeks);
+        return result.setStatus(1).setMsg("查询成功").setResultBody(dateListOfWeeksVo);
     }
 }
