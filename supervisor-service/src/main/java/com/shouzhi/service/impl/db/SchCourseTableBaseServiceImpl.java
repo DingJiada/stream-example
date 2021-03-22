@@ -12,7 +12,7 @@ import com.shouzhi.pojo.vo.SchDeviceOperateVo;
 import com.shouzhi.pojo.vo.TreeNodeVo;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
-import com.shouzhi.service.impl.other.DetectWeekResult;
+import com.shouzhi.pojo.vo.DetectWeekResultVo;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -183,14 +183,14 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
     }
 
     /**
-     * 检测week，模糊查找
-     * @param week 周数
+     * 根据参数查询列表  无连接表 NoJoinTable
+     * @param map
      * @author Dingjd
      * @date 2021/3/18 15:37
      **/
     @Override
-    public List<SchCourseTableBase> detectWeekOnLike(String week) throws Exception {
-        return schCourseTableBaseMapper.detectWeekOnLike(week);
+    public List<SchCourseTableBase> queryListByPageNJT(Map<String, Object> map) throws Exception {
+        return schCourseTableBaseMapper.queryListByPageNJT(map);
     }
 
     /**
@@ -574,22 +574,31 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
     /**
      * 检测week
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
-     * @param week 周数
+     * @param weeks 周数
+     * @param isSaveDetectData 是否保存数据
      * @author Dingjd
      * @date 2021/3/18 15:37
      **/
     @Override
-    public DetectWeekResult detectWeek(String permId, String week, HttpServletRequest req) throws Exception {
+    public DetectWeekResultVo detectWeek(String permId, String weeks, boolean isSaveDetectData, HttpServletRequest req) throws Exception {
 
-        List<SchCourseTableBase> schCourseTableBases = this.detectWeekOnLike(week);
+        Map<String, Object> map = new HashMap<>();
+        map.put("weeks",weeks);
+
+        List<SchCourseTableBase> schCourseTableBases = this.queryListByPageNJT(map);
 
         if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinLive()) != 0)) {//is_join_live 只要有不为0的，返-1
-            return new DetectWeekResult(-1, null);
+            return new DetectWeekResultVo(-1, null);
         }
         if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinedLiveAll()) != 0)) {//join_live_all 只要有不为0的，返-2
-            return new DetectWeekResult(-2, null);
+            return new DetectWeekResultVo(-2, null);
         }
-        return new DetectWeekResult(1, schCourseTableBases);//都为0，返1
+        if (isSaveDetectData) {
+            return new DetectWeekResultVo(1, schCourseTableBases);//都为0，返1
+        } else {
+            return new DetectWeekResultVo(1, null);
+        }
+
     }
 
 }

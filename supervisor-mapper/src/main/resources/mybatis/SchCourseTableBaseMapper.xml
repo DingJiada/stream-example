@@ -210,11 +210,14 @@
     GROUP BY wsctb.id
   </select>
 
-  <select id="detectWeekOnLike" resultMap="BaseResultMap">
+  <select id="queryListByPageNJT" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from wr_sch_course_table_base
-    where weeks like concat('%/',#{week,jdbcType=VARCHAR},'/%')
+    from wr_sch_course_table_base wsctb
+    where wsctb.is_delete='0'
+    <if test="weeks!=null and weeks!=''">
+      AND wsctb.weeks LIKE concat('%/',#{weeks,jdbcType=VARCHAR},'/%')
+    </if>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

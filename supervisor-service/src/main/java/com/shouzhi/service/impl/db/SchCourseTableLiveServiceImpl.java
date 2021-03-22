@@ -1,18 +1,16 @@
 package com.shouzhi.service.impl.db;
 
 import com.alibaba.fastjson.JSON;
-import com.shouzhi.basic.constants.DatePatterns;
 import com.shouzhi.basic.utils.UuidUtil;
 import com.shouzhi.basic.utils.WeeksUtil;
 import com.shouzhi.mapper.SchCourseTableLiveMapper;
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.db.SchCourseTableLive;
-import com.shouzhi.pojo.db.SchSemester;
 import com.shouzhi.pojo.dto.SchCourseTableLiveDto;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
-import com.shouzhi.service.impl.other.DetectWeekResult;
+import com.shouzhi.pojo.vo.DetectWeekResultVo;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -453,24 +451,25 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
      * 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-发布业务
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param isRecord 是否录制，默认否（0：否，1：是）
-     * @param week 周数
+     * @param weeks 周数
      * @author Dingjd
      * @date 2021/3/18 16:48
      **/
     @Override
-    public Integer publishLivePlanService(String permId, String isRecord, String week, HttpServletRequest req) throws Exception {
+    public Integer publishLivePlanService(String permId, String isRecord, String weeks, HttpServletRequest req) throws Exception {
 
-        DetectWeekResult detectWeekResult = schCourseTableBaseService.detectWeek(permId, week, req);//先检测
+        DetectWeekResultVo detectWeekResult = schCourseTableBaseService.detectWeek(permId, weeks, true, req);//先检测
 
         if (detectWeekResult.getResult() != 1) { //检测结果(result) == 1 才能进行新增操作
+            Assert.isTrue(detectWeekResult.getResult() == 1,"SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR");
             return 0;
         }
 
         BasicAuth userInfo = baseService.getUserInfo(req);
-        // 获取当前最新学期的周数天数列表
-        Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
 
         List<SchCourseTableBase> schCourseTableBases = detectWeekResult.getSchCourseTableLiveList();
+        // 获取当前最新学期的周数天数列表
+        Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
 
         List<SchCourseTableLive> schCourseTableLiveList = schCourseTableBases.stream().map(s -> {
             String id = s.getId();

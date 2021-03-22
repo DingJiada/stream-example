@@ -93,10 +93,10 @@ public interface SchCourseTableBaseMapper {
     List<SchCourseTableBase> BatchSelect(Map<String, Object> map);
 
     /**
-     * 模糊查询包含week
-     * @param week 周数
+     * 根据参数查询列表  无连接表 NoJoinTable
+     * @param map
      * @author Dingjd
      * @date 2021/3/18 15:40
      **/
-    List<SchCourseTableBase> detectWeekOnLike(String week);
+    List<SchCourseTableBase> queryListByPageNJT(Map<String, Object> map);
 }

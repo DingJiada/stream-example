@@ -1,4 +1,4 @@
-package com.shouzhi.service.impl.other;
+package com.shouzhi.pojo.vo;
 
 import com.shouzhi.pojo.db.SchCourseTableBase;
 import java.util.List;
@@ -7,15 +7,15 @@ import java.util.List;
  * @author Dingjd
  * @date 2021/3/19 14:18
  */
-public class DetectWeekResult {
+public class DetectWeekResultVo {
 
     private Integer result;
 
     private List<SchCourseTableBase> schCourseTableLiveList;
 
-    public DetectWeekResult(){}
+    public DetectWeekResultVo(){}
 
-    public DetectWeekResult(Integer result, List<SchCourseTableBase> schCourseTableLiveList) {
+    public DetectWeekResultVo(Integer result, List<SchCourseTableBase> schCourseTableLiveList) {
         this.result = result;
         this.schCourseTableLiveList = schCourseTableLiveList;
     }

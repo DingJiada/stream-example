@@ -5,7 +5,7 @@ import com.shouzhi.pojo.db.SchCourseTableBase;
 import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
 import com.shouzhi.pojo.vo.SchCourseTableGridVo;
 import com.shouzhi.pojo.vo.TreeNodeVo;
-import com.shouzhi.service.impl.other.DetectWeekResult;
+import com.shouzhi.pojo.vo.DetectWeekResultVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -96,12 +96,12 @@ public interface ISchCourseTableBaseService {
     List<SchCourseTableBase> BatchSelect(Map<String, Object> map);
 
     /**
-     * 检测week，模糊查找
-     * @param week 周数
+     * 根据参数查询列表  无连接表 NoJoinTable
+     * @param map
      * @author Dingjd
      * @date 2021/3/18 15:36
      **/
-    List<SchCourseTableBase> detectWeekOnLike(String week) throws Exception;
+    List<SchCourseTableBase> queryListByPageNJT(Map<String, Object> map) throws Exception;
 
     /**
      * 新增
@@ -189,10 +189,11 @@ public interface ISchCourseTableBaseService {
     /**
      * 检测week
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
-     * @param week 周数
+     * @param weeks 周数
+     * @param isSaveDetectData 是否保存数据
      * @author Dingjd
      * @date 2021/3/18 15:37
      **/
-    DetectWeekResult detectWeek(String permId, String week, HttpServletRequest req) throws Exception;
+    DetectWeekResultVo detectWeek(String permId, String weeks, boolean isSaveDetectData, HttpServletRequest req) throws Exception;
 
 }

@@ -198,9 +198,9 @@ public interface ISchCourseTableLiveService {
      * 后台管理-直播管理-直播课表-制定直播计划-按教务课表自动生成计划-发布业务
      * @param permId 权限ID或菜单ID(仅限于最后级别的菜单)
      * @param isRecord 是否录制，默认否（0：否，1：是）
-     * @param week 周数
+     * @param weeks 周数
      * @author Dingjd
      * @date 2021/3/18 16:48
      **/
-    Integer publishLivePlanService(String permId, String isRecord, String week, HttpServletRequest req) throws Exception;
+    Integer publishLivePlanService(String permId, String isRecord, String weeks, HttpServletRequest req) throws Exception;
 }
