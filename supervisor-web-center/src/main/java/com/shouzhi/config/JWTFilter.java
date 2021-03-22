@@ -99,8 +99,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 对跨域提供支持
+     * 该步已经移至Nginx内配置，项目本身不再提供跨域支持 2021-03-19 20:32:06
      */
-    @Override
+    /*@Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
@@ -113,7 +114,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
             return false;
         }
         return super.preHandle(request, response);
-    }
+    }*/
 
     /**
      * isAccessAllowed()返回false,调用此方法
