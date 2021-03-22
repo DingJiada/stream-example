@@ -195,6 +195,13 @@ public class BaseController {
                 result.setErrorResult(ErrorCodeEnum.SCH_SEMESTER_ALREADY_IS_CURRENT_SEM_ERROR);
                 break;
 
+            case "SCH_C_T_L_JOIN_LIVE_FAIL_WEEKS_WEEK_NO_IN_SCOPE_ERROR":
+                result.setErrorResult(ErrorCodeEnum.SCH_C_T_L_JOIN_LIVE_FAIL_WEEKS_WEEK_NO_IN_SCOPE_ERROR);
+                break;
+            case "SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR":
+                result.setErrorResult(ErrorCodeEnum.SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR);
+                break;
+
             case "DB_SQL_INSERT_ERROR":
                 result.setErrorResult(ErrorCodeEnum.DB_SQL_INSERT_ERROR);
                 break;
