@@ -513,21 +513,21 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
      * @date 2021/3/23 10:36
      **/
     @Override
-    public List<SchCourseTableBaseVO> querySelfAllCourse(Map<String, Object> map) {
+    public List<PcAllCoursesVO> querySelfAllCourse(Map<String, Object> map) {
 
         List<SchCourseTableBase> schCourseTableBaseList = schCourseTableBaseMapper.queryListByPage(map);
 
-        List<SchCourseTableBaseVO> schCourseTableBaseVOList = schCourseTableBaseList.stream().map(o -> {
-            SchCourseTableBaseVO schCourseTableBaseVO = new SchCourseTableBaseVO();
-            schCourseTableBaseVO.setStartTime(o.getStartTime());
-            schCourseTableBaseVO.setEndTime(o.getEndTime());
-            schCourseTableBaseVO.setSchSpaceName(o.getSchSpaceName());
-            schCourseTableBaseVO.setCourseName(o.getCourseName());
-            schCourseTableBaseVO.setSchClassNames(o.getSchClassNames());
-            return schCourseTableBaseVO;
+        List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseList.stream().map(o -> {
+            PcAllCoursesVO pcAllCoursesVO = new PcAllCoursesVO();
+            pcAllCoursesVO.setStartTime(o.getStartTime());
+            pcAllCoursesVO.setEndTime(o.getEndTime());
+            pcAllCoursesVO.setSchSpaceName(o.getSchSpaceName());
+            pcAllCoursesVO.setCourseName(o.getCourseName());
+            pcAllCoursesVO.setSchClassNames(o.getSchClassNames());
+            return pcAllCoursesVO;
         }).collect(Collectors.toList());
 
-        return schCourseTableBaseVOList;
+        return pcAllCoursesVOList;
     }
 
     /**

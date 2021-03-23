@@ -180,7 +180,7 @@ public interface ISchCourseTableBaseService {
      * @author Dingjd
      * @date 2021/3/23 10:36
      **/
-    List<SchCourseTableBaseVO> querySelfAllCourse(Map<String, Object> map);
+    List<PcAllCoursesVO> querySelfAllCourse(Map<String, Object> map);
 
     /**
      * 前端(当天)课程树

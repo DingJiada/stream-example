@@ -10,7 +10,7 @@ import java.util.Date;
  * @author Dingjd
  * @date 2021/3/23 9:06
  */
-public class SchCourseTableBaseVO implements Serializable {
+public class PcAllCoursesVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -40,9 +40,9 @@ public class SchCourseTableBaseVO implements Serializable {
      **/
     private String schClassNames;
 
-    public SchCourseTableBaseVO() {}
+    public PcAllCoursesVO() {}
 
-    public SchCourseTableBaseVO(Date startTime, Date endTime, String schSpaceName, String courseName, String schClassNames) {
+    public PcAllCoursesVO(Date startTime, Date endTime, String schSpaceName, String courseName, String schClassNames) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.schSpaceName = schSpaceName;
@@ -92,7 +92,7 @@ public class SchCourseTableBaseVO implements Serializable {
 
     @Override
     public String toString() {
-        return "SchCourseTableBaseVO{" +
+        return "PcAllCoursesVO{" +
                 "startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", schSpaceName='" + schSpaceName + '\'' +

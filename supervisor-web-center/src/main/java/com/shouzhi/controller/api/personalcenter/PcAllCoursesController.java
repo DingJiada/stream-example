@@ -6,7 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.shouzhi.basic.common.CommonResult;
 import com.shouzhi.controller.BaseController;
 import com.shouzhi.pojo.vo.PageInfoVo;
-import com.shouzhi.pojo.vo.SchCourseTableBaseVO;
+import com.shouzhi.pojo.vo.PcAllCoursesVO;
 import com.shouzhi.service.interf.db.ISchCourseTableBaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,20 +43,20 @@ public class PcAllCoursesController extends BaseController {
      * @date 2021/3/23 10:33
      **/
     @PostMapping("/findList/{pageNum}/{pageSize}")
-    public CommonResult<PageInfoVo<SchCourseTableBaseVO>>
+    public CommonResult<PageInfoVo<PcAllCoursesVO>>
             findList(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize,
                      @RequestParam(value="week",required=false) String week, @RequestParam(value="weeks",required=false) String weeks, HttpServletRequest req) {
         logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
-        CommonResult<PageInfoVo<SchCourseTableBaseVO>> result = new CommonResult<>();
+        CommonResult<PageInfoVo<PcAllCoursesVO>> result = new CommonResult<>();
         Map<String, Object> map = new HashMap<>();
         map.put("week",week);
         map.put("weeks",weeks);
 
         PageHelper.startPage(pageNum,pageSize);
 
-        List<SchCourseTableBaseVO> schCourseTableBaseVOList = schCourseTableBaseService.querySelfAllCourse(map);
+        List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseService.querySelfAllCourse(map);
 
-        PageInfo<SchCourseTableBaseVO> pageInfo = new PageInfo<>(schCourseTableBaseVOList);
+        PageInfo<PcAllCoursesVO> pageInfo = new PageInfo<>(pcAllCoursesVOList);
 
         return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
     }
