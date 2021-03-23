@@ -535,7 +535,11 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
             pcAllCoursesVO.setSchSpaceName(o.getSchSpaceName());
             pcAllCoursesVO.setCourseName(o.getCourseName());
             pcAllCoursesVO.setSchClassNames(o.getSchClassNames());
-            pcAllCoursesVO.setIsJoinLive(o.getIsJoinLive());
+            Collection<String> collection = null;
+            if (o.getJoinLiveWeeks() != null) {
+                collection = Arrays.stream(o.getJoinLiveWeeks().substring(1).split("/")).filter(s -> map.get("weeks").equals(s)).collect(Collectors.toList());
+            }
+            pcAllCoursesVO.setIsJoinLive(collection != null && collection.size() > 0 ? "1" : "0");//如果有值，代表已存在(已加入直播)
             pcAllCoursesVO.setDateForWeeks(from);
 
             return pcAllCoursesVO;

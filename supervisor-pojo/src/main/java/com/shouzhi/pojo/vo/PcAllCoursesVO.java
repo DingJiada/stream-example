@@ -45,7 +45,6 @@ public class PcAllCoursesVO implements Serializable {
      * 是否加入直播课表（0：未加入，1：已加入）
      * @ignore
      */
-    @JsonIgnore
     private String isJoinLive;
 
     /**
