@@ -511,23 +511,26 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
 
     /**
      * 查询个人中心-全部课程
-     * @param map
+     * @param week
+     * @param weeks
      * @author Dingjd
      * @date 2021/3/23 10:36
      **/
     @Override
-    public List<PcAllCoursesVO> querySelfAllCourse(Map<String, Object> map, HttpServletRequest req) throws Exception {
+    public List<PcAllCoursesVO> querySelfAllCourse(String week, String weeks, HttpServletRequest req) throws Exception {
         BasicAuth userInfo = baseService.getUserInfo(req);
+        Map<String, Object> map = new HashMap<>();
+        map.put("week",week);
+        map.put("weeksLike",String.join(weeks,"/","/"));
         map.put("sysUserId", userInfo.getSysUserId());
-
         List<SchCourseTableBase> schCourseTableBaseList = schCourseTableBaseMapper.queryListByPage(map);
-
+        if(CollectionUtils.isEmpty(schCourseTableBaseList)){
+            return new ArrayList<>();
+        }
         // 获取当前最新学期的周数天数列表
         Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
-
         List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseList.stream().map(o -> {
-
-            LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, String.valueOf(map.get("weeks")), String.valueOf(o.getWeek()), false);
+            LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, weeks, String.valueOf(o.getWeek()), false);
             Date from = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             PcAllCoursesVO pcAllCoursesVO = new PcAllCoursesVO();
             pcAllCoursesVO.setStartTime(o.getStartTime());
@@ -535,16 +538,20 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
             pcAllCoursesVO.setSchSpaceName(o.getSchSpaceName());
             pcAllCoursesVO.setCourseName(o.getCourseName());
             pcAllCoursesVO.setSchClassNames(o.getSchClassNames());
-            if (o.getJoinLiveWeeks() != null) {
-                pcAllCoursesVO.setIsJoinLive(o.getJoinLiveWeeks().contains(map.get("weeks").toString()) ? "1" : "0");//如果有值，代表已存在(已加入直播)
-            } else {
-                pcAllCoursesVO.setIsJoinLive("0");
-            }
             pcAllCoursesVO.setDateForWeeks(from);
-
+            // 默认未加入直播计划
+            pcAllCoursesVO.setIsJoinLive("0");
+            if(!"0".equals(o.getIsJoinLive())){
+                if("1".equals(o.getIsJoinedLiveAll())){
+                    pcAllCoursesVO.setIsJoinLive("1");
+                }else {
+                    if(o.getJoinLiveWeeks().contains(String.join(weeks,"/","/"))){
+                        pcAllCoursesVO.setIsJoinLive("1");
+                    }
+                }
+            }
             return pcAllCoursesVO;
         }).collect(Collectors.toList());
-
         return pcAllCoursesVOList;
     }
 

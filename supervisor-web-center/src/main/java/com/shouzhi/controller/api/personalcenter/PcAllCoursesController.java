@@ -31,12 +31,12 @@ public class PcAllCoursesController extends BaseController {
     @Autowired
     private ISchCourseTableBaseService schCourseTableBaseService;
 
-    // TODO SOMETHING
 
     /**
      * 查询个人中心-我的课程-全部课程
      * @apiNote 查询个人中心-我的课程-全部课程
-     * @param pageNum, pageSize 分页参数
+     * @param pageNum 页码(如第1页)
+     * @param pageSize 每页数量(如每页10条)
      * @param week 周
      * @param weeks 周数
      * @author Dingjd
@@ -44,25 +44,13 @@ public class PcAllCoursesController extends BaseController {
      **/
     @PostMapping("/findList/{pageNum}/{pageSize}")
     public CommonResult<PageInfoVo<PcAllCoursesVO>>
-            findList(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize,
-                     @RequestParam(value="week",required=false) String week, @RequestParam(value="weeks",required=false) String weeks, HttpServletRequest req) {
+    findList(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize,
+             @RequestParam("week") String week, @RequestParam("weeks") String weeks, HttpServletRequest req) throws Exception {
         logger.info("url={},ParameterMap={}", req.getServletPath(), JSON.toJSONString(req.getParameterMap()));
         CommonResult<PageInfoVo<PcAllCoursesVO>> result = new CommonResult<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("week",week);
-        map.put("weeks",weeks);
-
         PageHelper.startPage(pageNum,pageSize);
-        try {
-            List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseService.querySelfAllCourse(map, req);
-
-            PageInfo<PcAllCoursesVO> pageInfo = new PageInfo<>(pcAllCoursesVOList);
-
-            return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
-        } catch (Exception e) {
-            this.fillIllegalArgResult(result, e, true, true, logger);
-        }
-
-        return result;
+        List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseService.querySelfAllCourse(week, weeks, req);
+        PageInfo<PcAllCoursesVO> pageInfo = new PageInfo<>(pcAllCoursesVOList);
+        return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
     }
 }

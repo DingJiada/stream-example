@@ -176,11 +176,12 @@ public interface ISchCourseTableBaseService {
 
     /**
      * 查询个人中心-全部课程
-     * @param map
+     * @param week
+     * @param weeks
      * @author Dingjd
      * @date 2021/3/23 10:36
      **/
-    List<PcAllCoursesVO> querySelfAllCourse(Map<String, Object> map, HttpServletRequest req) throws Exception;
+    List<PcAllCoursesVO> querySelfAllCourse(String week, String weeks, HttpServletRequest req) throws Exception;
 
     /**
      * 前端(当天)课程树
