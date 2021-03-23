@@ -34,7 +34,7 @@ public class PublicSysStaticParamController extends BaseController {
      *          如用户进入登陆页面时前端应立马携带<b>pageType</b>=2请求此接口，接口返回背景轮播图URL，前端解析返回字段并填充。
      *          注：因此接口返回对象为非标准对象，接口文档的Response-fields无法自动生成，如需得知返回哪些字段可以请求一下对应接口，
      *          具体以接口返回字段为准，所有静态参数字段一般都为死字段，不会轻易变动。
-     * @param pageType 页面类型，1：门户首页、2：登陆页面、3：注册页面、4：后台页眉
+     * @param pageType 页面类型，1：门户首页、2：登陆页面、3：注册页面、4：后台页眉、5：画面预览
      * @author WX
      * @date 2020-11-24 17:19:06
      */

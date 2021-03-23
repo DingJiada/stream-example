@@ -240,6 +240,12 @@ public class SysStaticParamServiceImpl implements ISysStaticParamService {
                 resultMap.put("bgTopLeftName", staticParamMap.get("1_5_2").getParamVal());
                 resultMap.put("browserTabTitlePrefix", staticParamMap.get("1_5_3").getParamVal());
                 break;
+            case "5":
+                // 画面预览
+                resultMap = new HashMap<>();
+                resultMap.put("multichannelOptional", staticParamMap.get("1_7_1").getParamVal());
+                resultMap.put("multichannelMerge", staticParamMap.get("1_7_2").getParamVal());
+                break;
         }
         return resultMap;
     }

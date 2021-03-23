@@ -38,7 +38,7 @@ public class SysStaticParam implements Serializable {
     private String paramDesc;
 
     /**
-     * 展示类型（0：未知，1：span文本，2：text输入框，3：img图像，4：img图像列表）
+     * 展示类型（0：未知，1：span文本，2：text输入框，3：img图像，4：img图像列表，5：switch开关）
      * @ignore
      */
     private String showType;
