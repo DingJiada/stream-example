@@ -137,9 +137,9 @@ public class SchCourseTableBaseController extends BaseController {
         map.put("isJoinedLiveAll", "0");
         PageHelper.startPage(pageNum,pageSize);
         List<SchCourseTableBase> schCourseTableBases = schCourseTableBaseService.queryListByPage(map);
+        PageInfo<SchCourseTableBase> pageInfo = new PageInfo<>(schCourseTableBases);
         List<SchCourseTableBaseLiveSourceVo> r = schCourseTableBaseService.courseLiveSource(schCourseTableBases);
-        PageInfo<SchCourseTableBaseLiveSourceVo> pageInfo = new PageInfo<>(r);
-        return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
+        return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo, r));
     }
 
 
