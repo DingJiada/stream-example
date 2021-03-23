@@ -53,11 +53,16 @@ public class PcAllCoursesController extends BaseController {
         map.put("weeks",weeks);
 
         PageHelper.startPage(pageNum,pageSize);
+        try {
+            List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseService.querySelfAllCourse(map, req);
 
-        List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseService.querySelfAllCourse(map);
+            PageInfo<PcAllCoursesVO> pageInfo = new PageInfo<>(pcAllCoursesVOList);
 
-        PageInfo<PcAllCoursesVO> pageInfo = new PageInfo<>(pcAllCoursesVOList);
+            return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
+        } catch (Exception e) {
+            this.fillIllegalArgResult(result, e, true, true, logger);
+        }
 
-        return result.setStatus(1).setMsg("查询成功").setResultBody(this.filterPage(pageInfo));
+        return result;
     }
 }

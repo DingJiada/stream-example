@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.shouzhi.basic.constants.DatePatterns;
 import com.shouzhi.basic.utils.UuidUtil;
+import com.shouzhi.basic.utils.WeeksUtil;
 import com.shouzhi.mapper.SchCourseTableBaseMapper;
 import com.shouzhi.pojo.db.*;
 import com.shouzhi.pojo.vo.*;
@@ -20,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -513,17 +516,28 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
      * @date 2021/3/23 10:36
      **/
     @Override
-    public List<PcAllCoursesVO> querySelfAllCourse(Map<String, Object> map) {
+    public List<PcAllCoursesVO> querySelfAllCourse(Map<String, Object> map, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        map.put("sysUserId", userInfo.getSysUserId());
 
         List<SchCourseTableBase> schCourseTableBaseList = schCourseTableBaseMapper.queryListByPage(map);
 
+        // 获取当前最新学期的周数天数列表
+        Map<String, Object> weeksDaysList = schSemesterService.weeksDaysListByCurrentSem();
+
         List<PcAllCoursesVO> pcAllCoursesVOList = schCourseTableBaseList.stream().map(o -> {
+
+            LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, String.valueOf(map.get("weeks")), String.valueOf(o.getWeek()), false);
+            Date from = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             PcAllCoursesVO pcAllCoursesVO = new PcAllCoursesVO();
             pcAllCoursesVO.setStartTime(o.getStartTime());
             pcAllCoursesVO.setEndTime(o.getEndTime());
             pcAllCoursesVO.setSchSpaceName(o.getSchSpaceName());
             pcAllCoursesVO.setCourseName(o.getCourseName());
             pcAllCoursesVO.setSchClassNames(o.getSchClassNames());
+            pcAllCoursesVO.setIsJoinLive(o.getIsJoinLive());
+            pcAllCoursesVO.setDateForWeeks(from);
+
             return pcAllCoursesVO;
         }).collect(Collectors.toList());
 

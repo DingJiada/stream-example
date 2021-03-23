@@ -1,6 +1,7 @@
 package com.shouzhi.pojo.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -40,14 +41,29 @@ public class PcAllCoursesVO implements Serializable {
      **/
     private String schClassNames;
 
+    /**
+     * 是否加入直播课表（0：未加入，1：已加入）
+     * @ignore
+     */
+    @JsonIgnore
+    private String isJoinLive;
+
+    /**
+     * 周数+星期几所对应的日期，如：第18周的星期二对应的日期为yyyy-MM-dd
+     */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    private Date dateForWeeks;
+
     public PcAllCoursesVO() {}
 
-    public PcAllCoursesVO(Date startTime, Date endTime, String schSpaceName, String courseName, String schClassNames) {
+    public PcAllCoursesVO(Date startTime, Date endTime, String schSpaceName, String courseName, String schClassNames, String isJoinLive, Date dateForWeeks) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.schSpaceName = schSpaceName;
         this.courseName = courseName;
         this.schClassNames = schClassNames;
+        this.isJoinLive = isJoinLive;
+        this.dateForWeeks = dateForWeeks;
     }
 
     public String getSchSpaceName() {
@@ -90,6 +106,22 @@ public class PcAllCoursesVO implements Serializable {
         this.endTime = endTime;
     }
 
+    public String getIsJoinLive() {
+        return isJoinLive;
+    }
+
+    public void setIsJoinLive(String isJoinLive) {
+        this.isJoinLive = isJoinLive;
+    }
+
+    public Date getDateForWeeks() {
+        return dateForWeeks;
+    }
+
+    public void setDateForWeeks(Date dateForWeeks) {
+        this.dateForWeeks = dateForWeeks;
+    }
+
     @Override
     public String toString() {
         return "PcAllCoursesVO{" +
@@ -98,6 +130,8 @@ public class PcAllCoursesVO implements Serializable {
                 ", schSpaceName='" + schSpaceName + '\'' +
                 ", courseName='" + courseName + '\'' +
                 ", schClassNames='" + schClassNames + '\'' +
+                ", isJoinLive='" + isJoinLive + '\'' +
+                ", dateForWeeks=" + dateForWeeks +
                 '}';
     }
 }
