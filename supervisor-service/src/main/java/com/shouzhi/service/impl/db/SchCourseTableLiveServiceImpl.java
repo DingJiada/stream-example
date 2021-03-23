@@ -431,12 +431,11 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
 
         Map<String, Object> map = new HashMap<>();
 
-        List<String> list = new ArrayList<>();
         map.put("isCancel", Integer.parseInt(isCancel) == 0 ? "1" : "0");
 
         List<SchCourseTableLive> schCourseTableLives = this.queryListByPageNJT(map);
 
-        schCourseTableLives.forEach(o -> list.add(o.getId()));
+        List<String> list = schCourseTableLives.stream().map(SchCourseTableLive::getId).collect(Collectors.toList());
 
         map = new HashMap<>();
         map.put("list",list);
