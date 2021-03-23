@@ -2,10 +2,7 @@ package com.shouzhi.service.interf.db;
 
 import com.shouzhi.pojo.db.BasicAuth;
 import com.shouzhi.pojo.db.SchCourseTableBase;
-import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
-import com.shouzhi.pojo.vo.SchCourseTableGridVo;
-import com.shouzhi.pojo.vo.TreeNodeVo;
-import com.shouzhi.pojo.vo.DetectWeekVo;
+import com.shouzhi.pojo.vo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -177,6 +174,13 @@ public interface ISchCourseTableBaseService {
      */
     SchCourseTableBase findPatrolCourseDetail(Map<String, Object> map);
 
+    /**
+     * 查询个人中心-全部课程
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/23 10:36
+     **/
+    List<SchCourseTableBaseVO> querySelfAllCourse(Map<String, Object> map);
 
     /**
      * 前端(当天)课程树

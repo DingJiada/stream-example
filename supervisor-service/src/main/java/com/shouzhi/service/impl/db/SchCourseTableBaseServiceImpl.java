@@ -6,13 +6,9 @@ import com.shouzhi.basic.constants.DatePatterns;
 import com.shouzhi.basic.utils.UuidUtil;
 import com.shouzhi.mapper.SchCourseTableBaseMapper;
 import com.shouzhi.pojo.db.*;
-import com.shouzhi.pojo.vo.SchCourseTableBaseLiveSourceVo;
-import com.shouzhi.pojo.vo.SchCourseTableGridVo;
-import com.shouzhi.pojo.vo.SchDeviceOperateVo;
-import com.shouzhi.pojo.vo.TreeNodeVo;
+import com.shouzhi.pojo.vo.*;
 import com.shouzhi.service.common.BaseService;
 import com.shouzhi.service.constants.DBConst;
-import com.shouzhi.pojo.vo.DetectWeekVo;
 import com.shouzhi.service.interf.db.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -508,6 +504,30 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
         }
         baseService.generateSignUrl(schCourseTableBase, schCourseTableBase.getClass(), "schDevice1.playAddr","schDevice2.playAddr","schDeviceVGA.playAddr","schDeviceFlvOverlay");
         return schCourseTableBase;
+    }
+
+    /**
+     * 查询个人中心-全部课程
+     * @param map
+     * @author Dingjd
+     * @date 2021/3/23 10:36
+     **/
+    @Override
+    public List<SchCourseTableBaseVO> querySelfAllCourse(Map<String, Object> map) {
+
+        List<SchCourseTableBase> schCourseTableBaseList = schCourseTableBaseMapper.queryListByPage(map);
+
+        List<SchCourseTableBaseVO> schCourseTableBaseVOList = schCourseTableBaseList.stream().map(o -> {
+            SchCourseTableBaseVO schCourseTableBaseVO = new SchCourseTableBaseVO();
+            schCourseTableBaseVO.setStartTime(o.getStartTime());
+            schCourseTableBaseVO.setEndTime(o.getEndTime());
+            schCourseTableBaseVO.setSchSpaceName(o.getSchSpaceName());
+            schCourseTableBaseVO.setCourseName(o.getCourseName());
+            schCourseTableBaseVO.setSchClassNames(o.getSchClassNames());
+            return schCourseTableBaseVO;
+        }).collect(Collectors.toList());
+
+        return schCourseTableBaseVOList;
     }
 
     /**
