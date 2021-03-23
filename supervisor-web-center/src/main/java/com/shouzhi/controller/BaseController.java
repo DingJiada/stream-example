@@ -1,5 +1,6 @@
 package com.shouzhi.controller;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.shouzhi.basic.common.CommonResult;
 import com.shouzhi.basic.common.ErrorCodeEnum;
@@ -8,6 +9,7 @@ import com.shouzhi.service.constants.DBEnum;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +39,51 @@ public class BaseController {
                 .setList(pageInfo.getList());
         return instance;
     }
+
+
+    /**
+     * 将PageInfo对象泛型中的Po对象转化为Vo对象
+     * @param pageInfoPo PageInfo<Po>对象</>
+     * @param <P> Po类型
+     * @param <V> Vo类型
+     * @return
+     */
+    public <P, V> PageInfoVo<V> filterPage(PageInfo<P> pageInfoPo, List<V> list) {
+        PageInfoVo<V> instance = PageInfoVo.<V>getInstance();
+        instance.setPageNum(pageInfoPo.getPageNum())
+                .setPageSize(pageInfoPo.getPageSize())
+                .setPages(pageInfoPo.getPages())
+                .setNavigateLastPage(pageInfoPo.getNavigateLastPage())
+                .setNavigateFirstPage(pageInfoPo.getNavigateFirstPage())
+                .setTotal(pageInfoPo.getTotal())
+                .setList(list);
+        return instance;
+    }
+
+
+    /**
+     * 将PageInfo对象泛型中的Po对象转化为Vo对象
+     * @param pageInfoPo PageInfo<Po>对象</>
+     * @param <P> Po类型
+     * @param <V> Vo类型
+     * @return
+     */
+    public <P, V> PageInfo<V> PageInfo2PageInfoVo(PageInfo<P> pageInfoPo, List<V> list) {
+        // 创建Page对象，实际上是一个ArrayList类型的集合
+        Page<V> page = new Page<>(pageInfoPo.getPageNum(), pageInfoPo.getPageSize());
+        page.setTotal(pageInfoPo.getTotal());
+        PageInfo<V> vPageInfo = new PageInfo<>(page);
+        // PageInfo<V> vPageInfo = PageInfo.of(list);
+        vPageInfo.setPageNum(pageInfoPo.getPageNum());
+        vPageInfo.setPageSize(pageInfoPo.getPageSize());
+        vPageInfo.setPages(pageInfoPo.getPages());
+        vPageInfo.setNavigateLastPage(pageInfoPo.getNavigateLastPage());
+        vPageInfo.setNavigateFirstPage(pageInfoPo.getNavigateFirstPage());
+        vPageInfo.setTotal(pageInfoPo.getTotal());
+        vPageInfo.setList(list);
+        return vPageInfo;
+    }
+
 
     /**
      * New function code block please write here ~ ~ (Don't delete this prompt)
