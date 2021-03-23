@@ -2,6 +2,8 @@ package com.shouzhi.pojo.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shouzhi.pojo.db.SchCourseTableBase;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
  * @author Dingjd
  * @date 2021/3/19 14:18
  */
-public class DetectWeekVo {
+public class DetectWeekVo implements Serializable {
 
     /**
      * 检测结果，-1：该周数存在自定义计划、-2：该周数已全部自动加入计划、1：允许
