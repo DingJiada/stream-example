@@ -533,6 +533,10 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
             LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, weeks, String.valueOf(o.getWeek()), false);
             Date from = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             PcAllCoursesVO pcAllCoursesVO = new PcAllCoursesVO();
+            pcAllCoursesVO.setWeek(o.getWeek());
+            pcAllCoursesVO.setWeekV(o.getWeekV());
+            pcAllCoursesVO.setWeeks(weeks);
+            pcAllCoursesVO.setWeeksV(o.getWeeksV());
             pcAllCoursesVO.setStartTime(o.getStartTime());
             pcAllCoursesVO.setEndTime(o.getEndTime());
             pcAllCoursesVO.setSchSpaceName(o.getSchSpaceName());

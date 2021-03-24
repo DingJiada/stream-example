@@ -27,6 +27,26 @@ public class PcAllCoursesVO implements Serializable {
     private Date endTime;
 
     /**
+     * 周几，星期几，如：1、2、7等
+     */
+    private Integer week;
+
+    /**
+     * 周几，星期几，view视图字段，如：周一、周二、周日等
+     */
+    private String weekV;
+
+    /**
+     * 周数，如：1、2、5、18等
+     */
+    private String weeks;
+
+    /**
+     * 周数，view视图字段，如：1-2、5-18等
+     */
+    private String weeksV;
+
+    /**
      * 上课地点
      **/
     private String schSpaceName;
@@ -43,7 +63,6 @@ public class PcAllCoursesVO implements Serializable {
 
     /**
      * 是否加入直播课表（0：未加入，1：已加入）
-     * @ignore
      */
     private String isJoinLive;
 
@@ -55,9 +74,13 @@ public class PcAllCoursesVO implements Serializable {
 
     public PcAllCoursesVO() {}
 
-    public PcAllCoursesVO(Date startTime, Date endTime, String schSpaceName, String courseName, String schClassNames, String isJoinLive, Date dateForWeeks) {
+    public PcAllCoursesVO(Date startTime, Date endTime, Integer week, String weekV, String weeks, String weeksV, String schSpaceName, String courseName, String schClassNames, String isJoinLive, Date dateForWeeks) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.week = week;
+        this.weekV = weekV;
+        this.weeks = weeks;
+        this.weeksV = weeksV;
         this.schSpaceName = schSpaceName;
         this.courseName = courseName;
         this.schClassNames = schClassNames;
@@ -121,11 +144,47 @@ public class PcAllCoursesVO implements Serializable {
         this.dateForWeeks = dateForWeeks;
     }
 
+    public Integer getWeek() {
+        return week;
+    }
+
+    public void setWeek(Integer week) {
+        this.week = week;
+    }
+
+    public String getWeekV() {
+        return weekV;
+    }
+
+    public void setWeekV(String weekV) {
+        this.weekV = weekV;
+    }
+
+    public String getWeeks() {
+        return weeks;
+    }
+
+    public void setWeeks(String weeks) {
+        this.weeks = weeks;
+    }
+
+    public String getWeeksV() {
+        return weeksV;
+    }
+
+    public void setWeeksV(String weeksV) {
+        this.weeksV = weeksV;
+    }
+
     @Override
     public String toString() {
         return "PcAllCoursesVO{" +
                 "startTime=" + startTime +
                 ", endTime=" + endTime +
+                ", week=" + week +
+                ", weekV='" + weekV + '\'' +
+                ", weeks='" + weeks + '\'' +
+                ", weeksV='" + weeksV + '\'' +
                 ", schSpaceName='" + schSpaceName + '\'' +
                 ", courseName='" + courseName + '\'' +
                 ", schClassNames='" + schClassNames + '\'' +
