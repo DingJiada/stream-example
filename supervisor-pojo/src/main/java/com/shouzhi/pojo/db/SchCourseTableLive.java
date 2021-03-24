@@ -43,7 +43,7 @@ public class SchCourseTableLive implements Serializable {
     private String isRecord;
 
     /**
-     * 计划来源，1_1：基础课表自动生成、1_2：基础课表自定义创建、2_1：其它
+     * 计划来源，1_1：基础课表自动生成、1_2：基础课表自定义创建、1_3：基础课表个人中心创建、2_1：其它
      */
     private String planForm;
 
