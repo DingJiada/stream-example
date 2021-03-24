@@ -217,6 +217,35 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
     }
 
     /**
+     * 查询直播课程
+     * @param dataForWeeks 筛选日期
+     * @param week 周
+     * @param weeks 周数
+     * @author Dingjd
+     * @date 2021/3/24 17:17
+     **/
+    @Override
+    public List<SchCourseTableLive> querySelfLiveCourse(String dataForWeeks, String week, String weeks, HttpServletRequest req) throws Exception {
+        BasicAuth userInfo = baseService.getUserInfo(req);
+        Map<String, Object> map = new HashMap<>();
+        map.put("sysUserId", userInfo.getSysUserId());
+
+        if (dataForWeeks != null && !"".equals(dataForWeeks)) { //如果传了日期，就筛选日期，没有传日期，就筛选周+周数
+            map.put("dataForWeeks", dataForWeeks);
+        } else {
+            map.put("week", week);
+            map.put("weeksLike", String.join(weeks,"/","/"));
+        }
+        List<SchCourseTableLive> schCourseTableLiveList = schCourseTableLiveMapper.queryListByPage(map);
+
+        if(CollectionUtils.isEmpty(schCourseTableLiveList)){
+            return new ArrayList<>();
+        }
+
+        return schCourseTableLiveList;
+    }
+
+    /**
      * 加入(发布)自定义直播计划
      * @param records
      * @param permId

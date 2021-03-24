@@ -123,7 +123,15 @@ public interface ISchCourseTableLiveService {
      */
     Integer batchSave(List<SchCourseTableLive> list, String permId, HttpServletRequest req) throws Exception;
 
-
+    /**
+     * 查询直播课程
+     * @param dataForWeeks 筛选日期
+     * @param week 周
+     * @param weeks 周数
+     * @author Dingjd
+     * @date 2021/3/24 17:17
+     **/
+    List<SchCourseTableLive> querySelfLiveCourse(String dataForWeeks, String week, String weeks, HttpServletRequest req) throws Exception;
 
     /**
      * 加入(发布)自定义直播计划
