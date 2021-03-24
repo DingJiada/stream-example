@@ -251,7 +251,7 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
             sctl.setWeeks(r.getWeeks());
             sctl.setDateForWeeks(from);
             sctl.setIsRecord(r.getIsRecord());
-            sctl.setPlanForm("1_1");
+            sctl.setPlanForm("1_2");
             sctl.setPlanCreator(userInfo.getSysUser().getPersonName());
             sctl.setIsCancel("0");
             sctl.setId(UuidUtil.get32UUID());
