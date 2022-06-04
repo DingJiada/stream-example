@@ -522,7 +522,8 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
         Map<String, Object> map = new HashMap<>();
         map.put("week",week);
         map.put("weeksLike",String.join(weeks,"/","/"));
-        map.put("sysUserId", userInfo.getSysUserId());
+        //当前查询所有课程
+//        map.put("sysUserId", userInfo.getSysUserId());
         List<SchCourseTableBase> schCourseTableBaseList = schCourseTableBaseMapper.queryListByPage(map);
         if(CollectionUtils.isEmpty(schCourseTableBaseList)){
             return new ArrayList<>();
@@ -636,14 +637,17 @@ public class SchCourseTableBaseServiceImpl implements ISchCourseTableBaseService
 
         List<SchCourseTableBase> schCourseTableBases = this.queryListByPageNJT(map);
 
-        if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinLive()) != 0)) {//is_join_live 只要有不为0的，返-1
+        if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinLive()) != 0)) {
+            //is_join_live 只要有不为0的，返-1
             return new DetectWeekVo(-1, null);
         }
-        if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinedLiveAll()) != 0)) {//join_live_all 只要有不为0的，返-2
+        if (schCourseTableBases.stream().anyMatch(t -> Integer.parseInt(t.getIsJoinedLiveAll()) != 0)) {
+            //join_live_all 只要有不为0的，返-2
             return new DetectWeekVo(-2, null);
         }
         if (isSaveDetectData) {
-            return new DetectWeekVo(1, schCourseTableBases);//都为0，返1
+            return new DetectWeekVo(1, schCourseTableBases);
+            //都为0，返1
         } else {
             return new DetectWeekVo(1, null);
         }

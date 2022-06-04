@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="supervisor-web-center:war">
+    <output-path>$PROJECT_DIR$/supervisor-web-center/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>supervisor-web-center</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="supervisor-web-center-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="supervisor-web-center:war exploded" />
+    </root>
+  </artifact>
+</component>

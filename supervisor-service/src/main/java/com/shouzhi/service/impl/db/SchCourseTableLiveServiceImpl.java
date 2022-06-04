@@ -489,7 +489,8 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         DetectWeekVo detectWeek = schCourseTableBaseService.detectWeek(permId, weeks, true, req);//先检测
 
         if (detectWeek.getDetectResult() != 1) { //检测结果(result) == 1 才能进行新增操作
-            Assert.isTrue(detectWeek.getDetectResult() == 1,"SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR");
+            Assert.isTrue(detectWeek.getDetectResult() == 1,
+                    "SCH_C_T_L_JOIN_LIVE_FAIL_THIS_WEEKS_EXIST_CUSTOM_PLAN_ERROR");
             return 0;
         }
 
@@ -502,7 +503,8 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         List<SchCourseTableLive> schCourseTableLiveList = schCourseTableBases.stream().map(s -> {
             String id = s.getId();
             return Arrays.stream(s.getWeeks().substring(1).split("/")).map( str -> {
-                LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, String.valueOf(str), String.valueOf(s.getWeek()), false);
+                LocalDate localDate = WeeksUtil.dateOfWeek2s(weeksDaysList, String.valueOf(str),
+                        String.valueOf(s.getWeek()), false);
                 Date from = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
                 SchCourseTableLive schCourseTableLive = new SchCourseTableLive();
                 schCourseTableLive.setId(UuidUtil.get32UUID());//主键id
@@ -525,7 +527,9 @@ public class SchCourseTableLiveServiceImpl implements ISchCourseTableLiveService
         Integer count = this.batchInsert(schCourseTableLiveList);
 
         // 批量插入操作日志
-        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE, DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo, DBConst.TABLE_UNIFIED_ID, null, schCourseTableLiveList);
+        boolean b = logOperService.batchInsertLogOperAndDetail(DBConst.TABLE_NAME_WR_SCH_COURSE_TABLE_LIVE,
+                DBConst.OPER_TYPE_BATCH_INSERT, permId, DBConst.NO_CASCADE, null, userInfo,
+                DBConst.TABLE_UNIFIED_ID, null, schCourseTableLiveList);
         Assert.isTrue(count == schCourseTableLiveList.size() && b,"DB_SQL_INSERT_ERROR");
 
         return count;

@@ -177,6 +177,7 @@ public class AccountController extends BaseController {
 
         // 生成TOKEN
         JwtTokenVo jwtTokenVo = this.jwtTokenVo(basicAuth.getUserName());
+        System.out.println("AccessToken = " + jwtTokenVo.getAccessToken());
         // 登录时将BasicAuth对象放入redis,时效和accessToken一样
         redisTemplateService.setStr(RedisConst.INFO_USER(basicAuth.getUserName()), JSON.toJSONString(basicAuth), JWTUtil.ACCESS_TOKEN_EXPIRE/1000);
 

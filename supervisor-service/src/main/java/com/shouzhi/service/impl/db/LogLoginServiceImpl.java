@@ -96,13 +96,13 @@ public class LogLoginServiceImpl implements ILogLoginService {
         logLogin.setOsGroupName(UserAgentUtil.getOsGroupName(userAgent));
         logLogin.setOsDeviceTypeName(UserAgentUtil.getOsDeviceTypeName(userAgent));
         logLogin.setOsManufacturerName(UserAgentUtil.getOsManufacturerName(userAgent));
-        logLogin.setOsVersion(UserAgentUtil.getOsVersion(userAgent));
+//        logLogin.setOsVersion(UserAgentUtil.getOsVersion(userAgent));
         logLogin.setBrowserName(UserAgentUtil.getBrowserName(userAgent));
         logLogin.setBrowserGroupName(UserAgentUtil.getBrowserGroupName(userAgent));
         logLogin.setBrowserTypeName(UserAgentUtil.getBrowserTypeName(userAgent));
         logLogin.setBrowserManufacturerName(UserAgentUtil.getBrowserManufacturerName(userAgent));
         logLogin.setBrowserRenderingEngine(UserAgentUtil.getBrowserRenderingEngine(userAgent));
-        logLogin.setBrowserVersion(UserAgentUtil.getBrowserVersion(userAgent));
+//        logLogin.setBrowserVersion(UserAgentUtil.getBrowserVersion(userAgent));
         logLogin.setCreateId(createId);
         logLogin.setCreateBy(createBy);
         return this.insertSelective(logLogin);

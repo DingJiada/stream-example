@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="supervisor-service" />
+        <module name="supervisor-mapper" />
+        <module name="supervisor-web-center" />
+        <module name="supervisor-pojo" />
+        <module name="supervisor-web-media-task" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="supervisor-mapper" target="1.8" />
+      <module name="supervisor-pojo" target="1.8" />
+      <module name="supervisor-project-v2" target="1.8" />
+      <module name="supervisor-service" target="1.8" />
+      <module name="supervisor-web-center" target="1.8" />
+      <module name="supervisor-web-media-task" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="supervisor-mapper" options="-parameters" />
+      <module name="supervisor-pojo" options="-parameters" />
+      <module name="supervisor-service" options="-parameters" />
+      <module name="supervisor-web-center" options="-parameters" />
+      <module name="supervisor-web-media-task" options="-parameters" />
+    </option>
+  </component>
+</project>

@@ -57,6 +57,7 @@ public class SeparationKaptchaController {
 
             // create the text for the image
             String capText = captchaProducer.createText();
+            System.out.println("验证码" + capText);
             // create the image with the text
             BufferedImage bi = captchaProducer.createImage(capText);
             // write the data out
